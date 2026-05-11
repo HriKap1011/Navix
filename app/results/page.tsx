@@ -19,6 +19,18 @@ export default async function ResultsPage({
   const date = params.date ? formatTravelDate(params.date) : "Flexible dates";
   const routeOptions = buildRouteOptions(origin, destination, params.date);
 
+  // Sort routes by estimated price and create a rank map
+  const sortedByPrice = [...routeOptions].sort((a, b) => {
+    const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
+    const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
+    return priceA - priceB;
+  });
+
+  const priceRankMap = new Map<string, number>();
+  sortedByPrice.forEach((route, index) => {
+    priceRankMap.set(route.id, index);
+  });
+
   const editSearchHref = `/?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&date=${encodeURIComponent(params.date ?? "")}#plan`;
 
   return (
@@ -110,7 +122,11 @@ export default async function ResultsPage({
 
         <section className="mt-8 grid gap-5 lg:grid-cols-2">
           {routeOptions.map((route) => (
-            <RouteCard key={route.id} route={route} />
+            <RouteCard 
+              key={route.id} 
+              route={route}
+              priceRank={priceRankMap.get(route.id) || 0}
+            />
           ))}
         </section>
       </main>
