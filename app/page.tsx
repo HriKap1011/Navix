@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="relative isolate flex min-h-full flex-col overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
@@ -22,7 +24,7 @@ export default function Home() {
       {/* Navbar */}
       <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#030306]/75 backdrop-blur-xl backdrop-saturate-150">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8 lg:py-4">
-          <a href="#" className="group flex shrink-0 items-center gap-2.5">
+          <Link href="/" className="group flex shrink-0 items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 shadow-lg shadow-cyan-500/25 ring-1 ring-white/10 transition duration-300 group-hover:scale-105 group-hover:shadow-cyan-400/35">
               <svg
                 viewBox="0 0 24 24"
@@ -45,7 +47,7 @@ export default function Home() {
                 Travel decision engine
               </span>
             </span>
-          </a>
+          </Link>
 
           <nav
             className="hidden items-center gap-8 text-sm font-medium text-zinc-400 md:flex"
@@ -180,6 +182,21 @@ export default function Home() {
                 </span>
               ))}
             </div>
+
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                href="#plan"
+                className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-7 py-3.5 text-center text-[15px] font-semibold text-slate-950 shadow-[0_18px_46px_-14px_rgba(34,211,238,0.55)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_22px_52px_-12px_rgba(167,139,250,0.42)] active:scale-[0.99] sm:w-auto"
+              >
+                Find Smarter Routes
+              </Link>
+              <Link
+                href="#problem"
+                className="inline-flex items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.04] px-6 py-3.5 text-center text-[15px] font-semibold text-zinc-200 transition hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+              >
+                Why Navix
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -190,8 +207,9 @@ export default function Home() {
         >
           <div className="mx-auto max-w-6xl">
             <form
+              id="search"
               className="group/card rounded-[1.75rem] border border-white/[0.09] bg-gradient-to-br from-white/[0.09] via-white/[0.03] to-transparent p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset,0_28px_90px_-28px_rgba(124,58,237,0.45)] backdrop-blur-2xl transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.07)_inset,0_36px_100px_-24px_rgba(34,211,238,0.28)] sm:p-9"
-              action="#"
+              action="/results"
               method="get"
             >
               <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
