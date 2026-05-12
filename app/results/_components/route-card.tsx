@@ -1,5 +1,12 @@
 import type { RouteOption } from "../_data/mock-routes";
 
+const capitalizeCity = (city: string): string => {
+  return city
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
 const tagClasses: Record<RouteOption["tagTone"], string> = {
   cyan: "border-cyan-300/30 bg-cyan-400/10 text-cyan-200",
   emerald: "border-emerald-300/30 bg-emerald-400/10 text-emerald-200",
@@ -42,7 +49,7 @@ export function RouteCard({ route, priceRank = 0 }: RouteCardProps) {
   };
 
   const getShortCityName = (city: string): string => {
-    const fullName = city;
+    const fullName = capitalizeCity(city);
     // Only abbreviate if the full name is too long (more than 12 characters)
     if (fullName.length <= 12) {
       return fullName;
@@ -86,6 +93,14 @@ export function RouteCard({ route, priceRank = 0 }: RouteCardProps) {
     // Default to car if no match
     return "🚗";
   };
+
+  const capitalizeRouteCombination = (route: string): string => {
+    // Split by arrows and capitalize each city
+    return route
+      .split(" → ")
+      .map((city) => capitalizeCity(city))
+      .join(" → ");
+  };
   return (
     <article
       className={`group relative overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 ease-out will-change-transform sm:p-7 ${
@@ -105,7 +120,7 @@ export function RouteCard({ route, priceRank = 0 }: RouteCardProps) {
               Route combination
             </p>
             <h2 className="mt-2 text-balance text-lg font-semibold tracking-tight text-white sm:text-xl">
-              {route.routeCombination}
+              {capitalizeRouteCombination(route.routeCombination)}
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">

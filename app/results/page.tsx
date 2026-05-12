@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RouteCard } from "./_components/route-card";
+import { TripSelector } from "./_components/trip-selector";
 import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
 
 type SearchParams = {
@@ -98,17 +99,13 @@ export default async function ResultsPage({
                 Compare multi-modal legs side by side. Prices and times are mock
                 data for MVP—real routing plugs in later.
               </p>
-              <p className="mt-4 text-sm text-zinc-400">
-                <span className="text-zinc-500">Trip</span>{" "}
-                <span className="font-medium text-zinc-200">{origin}</span>
-                <span className="mx-1.5 text-zinc-600">→</span>
-                <span className="font-medium text-zinc-200">
-                  {destination}
-                </span>
-                <span className="mx-2 hidden text-zinc-600 sm:inline">·</span>
-                <span className="mt-2 block text-zinc-500 sm:mt-0 sm:inline">
-                  {date === "Flexible dates" ? date : <>Travel · {date}</>}
-                </span>
+              <p className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+                <TripSelector 
+                  origin={origin} 
+                  destination={destination} 
+                  date={date}
+                  dateParam={params.date}
+                />
               </p>
             </div>
             <Link
