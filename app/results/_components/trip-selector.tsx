@@ -7,11 +7,18 @@ const capitalizeCity = (city: string): string => {
     .join(" ");
 };
 
+const formatFlexibleMonth = (monthStr: string): string => {
+  const [year, month] = monthStr.split("-");
+  const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" }) + " (Flexible)";
+};
+
 type TripSelectorProps = {
   origin: string;
   destination: string;
   date: string;
   dateParam?: string;
+  flexibleMonth?: string;
 };
 
 export function TripSelector({
@@ -19,6 +26,7 @@ export function TripSelector({
   destination,
   date,
   dateParam,
+  flexibleMonth,
 }: TripSelectorProps) {
   const capitalizedOrigin = capitalizeCity(origin);
   const capitalizedDestination = capitalizeCity(destination);
@@ -51,11 +59,12 @@ export function TripSelector({
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
+            aria-hidden
           >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
           </svg>
-          {date === "Flexible dates" ? date : <>Travel · {date}</>}
+          {flexibleMonth ? formatFlexibleMonth(flexibleMonth) : date}
         </button>
       </div>
     </div>

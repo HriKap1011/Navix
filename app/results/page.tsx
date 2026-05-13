@@ -3,10 +3,24 @@ import { RouteCard } from "./_components/route-card";
 import { TripSelector } from "./_components/trip-selector";
 import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
 
+const capitalizeCity = (city: string): string => {
+  return city
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
+const formatFlexibleMonth = (monthStr: string): string => {
+  const [year, month] = monthStr.split("-");
+  const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" }) + " (Flexible dates)";
+};
+
 type SearchParams = {
   origin?: string;
   destination?: string;
   date?: string;
+  flexibleMonth?: string;
 };
 
 export default async function ResultsPage({
@@ -17,7 +31,14 @@ export default async function ResultsPage({
   const params = await searchParams;
   const origin = params.origin?.trim() || "Mumbai";
   const destination = params.destination?.trim() || "Bengaluru";
-  const date = params.date ? formatTravelDate(params.date) : "Flexible dates";
+  
+  let date = "Flexible dates";
+  if (params.date) {
+    date = formatTravelDate(params.date);
+  } else if (params.flexibleMonth) {
+    date = formatFlexibleMonth(params.flexibleMonth);
+  }
+  
   const routeOptions = buildRouteOptions(origin, destination, params.date);
 
   // Sort routes by estimated price and create a rank map
@@ -32,7 +53,8 @@ export default async function ResultsPage({
     priceRankMap.set(route.id, index);
   });
 
-  const editSearchHref = `/?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&date=${encodeURIComponent(params.date ?? "")}#plan`;
+  const dateParam = params.date ? `date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : "";
+  const editSearchHref = `/?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${dateParam ? "&" + dateParam : ""}#plan`;
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
@@ -83,7 +105,17 @@ export default async function ResultsPage({
       </header>
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] p-6 shadow-[0_30px_90px_-36px_rgba(34,211,238,0.35)] backdrop-blur-xl sm:p-8">
+        <div className="overflow-visible rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] p-6 shadow-[0_30px_90px_-36px_rgba(34,211,238,0.35)] backdrop-blur-xl sm:p-8">
+          {/* Journey Display */}
+          <div className="mb-8 pb-8 border-b border-white/10">
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {capitalizeCity(origin)} <span className="text-zinc-500">→</span> {capitalizeCity(destination)}
+            </h1>
+            <p className="mt-3 text-lg text-zinc-400">
+              {date}
+            </p>
+          </div>
+
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <Link
@@ -92,21 +124,22 @@ export default async function ResultsPage({
               >
                 <span aria-hidden>←</span> Home
               </Link>
-              <h1 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
                 Smart route options for your trip
-              </h1>
+              </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
                 Compare multi-modal legs side by side. Prices and times are mock
                 data for MVP—real routing plugs in later.
               </p>
-              <p className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
                 <TripSelector 
                   origin={origin} 
                   destination={destination} 
                   date={date}
                   dateParam={params.date}
+                  flexibleMonth={params.flexibleMonth}
                 />
-              </p>
+              </div>
             </div>
             <Link
               href={editSearchHref}
