@@ -1,5 +1,24 @@
 export type TravelDifficulty = "Easy" | "Moderate" | "Challenging";
 
+export type TravelInsights = {
+  demandLevel: "Low" | "Moderate" | "High" | "Very High";
+  bookingUrgency: string;
+  seasonalTip: string;
+  crowdLevel: number; // 0-100
+  priceTrend: "Rising" | "Stable" | "Dropping";
+  trendDescription: string;
+};
+
+export type CorridorInsights = {
+  overallDemand: "Low" | "Moderate" | "High" | "Very High";
+  corridorTrend: string;
+  bestBookingWindow: string;
+  seasonalContext: string;
+  avgCrowdLevel: number;
+  routesAnalyzed: number;
+  corridorPopularity: number; // 0-100
+};
+
 export type RouteOption = {
   id: string;
   routeCombination: string;
@@ -10,13 +29,14 @@ export type RouteOption = {
   recommendationTag: string;
   tagTone: "cyan" | "emerald" | "violet" | "amber";
   isRecommended?: boolean;
-  // New realism fields
-  departureTime: string;       // e.g. "06:45"
-  arrivalTime: string;         // e.g. "14:20"
-  layoverDuration: string;     // e.g. "1h 15m" (total wait between legs)
-  estimatedAvailability: number; // seats / % availability 0–100
-  confidenceScore: number;     // 0–100
+  departureTime: string;
+  arrivalTime: string;
+  layoverDuration: string;
+  estimatedAvailability: number;
+  confidenceScore: number;
   difficulty: TravelDifficulty;
+  travelInsights: TravelInsights;
+  navixScore: number;
 };
 
 export type RouteLeg = {
@@ -47,6 +67,13 @@ const routeTemplates = [
     baseAvailability: 72,
     baseConfidence: 84,
     difficulty: "Easy" as TravelDifficulty,
+    baseDemand: "Moderate" as const,
+    baseUrgency: "Book when ready — good availability",
+    baseSeasonalTip: "Year-round popular corridor",
+    baseCrowdLevel: 58,
+    basePriceTrend: "Stable" as const,
+    baseTrendDesc: "Prices holding steady on this route",
+    baseNavixScore: 87,
   },
   {
     via: "Goa Madgaon",
@@ -62,6 +89,13 @@ const routeTemplates = [
     baseAvailability: 61,
     baseConfidence: 71,
     difficulty: "Moderate" as TravelDifficulty,
+    baseDemand: "High" as const,
+    baseUrgency: "Book 2–3 days ahead for best rates",
+    baseSeasonalTip: "Budget route — demand spikes on weekends",
+    baseCrowdLevel: 72,
+    basePriceTrend: "Rising" as const,
+    baseTrendDesc: "Fares trending up over next 48 hours",
+    baseNavixScore: 79,
   },
   {
     via: "Hyderabad Deccan",
@@ -77,6 +111,13 @@ const routeTemplates = [
     baseAvailability: 38,
     baseConfidence: 91,
     difficulty: "Easy" as TravelDifficulty,
+    baseDemand: "Very High" as const,
+    baseUrgency: "Book ASAP — premium seats fill fast",
+    baseSeasonalTip: "Business corridor with consistent demand",
+    baseCrowdLevel: 81,
+    basePriceTrend: "Rising" as const,
+    baseTrendDesc: "High demand pushing fares upward",
+    baseNavixScore: 83,
   },
   {
     via: "Hubballi",
@@ -92,6 +133,13 @@ const routeTemplates = [
     baseAvailability: 55,
     baseConfidence: 77,
     difficulty: "Moderate" as TravelDifficulty,
+    baseDemand: "Low" as const,
+    baseUrgency: "Flexible — last-minute booking usually fine",
+    baseSeasonalTip: "Off-peak route with reliable availability",
+    baseCrowdLevel: 35,
+    basePriceTrend: "Dropping" as const,
+    baseTrendDesc: "Lower demand keeping prices competitive",
+    baseNavixScore: 72,
   },
 ];
 
@@ -142,6 +190,64 @@ export function formatTravelDate(date: string) {
 }
 
 // ------------------------------------------------------------------
+// Corridor Insights
+// ------------------------------------------------------------------
+
+export function getCorridorInsights(
+  origin: string,
+  destination: string,
+  dateInput?: string,
+): CorridorInsights {
+  const seed = getHash(`${origin}-${destination}-corridor`);
+  const month = dateInput ? new Date(dateInput).getMonth() : new Date().getMonth();
+
+  let seasonalContext: string;
+  let demandBoost = 0;
+  if (month >= 9 || month <= 1) {
+    seasonalContext = "Peak travel season — festival and holiday demand is elevated across this corridor";
+    demandBoost = 15;
+  } else if (month >= 2 && month <= 4) {
+    seasonalContext = "Summer travel window — moderate demand with occasional spikes around long weekends";
+    demandBoost = 5;
+  } else {
+    seasonalContext = "Monsoon season — lighter traffic and better seat availability expected";
+    demandBoost = -10;
+  }
+
+  const basePop = 55 + (seed % 35);
+  const popularity = Math.min(98, Math.max(20, basePop + demandBoost));
+
+  const demands: Array<"Low" | "Moderate" | "High" | "Very High"> = ["Low", "Moderate", "High", "Very High"];
+  const demandIdx = popularity > 80 ? 3 : popularity > 60 ? 2 : popularity > 40 ? 1 : 0;
+
+  const avgCrowd = Math.min(95, Math.max(15, 40 + (seed % 40) + Math.floor(demandBoost / 2)));
+
+  const trends = [
+    "Prices on this corridor are trending upward — booking soon is recommended.",
+    "This route shows stable pricing with minor fluctuations expected over the next week.",
+    "Competition between operators is keeping prices competitive on this corridor.",
+    "High demand corridor with limited budget options — consider off-peak departures.",
+  ];
+
+  const windows = [
+    "2–4 days before travel",
+    "1–2 weeks ahead for best rates",
+    "Same-week booking usually fine",
+    "Book 3+ days early for guaranteed seats",
+  ];
+
+  return {
+    overallDemand: demands[demandIdx],
+    corridorTrend: trends[seed % trends.length],
+    bestBookingWindow: windows[seed % windows.length],
+    seasonalContext,
+    avgCrowdLevel: avgCrowd,
+    routesAnalyzed: routeTemplates.length,
+    corridorPopularity: popularity,
+  };
+}
+
+// ------------------------------------------------------------------
 // Builder
 // ------------------------------------------------------------------
 
@@ -158,8 +264,7 @@ export function buildRouteOptions(
   const durationOffset = seed % 55;
   const priceOffset = seed % 420;
   const recommendedIndex = seed % routeTemplates.length;
-  // Small per-search time jitter so results feel search-specific
-  const timeJitterMin = (seed % 30) - 15; // –15 … +14 minutes
+  const timeJitterMin = (seed % 30) - 15;
 
   return routeTemplates.map((template, index) => {
     const directionalBoost = index % 2 === 0 ? 1 : -1;
@@ -176,13 +281,8 @@ export function buildRouteOptions(
     const firstLegMinutes = Math.max(60, Math.round(totalMinutes * template.legRatio));
     const secondLegMinutes = Math.max(45, totalMinutes - firstLegMinutes);
 
-    // Departure / arrival maths
     const depJitter = (timeJitterMin + index * 7) % 30;
-    const depRaw = addMinutesToTime(
-      template.baseDepHour,
-      template.baseDepMin,
-      depJitter,
-    );
+    const depRaw = addMinutesToTime(template.baseDepHour, template.baseDepMin, depJitter);
     const leg1Arr = addMinutesToTime(depRaw.hour, depRaw.min, firstLegMinutes);
     const layoverMin = template.layoverMinutes + (seed % 20) - 10;
     const leg2Dep = addMinutesToTime(leg1Arr.hour, leg1Arr.min, layoverMin);
@@ -207,17 +307,34 @@ export function buildRouteOptions(
       },
     ];
 
-    // Availability: jitter ±12 from base, clamp 5–99
     const availability = Math.min(
       99,
       Math.max(5, template.baseAvailability + ((seed >> index) % 25) - 12),
     );
 
-    // Confidence: jitter ±8, clamp 40–99
     const confidence = index === 0 ? 87 : Math.min(
       99,
       Math.max(40, template.baseConfidence + ((seed >> (index + 2)) % 17) - 8),
     );
+
+    const isRec = index === recommendedIndex;
+
+    // Navix Score with jitter
+    const scoreJitter = ((seed >> (index + 3)) % 9) - 4;
+    const navixScore = Math.min(96, Math.max(55, template.baseNavixScore + scoreJitter + (isRec ? 4 : 0)));
+
+    // Travel insights with slight jitter
+    const crowdJitter = ((seed >> (index + 1)) % 15) - 7;
+    const crowdLevel = Math.min(95, Math.max(10, template.baseCrowdLevel + crowdJitter));
+
+    const travelInsights: TravelInsights = {
+      demandLevel: template.baseDemand,
+      bookingUrgency: template.baseUrgency,
+      seasonalTip: template.baseSeasonalTip,
+      crowdLevel,
+      priceTrend: template.basePriceTrend,
+      trendDescription: template.baseTrendDesc,
+    };
 
     return {
       id: `route-${index + 1}`,
@@ -228,13 +345,15 @@ export function buildRouteOptions(
       legs,
       recommendationTag: template.recommendationTag,
       tagTone: template.tagTone,
-      isRecommended: index === recommendedIndex,
+      isRecommended: isRec,
       departureTime: formatTime(depRaw.hour, depRaw.min),
       arrivalTime: formatTime(finalArr.hour, finalArr.min),
       layoverDuration: formatDuration(Math.max(10, layoverMin)),
       estimatedAvailability: availability,
       confidenceScore: confidence,
       difficulty: template.difficulty,
+      travelInsights,
+      navixScore,
     };
   });
 }
