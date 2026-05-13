@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SearchForm } from "./_components/search-form";
 
 export default function Home() {
   return (
@@ -206,124 +207,7 @@ export default function Home() {
           className="relative z-10 -mt-4 px-4 pb-16 sm:-mt-8 sm:px-6 sm:pb-20 lg:px-8"
         >
           <div className="mx-auto max-w-6xl">
-            <form
-              id="search"
-              className="group/card rounded-[1.75rem] border border-white/[0.09] bg-gradient-to-br from-white/[0.09] via-white/[0.03] to-transparent p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset,0_28px_90px_-28px_rgba(124,58,237,0.45)] backdrop-blur-2xl transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.07)_inset,0_36px_100px_-24px_rgba(34,211,238,0.28)] sm:p-9"
-              action="/results"
-              method="get"
-            >
-              <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                    Find smarter routes in seconds
-                  </h2>
-                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-400 sm:text-base">
-                    Enter your source, destination, and travel date. Navix
-                    surfaces alternate combinations—not just the obvious direct
-                    option booking sites push first.
-                  </p>
-                </div>
-                <span className="inline-flex w-fit items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/[0.09] px-3 py-2 text-xs font-medium text-emerald-200/95">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/50" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
-                  MVP: trains & buses
-                </span>
-              </div>
-
-              <div className="grid gap-5 lg:grid-cols-12 lg:gap-6">
-                <label className="group/f lg:col-span-4">
-                  <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500 transition-colors group-focus-within/f:text-cyan-400/95">
-                    Source
-                  </span>
-                  <div className="relative">
-                    <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within/f:text-cyan-400/85">
-                      <svg
-                        className="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        aria-hidden
-                      >
-                        <circle cx="12" cy="11" r="3" />
-                        <path d="M12 21s7-4.5 7-10a7 7 0 1 0-14 0c0 5.5 7 10 7 10z" />
-                      </svg>
-                    </span>
-                    <input
-                      name="origin"
-                      type="text"
-                      placeholder="City, station, or stop"
-                      autoComplete="off"
-                      className="w-full rounded-2xl border border-white/10 bg-black/45 py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-500 outline-none transition duration-200 focus:border-cyan-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(34,211,238,0.14)] hover:border-white/[0.18]"
-                    />
-                  </div>
-                </label>
-
-                <label className="group/f lg:col-span-4">
-                  <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500 transition-colors group-focus-within/f:text-violet-300/95">
-                    Destination
-                  </span>
-                  <div className="relative">
-                    <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within/f:text-violet-300/85">
-                      <svg
-                        className="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        aria-hidden
-                      >
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                      </svg>
-                    </span>
-                    <input
-                      name="destination"
-                      type="text"
-                      placeholder="Where you need to arrive"
-                      autoComplete="off"
-                      className="w-full rounded-2xl border border-white/10 bg-black/45 py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-500 outline-none transition duration-200 focus:border-violet-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(167,139,250,0.14)] hover:border-white/[0.18]"
-                    />
-                  </div>
-                </label>
-
-                <label className="group/f lg:col-span-4">
-                  <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500 transition-colors group-focus-within/f:text-sky-300/95">
-                    Travel date
-                  </span>
-                  <input
-                    name="date"
-                    type="date"
-                    className="w-full cursor-pointer rounded-2xl border border-white/10 bg-black/45 px-4 py-4 text-[15px] text-white outline-none transition duration-200 focus:border-sky-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(56,189,248,0.14)] hover:border-white/[0.18] [color-scheme:dark]"
-                  />
-                </label>
-              </div>
-
-              <div className="mt-8 flex flex-col gap-5 border-t border-white/[0.06] pt-8 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-lg text-xs leading-relaxed text-zinc-500 sm:text-sm">
-                  Results include comparison-friendly route cards and booking
-                  partner handoffs—prioritizing clarity over clutter.
-                </p>
-                <button
-                  type="submit"
-                  className="group/btn inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-10 py-4 text-[15px] font-semibold text-slate-950 shadow-[0_18px_46px_-14px_rgba(34,211,238,0.55)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_22px_52px_-12px_rgba(167,139,250,0.42)] active:scale-[0.98] sm:w-auto"
-                >
-                  Find Smarter Routes
-                  <svg
-                    className="h-[18px] w-[18px] transition-transform duration-300 group-hover/btn:translate-x-0.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    aria-hidden
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </button>
-              </div>
-            </form>
+            <SearchForm />
           </div>
         </section>
 
