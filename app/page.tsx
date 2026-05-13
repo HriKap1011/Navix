@@ -137,19 +137,81 @@ export default function Home() {
 
       <main className="relative z-10 flex flex-1 flex-col">
         {/* Hero */}
-        <section className="relative overflow-hidden px-4 pb-14 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-24 lg:pt-20">
-          <div className="absolute inset-0 bg-gradient-to-b from-violet-950/[0.55] via-[#030306]/80 to-transparent" />
+        <section className="relative overflow-hidden px-4 pb-14 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-24 lg:pt-20 min-h-[85vh] flex items-center">
+          <div className="absolute inset-0 bg-gradient-to-b from-violet-950/[0.35] via-[#030306]/80 to-transparent" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/45 to-transparent" />
 
-          <div className="relative mx-auto max-w-6xl">
-            <p className="mb-5 inline-flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/90 shadow-sm backdrop-blur-md sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.75)]" />
+          {/* Animated Travel Network Visuals */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden sm:opacity-100 opacity-40">
+            {/* Glowing Ambient Orbs */}
+            <div className="absolute top-[10%] right-[20%] w-[350px] h-[350px] bg-cyan-500/10 rounded-full blur-[90px] animate-pulse" />
+            <div className="absolute top-[40%] right-[5%] w-[300px] h-[300px] bg-violet-500/10 rounded-full blur-[90px] animate-pulse" style={{ animationDelay: '2s' }} />
+            <div className="absolute bottom-[20%] left-[10%] w-[250px] h-[250px] bg-emerald-500/5 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '4s' }} />
+
+            {/* Connecting Lines (SVG) */}
+            <svg className="absolute w-full h-full opacity-30" xmlns="http://www.w3.org/2000/svg">
+              <path d="M -100 150 C 300 50, 700 450, 1400 150" fill="none" stroke="url(#cyanGrad)" strokeWidth="1.5" strokeDasharray="6 6" />
+              <path d="M -100 450 C 400 350, 800 50, 1400 350" fill="none" stroke="url(#violetGrad)" strokeWidth="1.5" strokeDasharray="6 6" />
+              <path d="M 400 -50 C 500 250, 600 650, 800 900" fill="none" stroke="url(#emeraldGrad)" strokeWidth="1.5" strokeDasharray="6 6" />
+              <defs>
+                <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#22d3ee" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#22d3ee" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="violetGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#a78bfa" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#a78bfa" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#a78bfa" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#34d399" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#34d399" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#34d399" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* Glowing Nodes */}
+            <div className="absolute top-[25%] left-[48%] w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_15px_#22d3ee] animate-pulse" />
+            <div className="absolute top-[48%] right-[28%] w-3 h-3 rounded-full bg-violet-400 shadow-[0_0_15px_#a78bfa] animate-pulse" style={{ animationDelay: '1.5s' }} />
+            <div className="absolute top-[65%] left-[32%] w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_15px_#34d399] animate-pulse" style={{ animationDelay: '3s' }} />
+
+            {/* Floating Mini Cards - Strictly on the right side */}
+            <div className="absolute top-[20%] right-[10%] hidden lg:flex rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-transparent backdrop-blur-xl p-3 items-center gap-3 rotate-3 shadow-[0_10px_40px_-10px_rgba(34,211,238,0.2)] animate-float">
+              <div className="w-10 h-10 rounded-full bg-cyan-400/20 flex items-center justify-center text-cyan-200 text-lg ring-1 ring-cyan-400/30 shadow-[inset_0_0_15px_rgba(34,211,238,0.2)]">✈️</div>
+              <div>
+                <div className="text-[13px] font-semibold text-white mb-1.5">Direct Flight</div>
+                <div className="h-1 w-14 bg-gradient-to-r from-cyan-400 to-transparent rounded-full" />
+              </div>
+            </div>
+
+            <div className="absolute top-[50%] right-[20%] hidden lg:flex rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-transparent backdrop-blur-xl p-3 items-center gap-3 -rotate-6 shadow-[0_10px_40px_-10px_rgba(167,139,250,0.2)] animate-float-reverse">
+              <div className="w-10 h-10 rounded-full bg-violet-400/20 flex items-center justify-center text-violet-200 text-lg ring-1 ring-violet-400/30 shadow-[inset_0_0_15px_rgba(167,139,250,0.2)]">🚄</div>
+              <div>
+                <div className="text-[13px] font-semibold text-white mb-1.5">Express Train</div>
+                <div className="h-1 w-16 bg-gradient-to-r from-violet-400 to-transparent rounded-full" />
+              </div>
+            </div>
+
+            <div className="absolute bottom-[15%] right-[5%] hidden lg:flex rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-transparent backdrop-blur-xl p-3 items-center gap-3 rotate-6 shadow-[0_10px_40px_-10px_rgba(52,211,153,0.2)] animate-float-delayed">
+              <div className="w-10 h-10 rounded-full bg-emerald-400/20 flex items-center justify-center text-emerald-200 text-lg ring-1 ring-emerald-400/30 shadow-[inset_0_0_15px_rgba(52,211,153,0.2)]">🚌</div>
+              <div>
+                <div className="text-[13px] font-semibold text-white mb-1.5">Sleeper Bus</div>
+                <div className="h-1 w-12 bg-gradient-to-r from-emerald-400 to-transparent rounded-full" />
+              </div>
+            </div>
+          </div>
+
+          <div className="relative mx-auto max-w-6xl w-full animate-fade-in-up">
+            <p className="mb-6 inline-flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-200/90 shadow-sm backdrop-blur-md sm:text-xs transition-colors hover:bg-white/[0.08] cursor-default">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.75)] animate-pulse" />
               Smart multi-modal travel decision engine
             </p>
 
-            <h1 className="max-w-[22ch] text-balance text-4xl font-semibold tracking-tight text-white sm:max-w-3xl sm:text-5xl lg:text-[3.35rem] lg:leading-[1.06]">
+            <h1 className="max-w-[22ch] text-balance text-5xl font-extrabold tracking-tight text-white sm:max-w-3xl sm:text-6xl lg:text-[4.2rem] lg:leading-[1.05]">
               Optimize long-distance travel when{" "}
-              <span className="bg-gradient-to-r from-cyan-300 via-white to-violet-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-300 via-white to-violet-300 bg-clip-text text-transparent drop-shadow-sm">
                 direct routes break down
               </span>
               .
@@ -184,16 +246,16 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="#plan"
-                className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-7 py-3.5 text-center text-[15px] font-semibold text-slate-950 shadow-[0_18px_46px_-14px_rgba(34,211,238,0.55)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_22px_52px_-12px_rgba(167,139,250,0.42)] active:scale-[0.99] sm:w-auto"
+                className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-8 py-4 text-center text-[15px] font-bold text-slate-950 shadow-[0_18px_46px_-14px_rgba(34,211,238,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_24px_54px_-12px_rgba(167,139,250,0.5)] active:scale-95 sm:w-auto"
               >
                 Find Smarter Routes
               </Link>
               <Link
                 href="#problem"
-                className="inline-flex items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.04] px-6 py-3.5 text-center text-[15px] font-semibold text-zinc-200 transition hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                className="inline-flex items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.04] px-7 py-4 text-center text-[15px] font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.1] hover:text-white active:scale-95"
               >
                 Why Navix
               </Link>
@@ -217,11 +279,11 @@ export default function Home() {
           className="relative border-y border-white/[0.05] bg-gradient-to-b from-transparent via-violet-950/[0.15] to-transparent px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
         >
           <div className="mx-auto max-w-6xl">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/90">
+            <div className="max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400/90">
                 The problem
               </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
                 Travel decisions shouldn&apos;t depend on ten open tabs
               </h2>
               <p className="mt-5 text-lg leading-relaxed text-zinc-400">
@@ -242,9 +304,9 @@ export default function Home() {
               ].map((item) => (
                 <li
                   key={item}
-                  className="flex gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition duration-200 hover:border-white/14 hover:bg-white/[0.04]"
+                  className="group flex gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:border-white/20 hover:bg-white/[0.05] hover:shadow-xl hover:shadow-black/20"
                 >
-                  <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-500/15 text-red-300 ring-1 ring-red-400/20">
+                  <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-500/15 text-red-300 ring-1 ring-red-400/20 transition-transform duration-300 group-hover:scale-110">
                     <svg
                       className="h-3.5 w-3.5"
                       viewBox="0 0 24 24"
@@ -256,7 +318,7 @@ export default function Home() {
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                   </span>
-                  <span className="text-[15px] leading-snug text-zinc-300">
+                  <span className="text-[15px] leading-snug text-zinc-300 transition-colors duration-300 group-hover:text-white">
                     {item}
                   </span>
                 </li>
@@ -334,9 +396,9 @@ export default function Home() {
               ].map((card) => (
                 <article
                   key={card.title}
-                  className="group flex flex-col rounded-3xl border border-white/[0.07] bg-white/[0.025] p-6 transition duration-300 hover:border-cyan-400/25 hover:bg-white/[0.045] hover:shadow-[0_24px_70px_-36px_rgba(34,211,238,0.35)] sm:p-7"
+                  className="group flex flex-col rounded-3xl border border-white/[0.07] bg-white/[0.025] p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan-400/40 hover:bg-white/[0.045] hover:shadow-[0_32px_80px_-30px_rgba(34,211,238,0.35)] sm:p-7"
                 >
-                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-white/10 to-white/[0.02] text-cyan-300 ring-1 ring-white/10 transition duration-300 group-hover:text-white">
+                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-white/10 to-white/[0.02] text-cyan-300 ring-1 ring-white/10 transition-all duration-300 group-hover:scale-110 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]">
                     <svg
                       className="h-5 w-5"
                       viewBox="0 0 24 24"
@@ -350,10 +412,10 @@ export default function Home() {
                       {card.icon}
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold tracking-tight text-white">
+                  <h3 className="text-lg font-bold tracking-tight text-white transition-colors group-hover:text-cyan-50">
                     {card.title}
                   </h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-400">
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-500 transition-colors duration-300 group-hover:text-zinc-300">
                     {card.body}
                   </p>
                 </article>

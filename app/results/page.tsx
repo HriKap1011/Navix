@@ -41,6 +41,9 @@ export default async function ResultsPage({
   
   const routeOptions = buildRouteOptions(origin, destination, params.date);
 
+  // Simulate complex routing engine delay to show polished loading skeleton
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+
   // Sort routes by estimated price and create a rank map
   const sortedByPrice = [...routeOptions].sort((a, b) => {
     const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
@@ -150,15 +153,33 @@ export default async function ResultsPage({
           </div>
         </div>
 
-        <section className="mt-8 grid gap-5 lg:grid-cols-2">
-          {routeOptions.map((route) => (
-            <RouteCard 
-              key={route.id} 
-              route={route}
-              priceRank={priceRankMap.get(route.id) || 0}
-            />
-          ))}
-        </section>
+        {routeOptions.length > 0 ? (
+          <section className="mt-8 grid gap-5 lg:grid-cols-2">
+            {routeOptions.map((route) => (
+              <RouteCard 
+                key={route.id} 
+                route={route}
+                priceRank={priceRankMap.get(route.id) || 0}
+              />
+            ))}
+          </section>
+        ) : (
+          <section className="mt-8 flex flex-col items-center justify-center rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-12 text-center backdrop-blur-sm sm:p-16">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10 mb-6 shadow-lg shadow-black/20">
+              <span className="text-3xl grayscale">🧭</span>
+            </div>
+            <h3 className="text-xl font-semibold text-white sm:text-2xl">No routes found</h3>
+            <p className="mt-3 max-w-md text-sm text-zinc-400">
+              We couldn't find any valid routes between {capitalizeCity(origin)} and {capitalizeCity(destination)}. Try adjusting your search criteria or dates.
+            </p>
+            <Link
+              href={editSearchHref}
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-cyan-400/10 px-6 py-2.5 text-sm font-semibold text-cyan-300 ring-1 ring-inset ring-cyan-400/20 transition hover:bg-cyan-400/20 hover:text-cyan-200"
+            >
+              Modify search
+            </Link>
+          </section>
+        )}
       </main>
     </div>
   );
