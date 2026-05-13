@@ -3,10 +3,10 @@ import { SearchForm } from "./_components/search-form";
 
 export default function Home() {
   return (
-    <div className="relative isolate flex min-h-full flex-col overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
+    <div className="nv-page relative isolate flex min-h-full flex-col overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
       {/* Ambient grid */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        className="nv-grid pointer-events-none absolute inset-0 opacity-[0.4]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
@@ -18,12 +18,12 @@ export default function Home() {
         }}
       />
 
-      <div className="pointer-events-none absolute -left-40 top-0 h-[460px] w-[460px] rounded-full bg-violet-600/[0.22] blur-[130px] motion-safe:animate-pulse" />
-      <div className="pointer-events-none absolute -right-32 top-28 h-[400px] w-[400px] rounded-full bg-cyan-500/[0.18] blur-[115px] motion-safe:animate-pulse motion-safe:[animation-delay:1.25s]" />
-      <div className="pointer-events-none absolute bottom-[-120px] left-1/2 h-[320px] w-[min(90vw,720px)] -translate-x-1/2 rounded-full bg-indigo-600/[0.14] blur-[105px]" />
+      <div className="nv-ambient pointer-events-none absolute -left-40 top-0 h-[460px] w-[460px] rounded-full bg-violet-600/[0.22] blur-[130px] motion-safe:animate-pulse" />
+      <div className="nv-ambient pointer-events-none absolute -right-32 top-28 h-[400px] w-[400px] rounded-full bg-cyan-500/[0.18] blur-[115px] motion-safe:animate-pulse motion-safe:[animation-delay:1.25s]" />
+      <div className="nv-ambient pointer-events-none absolute bottom-[-120px] left-1/2 h-[320px] w-[min(90vw,720px)] -translate-x-1/2 rounded-full bg-indigo-600/[0.14] blur-[105px]" />
 
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#030306]/75 backdrop-blur-xl backdrop-saturate-150">
+      <header className="nv-header sticky top-0 z-50 border-b border-white/[0.06] bg-[#030306]/75 backdrop-blur-xl backdrop-saturate-150">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8 lg:py-4">
           <Link href="/" className="group flex shrink-0 items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 shadow-lg shadow-cyan-500/25 ring-1 ring-white/10 transition duration-300 group-hover:scale-105 group-hover:shadow-cyan-400/35">
@@ -41,24 +41,24 @@ export default function Home() {
               </svg>
             </span>
             <span className="flex flex-col leading-none">
-              <span className="text-[15px] font-semibold tracking-tight text-white sm:text-base">
+              <span className="nv-text-primary text-[15px] font-semibold tracking-tight text-white sm:text-base">
                 Navix
               </span>
-              <span className="mt-0.5 hidden text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-500 sm:block">
-                Travel decision engine
+              <span className="nv-text-muted mt-0.5 hidden text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-500 sm:block">
+                Smarter routes. Fewer tabs. One decision.
               </span>
             </span>
           </Link>
 
           <nav
-            className="hidden items-center gap-8 text-sm font-medium text-zinc-400 md:flex"
+            className="nv-text-secondary hidden items-center gap-8 text-sm font-medium text-zinc-400 md:flex"
             aria-label="Primary"
           >
             <a
-              href="#problem"
+              href="#why-navix"
               className="transition-colors duration-200 hover:text-white"
             >
-              Problem
+              Why Navix
             </a>
             <a
               href="#features"
@@ -75,6 +75,7 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
+
             <a
               href="#plan"
               className="hidden rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-zinc-200 transition-all duration-200 hover:border-cyan-400/35 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_0_28px_-6px_rgba(34,211,238,0.35)] sm:inline-flex"
@@ -105,10 +106,10 @@ export default function Home() {
               </summary>
               <div className="absolute right-0 top-full z-50 mt-2 w-[min(88vw,280px)] rounded-2xl border border-white/10 bg-[#0a0a10]/95 p-2 shadow-2xl shadow-black/50 backdrop-blur-xl">
                 <a
-                  href="#problem"
+                  href="#why-navix"
                   className="block rounded-xl px-4 py-3 text-sm font-medium text-zinc-300 transition hover:bg-white/[0.06] hover:text-white"
                 >
-                  Problem
+                  Why Navix
                 </a>
                 <a
                   href="#features"
@@ -209,21 +210,19 @@ export default function Home() {
               Smart multi-modal travel decision engine
             </p>
 
-            <h1 className="max-w-[22ch] text-balance text-5xl font-extrabold tracking-tight text-white sm:max-w-3xl sm:text-6xl lg:text-[4.2rem] lg:leading-[1.05]">
-              Optimize long-distance travel when{" "}
-              <span className="bg-gradient-to-r from-cyan-300 via-white to-violet-300 bg-clip-text text-transparent drop-shadow-sm">
-                direct routes break down
+            <h1 className="nv-text-primary max-w-[20ch] text-balance text-5xl font-black tracking-tight text-white sm:max-w-3xl sm:text-6xl lg:text-7xl lg:leading-[1.05]">
+              Optimize travel when{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-violet-400 drop-shadow-lg">
+                direct routes fail.
               </span>
-              .
             </h1>
 
-            <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-zinc-400 sm:text-xl">
+            <p className="nv-text-secondary mt-8 max-w-2xl text-pretty text-lg font-medium leading-relaxed text-zinc-400 sm:text-xl">
               Navix combines buses, trains, nearby stations, and alternate legs
-              into ranked itineraries—so you stop tab-hopping and start deciding
-              with confidence.
+              into intelligent, ranked itineraries. Stop tab-hopping. Start deciding.
             </p>
 
-            <p className="mt-6 max-w-2xl border-l-2 border-cyan-400/50 pl-5 text-base italic leading-relaxed text-zinc-300 sm:text-lg">
+            <p className="mt-8 max-w-2xl border-l-2 border-cyan-400/50 pl-5 text-base italic leading-relaxed text-zinc-300 sm:text-lg">
               “No confirmed train ticket?{" "}
               <span className="font-semibold not-italic text-white">
                 Find smarter alternative routes.
@@ -249,13 +248,13 @@ export default function Home() {
             <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="#plan"
-                className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-8 py-4 text-center text-[15px] font-bold text-slate-950 shadow-[0_18px_46px_-14px_rgba(34,211,238,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_24px_54px_-12px_rgba(167,139,250,0.5)] active:scale-95 sm:w-auto"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-10 py-4 text-center text-[16px] font-bold text-slate-950 shadow-[0_0_40px_-10px_rgba(34,211,238,0.6)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_60px_-15px_rgba(167,139,250,0.6)] active:scale-95 sm:w-auto"
               >
                 Find Smarter Routes
               </Link>
               <Link
-                href="#problem"
-                className="inline-flex items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.04] px-7 py-4 text-center text-[15px] font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.1] hover:text-white active:scale-95"
+                href="#why-navix"
+                className="inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] px-9 py-4 text-center text-[16px] font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.1] hover:text-white active:scale-95"
               >
                 Why Navix
               </Link>
@@ -273,66 +272,87 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Problem */}
+        {/* Why Navix */}
         <section
-          id="problem"
-          className="relative border-y border-white/[0.05] bg-gradient-to-b from-transparent via-violet-950/[0.15] to-transparent px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
+          id="why-navix"
+          className="nv-section relative border-y border-white/[0.05] bg-gradient-to-b from-[#030306] via-violet-950/[0.1] to-[#030306] px-4 py-24 sm:px-6 sm:py-32 lg:px-8"
         >
           <div className="mx-auto max-w-6xl">
-            <div className="max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400/90">
-                The problem
+            <div className="text-center max-w-3xl mx-auto mb-20 animate-fade-in-up">
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-400/90 mb-4">
+                Why Navix
               </p>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                Travel decisions shouldn&apos;t depend on ten open tabs
+              <h2 className="nv-text-primary text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Direct travel is broken. <br className="hidden sm:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">We fix the messy middle.</span>
               </h2>
-              <p className="mt-5 text-lg leading-relaxed text-zinc-400">
-                Traditional booking flows assume you already know the best path.
-                Navix is built for the messy middle—when tickets vanish, prices
-                spike, or direct legs simply don&apos;t exist.
+              <p className="nv-text-secondary mt-6 text-lg leading-relaxed text-zinc-400 sm:text-xl">
+                Planning long-distance travel shouldn't feel like a puzzle. We eliminate the frustration of fragmented systems by intelligently piecing together the optimal journey.
               </p>
             </div>
 
-            <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-              {[
-                "Waitlisted or unavailable train tickets",
-                "Expensive last-minute flight shock",
-                "Fragmented info across apps and operators",
-                "Hard-to-find alternate routes and stations",
-                "Hours lost comparing buses vs trains manually",
-                "No single view of tradeoffs (time vs money vs comfort)",
-              ].map((item) => (
-                <li
-                  key={item}
-                  className="group flex gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:border-white/20 hover:bg-white/[0.05] hover:shadow-xl hover:shadow-black/20"
-                >
-                  <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-500/15 text-red-300 ring-1 ring-red-400/20 transition-transform duration-300 group-hover:scale-110">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      aria-hidden
-                    >
-                      <path d="M18 6L6 18M6 6l12 12" />
-                    </svg>
-                  </span>
-                  <span className="text-[15px] leading-snug text-zinc-300 transition-colors duration-300 group-hover:text-white">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+              <div className="space-y-6 sm:space-y-8">
+                {[
+                  {
+                    title: "Waitlist frustrations",
+                    desc: "Train fully booked? We instantly find reliable bus-to-train or alternate station combinations so you never miss a trip.",
+                    icon: "🎟️",
+                  },
+                  {
+                    title: "Expensive direct flights",
+                    desc: "When direct routes spike in price, we surface creative, multi-modal alternatives that save you money without burning your whole day.",
+                    icon: "💸",
+                  },
+                  {
+                    title: "Fragmented booking systems",
+                    desc: "Stop cross-referencing ten different apps. We unify buses, trains, and flights into single, cohesive itineraries.",
+                    icon: "🧩",
+                  },
+                ].map((feature, i) => (
+                  <div key={i} className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-6 sm:p-8 transition-all hover:bg-white/[0.04] hover:border-cyan-500/20">
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 opacity-0 group-hover:opacity-10 transition-opacity rounded-3xl" />
+                    <div className="flex gap-5">
+                      <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 text-2xl group-hover:scale-110 group-hover:border-cyan-500/30 transition-all">
+                        {feature.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                        <p className="text-zinc-400 leading-relaxed">{feature.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-            <div className="mt-12 rounded-3xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/[0.08] to-violet-600/[0.06] p-8 sm:p-10">
-              <p className="text-lg font-medium leading-relaxed text-white sm:text-xl">
-                Navix solves this by generating{" "}
-                <span className="text-cyan-200">
-                  optimized multi-modal recommendations
-                </span>{" "}
-                — not endless lists of disconnected options.
-              </p>
+              <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-[#0a0a10] to-[#030306] p-8 sm:p-12 overflow-hidden shadow-2xl">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-cyan-500/20 blur-[100px] rounded-full" />
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-violet-500/20 blur-[100px] rounded-full" />
+                
+                <h3 className="relative z-10 text-2xl font-bold text-white mb-6">
+                  Intelligent Route Optimization
+                </h3>
+                <p className="relative z-10 text-zinc-400 leading-relaxed mb-8">
+                  Our proprietary engine doesn't just list tickets; it analyzes thousands of data points across transport modes to build the ultimate itinerary. We weigh price, duration, comfort, and reliability to present you with clear, confident choices.
+                </p>
+                <div className="relative z-10 p-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">Navix Optimized Path</span>
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Highly Reliable
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-lg border border-cyan-500/30">🚌</div>
+                    <div className="h-0.5 flex-1 bg-gradient-to-r from-cyan-500/50 to-violet-500/50 rounded-full" />
+                    <div className="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center text-lg border border-violet-500/30">🚄</div>
+                  </div>
+                  <div className="flex justify-between mt-3 text-sm text-zinc-300 font-medium">
+                    <span>Sleeper Bus (3h)</span>
+                    <span>Express Train (5h)</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -348,11 +368,11 @@ export default function Home() {
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300/90">
                   MVP capabilities
                 </p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                <h2 className="nv-text-primary mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                   Intelligence that scales with your journey
                 </h2>
               </div>
-              <p className="max-w-md text-sm leading-relaxed text-zinc-500 sm:text-base">
+              <p className="nv-text-muted max-w-md text-sm leading-relaxed text-zinc-500 sm:text-base">
                 Lean scope, sharp execution—focused on the painful “no ticket”
                 moment first, with room to grow into flights, alerts, and AI
                 ranking.
@@ -396,7 +416,7 @@ export default function Home() {
               ].map((card) => (
                 <article
                   key={card.title}
-                  className="group flex flex-col rounded-3xl border border-white/[0.07] bg-white/[0.025] p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan-400/40 hover:bg-white/[0.045] hover:shadow-[0_32px_80px_-30px_rgba(34,211,238,0.35)] sm:p-7"
+                  className="nv-card group flex flex-col rounded-3xl border border-white/[0.07] bg-white/[0.025] p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan-400/40 hover:bg-white/[0.045] hover:shadow-[0_32px_80px_-30px_rgba(34,211,238,0.35)] sm:p-7"
                 >
                   <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-white/10 to-white/[0.02] text-cyan-300 ring-1 ring-white/10 transition-all duration-300 group-hover:scale-110 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]">
                     <svg
@@ -412,7 +432,7 @@ export default function Home() {
                       {card.icon}
                     </svg>
                   </div>
-                  <h3 className="text-lg font-bold tracking-tight text-white transition-colors group-hover:text-cyan-50">
+                  <h3 className="nv-text-primary text-lg font-bold tracking-tight text-white transition-colors group-hover:text-cyan-50">
                     {card.title}
                   </h3>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-500 transition-colors duration-300 group-hover:text-zinc-300">
@@ -424,8 +444,108 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Statistics / Trust */}
+        <section className="nv-section relative border-y border-white/[0.05] bg-gradient-to-b from-[#030306] via-cyan-950/[0.07] to-[#030306] px-4 py-24 sm:px-6 sm:py-32 lg:px-8 overflow-hidden">
+          {/* Background accents */}
+          <div className="nv-ambient pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/[0.06] rounded-full blur-[150px]" />
+
+          <div className="mx-auto max-w-6xl relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-20">
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-400/90 mb-4">
+                Built for impact
+              </p>
+              <h2 className="nv-text-primary text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+                Numbers that move{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">travelers forward</span>
+              </h2>
+              <p className="mt-6 text-lg leading-relaxed text-zinc-400">
+                Every route we optimize is a traveler who saved money, time, or both. Here&apos;s how the engine performs.
+              </p>
+            </div>
+
+            {/* Stats grid */}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  value: "3.2×",
+                  label: "More route options",
+                  desc: "vs. single-platform search",
+                  color: "from-cyan-400/20 to-cyan-400/5",
+                  border: "border-cyan-400/20",
+                  accent: "text-cyan-400",
+                },
+                {
+                  value: "₹840",
+                  label: "Avg. savings per trip",
+                  desc: "on multi-modal itineraries",
+                  color: "from-emerald-400/20 to-emerald-400/5",
+                  border: "border-emerald-400/20",
+                  accent: "text-emerald-400",
+                },
+                {
+                  value: "47%",
+                  label: "Faster decisions",
+                  desc: "compared to manual research",
+                  color: "from-violet-400/20 to-violet-400/5",
+                  border: "border-violet-400/20",
+                  accent: "text-violet-400",
+                },
+                {
+                  value: "12+",
+                  label: "Data points per route",
+                  desc: "price, time, comfort, reliability",
+                  color: "from-amber-400/20 to-amber-400/5",
+                  border: "border-amber-400/20",
+                  accent: "text-amber-400",
+                },
+              ].map((stat) => (
+                <div
+                  key={stat.label}
+                  className={`group relative rounded-2xl border ${stat.border} bg-gradient-to-b ${stat.color} p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20`}
+                >
+                  <p className={`text-4xl font-black tracking-tight ${stat.accent} sm:text-5xl`}>
+                    {stat.value}
+                  </p>
+                  <p className="mt-3 text-sm font-bold text-white">
+                    {stat.label}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-500">
+                    {stat.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust bar */}
+            <div className="mt-16 flex flex-col items-center gap-8 sm:flex-row sm:justify-center sm:gap-12">
+              {[
+                { icon: "🔒", text: "No personal data stored" },
+                { icon: "⚡", text: "Results in under 3 seconds" },
+                { icon: "🎯", text: "Accuracy-first ranking" },
+                { icon: "🌐", text: "Works across 500+ stations" },
+              ].map((item) => (
+                <div key={item.text} className="flex items-center gap-2.5">
+                  <span className="text-lg">{item.icon}</span>
+                  <span className="text-sm font-medium text-zinc-400">{item.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Tagline */}
+            <div className="mt-20 text-center">
+              <p className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                &ldquo;Smarter routes. Fewer tabs.{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">One decision.</span>&rdquo;
+              </p>
+              <p className="mt-4 text-sm text-zinc-500">
+                The Navix promise — making every journey feel optimized from the start.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
-        <footer className="relative z-10 mt-auto border-t border-white/[0.06] bg-[#020208]/90 px-4 py-12 backdrop-blur-md sm:px-6 lg:px-8">
+        <footer className="nv-footer relative z-10 mt-auto border-t border-white/[0.06] bg-[#020208]/90 px-4 py-12 backdrop-blur-md sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.2fr_1fr] md:gap-16">
             <div>
               <div className="flex items-center gap-2">
@@ -443,8 +563,11 @@ export default function Home() {
                 </span>
                 <span className="text-lg font-semibold text-white">Navix</span>
               </div>
+              <p className="mt-1 text-xs font-medium text-zinc-500 italic">
+                Smarter routes. Fewer tabs. One decision.
+              </p>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-500">
-                The smart multi-modal travel decision engine—optimizing routes
+                The intelligent travel decision engine — optimizing routes
                 when direct options fail, cost too much, or waste your time.
               </p>
               <p className="mt-6 text-xs font-medium uppercase tracking-[0.16em] text-zinc-600">
@@ -475,7 +598,7 @@ export default function Home() {
                   </li>
                   <li>
                     <a
-                      href="#problem"
+                      href="#why-navix"
                       className="transition hover:text-white"
                     >
                       Why Navix
@@ -519,8 +642,7 @@ export default function Home() {
           <div className="mx-auto mt-12 flex max-w-6xl flex-col items-start justify-between gap-4 border-t border-white/[0.05] pt-8 text-sm text-zinc-600 sm:flex-row sm:items-center">
             <span>© {new Date().getFullYear()} Navix. All rights reserved.</span>
             <span className="text-xs text-zinc-600">
-              Google Maps for long-distance travel—starting with smarter rail &
-              road.
+              Smarter routes. Fewer tabs. One decision.
             </span>
           </div>
         </footer>

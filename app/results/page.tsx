@@ -60,17 +60,17 @@ export default async function ResultsPage({
   const editSearchHref = `/?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${dateParam ? "&" + dateParam : ""}#plan`;
 
   return (
-    <div className="relative min-h-full overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
+    <div className="nv-page relative min-h-full overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        className="nv-ambient pointer-events-none absolute inset-0 opacity-[0.35]"
         style={{
           backgroundImage:
             "radial-gradient(circle at 20% 15%, rgba(6,182,212,0.16), transparent 30%), radial-gradient(circle at 80% 10%, rgba(167,139,250,0.17), transparent 34%), radial-gradient(circle at 50% 100%, rgba(59,130,246,0.2), transparent 42%)",
         }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:72px_72px] opacity-[0.85]" />
+      <div className="nv-grid pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:72px_72px] opacity-[0.85]" />
 
-      <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#030306]/80 backdrop-blur-xl backdrop-saturate-150">
+      <header className="nv-header sticky top-0 z-30 border-b border-white/[0.06] bg-[#030306]/80 backdrop-blur-xl backdrop-saturate-150">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -108,10 +108,10 @@ export default async function ResultsPage({
       </header>
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
-        <div className="overflow-visible rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] p-6 shadow-[0_30px_90px_-36px_rgba(34,211,238,0.35)] backdrop-blur-xl sm:p-8">
+        <div className="nv-card overflow-visible rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] p-6 shadow-[0_30px_90px_-36px_rgba(34,211,238,0.35)] backdrop-blur-xl sm:p-8">
           {/* Journey Display */}
           <div className="mb-8 pb-8 border-b border-white/10">
-            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h1 className="nv-text-primary text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               {capitalizeCity(origin)} <span className="text-zinc-500">→</span> {capitalizeCity(destination)}
             </h1>
             <p className="mt-3 text-lg text-zinc-400">
@@ -127,10 +127,10 @@ export default async function ResultsPage({
               >
                 <span aria-hidden>←</span> Home
               </Link>
-              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
+              <h2 className="nv-text-primary mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
                 Smart route options for your trip
               </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <p className="nv-text-secondary mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
                 Compare multi-modal legs side by side. Prices and times are mock
                 data for MVP—real routing plugs in later.
               </p>
@@ -164,20 +164,118 @@ export default async function ResultsPage({
             ))}
           </section>
         ) : (
-          <section className="mt-8 flex flex-col items-center justify-center rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-12 text-center backdrop-blur-sm sm:p-16">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10 mb-6 shadow-lg shadow-black/20">
-              <span className="text-3xl grayscale">🧭</span>
+          <section className="mt-8 relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl">
+            {/* Decorative background */}
+            <div className="pointer-events-none absolute -top-32 -right-32 h-80 w-80 rounded-full bg-cyan-500/[0.06] blur-[100px]" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-violet-500/[0.06] blur-[100px]" />
+
+            <div className="relative z-10 flex flex-col items-center px-6 py-16 text-center sm:px-12 sm:py-20">
+              {/* Travel compass illustration */}
+              <div className="relative mb-8">
+                <div className="flex h-28 w-28 items-center justify-center rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent shadow-[0_0_60px_-15px_rgba(34,211,238,0.2)]">
+                  <svg className="h-14 w-14 text-zinc-600" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Outer ring */}
+                    <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.5" />
+                    <circle cx="32" cy="32" r="22" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+                    {/* Compass needle */}
+                    <path d="M32 10L36 30H28L32 10Z" fill="rgba(34,211,238,0.5)" />
+                    <path d="M32 54L28 34H36L32 54Z" fill="rgba(167,139,250,0.4)" />
+                    {/* Center dot */}
+                    <circle cx="32" cy="32" r="3" fill="rgba(34,211,238,0.6)" />
+                    <circle cx="32" cy="32" r="1.5" fill="white" opacity="0.8" />
+                    {/* Cardinal marks */}
+                    <circle cx="32" cy="6" r="1.5" fill="currentColor" opacity="0.4" />
+                    <circle cx="58" cy="32" r="1.5" fill="currentColor" opacity="0.4" />
+                    <circle cx="32" cy="58" r="1.5" fill="currentColor" opacity="0.4" />
+                    <circle cx="6" cy="32" r="1.5" fill="currentColor" opacity="0.4" />
+                  </svg>
+                </div>
+                {/* Orbiting dots */}
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-cyan-400/40 animate-pulse" />
+                <div className="absolute top-1/2 -right-1 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-violet-400/40 animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-emerald-400/30 animate-pulse" style={{ animationDelay: '2s' }} />
+              </div>
+
+              {/* Messaging */}
+              <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                No routes found for this journey
+              </h3>
+              <p className="mt-4 max-w-lg text-sm leading-relaxed text-zinc-400 sm:text-base">
+                We couldn&apos;t find multi-modal routes between{" "}
+                <span className="font-semibold text-zinc-200">{capitalizeCity(origin)}</span> and{" "}
+                <span className="font-semibold text-zinc-200">{capitalizeCity(destination)}</span>.
+                This can happen when cities are too close, too remote, or the date doesn&apos;t have available services.
+              </p>
+
+              {/* Suggestions */}
+              <div className="mt-8 w-full max-w-md">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-3">
+                  What you can try
+                </p>
+                <div className="space-y-2">
+                  {[
+                    { icon: "📅", text: "Try a different travel date or use flexible dates" },
+                    { icon: "📍", text: "Check for nearby cities or alternate stations" },
+                    { icon: "🔄", text: "Search the reverse direction to verify coverage" },
+                    { icon: "🚉", text: "Try a major hub city as an intermediate stop" },
+                  ].map((tip) => (
+                    <div
+                      key={tip.text}
+                      className="flex items-center gap-3 rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3 text-left"
+                    >
+                      <span className="text-base shrink-0">{tip.icon}</span>
+                      <span className="text-sm text-zinc-400">{tip.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href={editSearchHref}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-8 py-3.5 text-sm font-bold text-slate-950 shadow-[0_0_30px_-8px_rgba(34,211,238,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_-6px_rgba(167,139,250,0.5)]"
+                >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                  Modify Search
+                </Link>
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-8 py-3.5 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+                >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+                  Back to Home
+                </Link>
+              </div>
+
+              {/* Popular routes suggestion */}
+              <div className="mt-12 w-full max-w-lg">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-3">
+                  Popular routes that work great
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {[
+                    { from: "Delhi", to: "Mumbai", emoji: "🚄" },
+                    { from: "Bangalore", to: "Goa", emoji: "🏖️" },
+                    { from: "Hyderabad", to: "Chennai", emoji: "🚌" },
+                    { from: "Pune", to: "Bangalore", emoji: "✈️" },
+                    { from: "Kolkata", to: "Patna", emoji: "🚊" },
+                    { from: "Jaipur", to: "Udaipur", emoji: "🏰" },
+                  ].map((r) => (
+                    <Link
+                      key={`${r.from}-${r.to}`}
+                      href={`/results?origin=${encodeURIComponent(r.from)}&destination=${encodeURIComponent(r.to)}`}
+                      className="group/pop flex items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5 text-left transition-all duration-200 hover:border-cyan-500/30 hover:bg-cyan-500/[0.06]"
+                    >
+                      <span className="text-sm">{r.emoji}</span>
+                      <span className="text-xs font-medium text-zinc-400 group-hover/pop:text-zinc-200 transition-colors truncate">
+                        {r.from} → {r.to}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-white sm:text-2xl">No routes found</h3>
-            <p className="mt-3 max-w-md text-sm text-zinc-400">
-              We couldn't find any valid routes between {capitalizeCity(origin)} and {capitalizeCity(destination)}. Try adjusting your search criteria or dates.
-            </p>
-            <Link
-              href={editSearchHref}
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-cyan-400/10 px-6 py-2.5 text-sm font-semibold text-cyan-300 ring-1 ring-inset ring-cyan-400/20 transition hover:bg-cyan-400/20 hover:text-cyan-200"
-            >
-              Modify search
-            </Link>
           </section>
         )}
       </main>
