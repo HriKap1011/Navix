@@ -1,8 +1,71 @@
 @import "tailwindcss";
 
+/* ─── Theme tokens ──────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core surfaces */
+  --nv-bg: 250 250 252;
+  --nv-bg-hex: #fafafc;
+  --nv-surface: 255 255 255;
+  --nv-surface-hex: #ffffff;
+  --nv-surface-hover: 243 244 246;
+  --nv-elevated: 249 250 251;
+
+  /* Text */
+  --nv-text: 15 23 42;
+  --nv-text-secondary: 71 85 105;
+  --nv-text-muted: 148 163 184;
+
+  /* Borders */
+  --nv-border: 0 0 0 / 0.08;
+  --nv-border-hover: 0 0 0 / 0.15;
+
+  /* Card glass */
+  --nv-glass: 255 255 255 / 0.75;
+  --nv-glass-border: 0 0 0 / 0.06;
+
+  /* Ambient glow opacity */
+  --nv-glow-opacity: 0.12;
+  --nv-grid-opacity: 0.5;
+
+  /* Input */
+  --nv-input-bg: 241 245 249;
+  --nv-input-border: 203 213 225;
+
+  /* Shadows */
+  --nv-shadow: 0 0 0 / 0.08;
+
+  /* Scheme */
+  color-scheme: light;
+}
+
+.dark {
+  --nv-bg: 3 3 6;
+  --nv-bg-hex: #030306;
+  --nv-surface: 255 255 255;
+  --nv-surface-hex: #0a0a10;
+  --nv-surface-hover: 255 255 255;
+  --nv-elevated: 10 10 16;
+
+  --nv-text: 244 244 245;
+  --nv-text-secondary: 161 161 170;
+  --nv-text-muted: 113 113 122;
+
+  --nv-border: 255 255 255 / 0.06;
+  --nv-border-hover: 255 255 255 / 0.15;
+
+  --nv-glass: 255 255 255 / 0.04;
+  --nv-glass-border: 255 255 255 / 0.09;
+
+  --nv-glow-opacity: 0.22;
+  --nv-grid-opacity: 0.4;
+
+  --nv-input-bg: 0 0 0 / 0.45;
+  --nv-input-border: 255 255 255 / 0.1;
+
+  --nv-shadow: 0 0 0 / 0.4;
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -12,32 +75,81 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base styles ─────────────────────────────────────────────────────── */
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--nv-bg-hex);
+  color: rgb(var(--nv-text));
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Smooth theme transition for all themed elements */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+
+/* Opt-out for elements that have their own transitions */
+.no-theme-transition,
+.no-theme-transition *,
+[class*="animate-"],
+[class*="transition"] {
+  transition-property: none !important;
+}
+
+/* Re-enable explicit transitions */
+[class*="transition-all"],
+[class*="transition-colors"],
+[class*="transition-opacity"],
+[class*="transition-transform"],
+[class*="duration-"] {
+  transition-property: all;
+  transition-duration: inherit;
+}
+
+/* ─── Animations ──────────────────────────────────────────────────────── */
+
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate, 0deg)); }
-  50% { transform: translateY(-10px) rotate(var(--tw-rotate, 0deg)); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--tw-rotate, 0deg));
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(var(--tw-rotate, 0deg));
+  }
 }
 
 @keyframes float-reverse {
-  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate, 0deg)); }
-  50% { transform: translateY(10px) rotate(var(--tw-rotate, 0deg)); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--tw-rotate, 0deg));
+  }
+
+  50% {
+    transform: translateY(10px) rotate(var(--tw-rotate, 0deg));
+  }
 }
 
 @keyframes fade-in-up {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-float {
@@ -54,4 +166,246 @@ body {
 
 .animate-fade-in-up {
   animation: fade-in-up 0.8s ease-out forwards;
+}
+
+/* ─── Light mode overrides ────────────────────────────────────────────── */
+
+/* Page wrappers: In light mode, swap the deep dark bg for a clean light */
+:root:not(.dark) .nv-page {
+  background: var(--nv-bg-hex) !important;
+  color: rgb(var(--nv-text)) !important;
+}
+
+/* Ambient blurs: reduce opacity in light mode */
+:root:not(.dark) .nv-ambient {
+  opacity: var(--nv-glow-opacity) !important;
+}
+
+/* Cards / glass surfaces */
+:root:not(.dark) .nv-card {
+  background: rgba(var(--nv-surface), 0.85) !important;
+  border-color: rgba(var(--nv-border)) !important;
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+}
+
+:root:not(.dark) .nv-card:hover {
+  box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Header */
+:root:not(.dark) .nv-header {
+  background: rgba(var(--nv-bg), 0.85) !important;
+  border-color: rgba(var(--nv-border)) !important;
+}
+
+/* Text overrides */
+:root:not(.dark) .nv-text-primary {
+  color: rgb(var(--nv-text)) !important;
+}
+
+:root:not(.dark) .nv-text-secondary {
+  color: rgb(var(--nv-text-secondary)) !important;
+}
+
+:root:not(.dark) .nv-text-muted {
+  color: rgb(var(--nv-text-muted)) !important;
+}
+
+/* Inputs */
+:root:not(.dark) .nv-input {
+  background: rgb(var(--nv-input-bg)) !important;
+  border-color: rgb(var(--nv-input-border)) !important;
+  color: rgb(var(--nv-text)) !important;
+  color-scheme: light !important;
+}
+
+:root:not(.dark) .nv-input::placeholder {
+  color: rgb(var(--nv-text-muted)) !important;
+}
+
+:root:not(.dark) .nv-input:focus {
+  background: white !important;
+}
+
+/* Section separators */
+:root:not(.dark) .nv-section {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  background: linear-gradient(to bottom, rgba(var(--nv-bg), 1), rgba(236, 240, 250, 0.5), rgba(var(--nv-bg), 1)) !important;
+}
+
+/* Stat cards */
+:root:not(.dark) .nv-stat {
+  background: rgba(var(--nv-surface), 0.9) !important;
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Footer */
+:root:not(.dark) .nv-footer {
+  background: rgb(248, 250, 252) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Sub-borders in light mode */
+:root:not(.dark) .nv-border-sub {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Badge overrides in light mode */
+:root:not(.dark) .nv-badge {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: rgb(var(--nv-text-secondary)) !important;
+}
+
+/* CTA gradient stays vibrant in both modes - no override needed */
+
+/* Route card special handling */
+:root:not(.dark) .nv-route-card {
+  background: rgba(var(--nv-surface), 0.92) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.08) !important;
+}
+
+:root:not(.dark) .nv-route-card:hover {
+  box-shadow: 0 12px 40px -8px rgba(6, 182, 212, 0.15) !important;
+  border-color: rgba(6, 182, 212, 0.3) !important;
+}
+
+:root:not(.dark) .nv-route-card.nv-recommended {
+  border-color: rgba(6, 182, 212, 0.25) !important;
+  box-shadow: 0 8px 32px -8px rgba(6, 182, 212, 0.18) !important;
+}
+
+/* Inner stat surfaces in route card */
+:root:not(.dark) .nv-inner-surface {
+  background: rgb(241, 245, 249) !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Grid overlay */
+:root:not(.dark) .nv-grid {
+  opacity: 0 !important;
+}
+
+/* ── Mobile menu dropdown ── */
+:root:not(.dark) .nv-page details>div {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ── Gradient-to-br surfaces (search form, cards) ── */
+:root:not(.dark) .nv-page [class*="from-white/"][class*="to-white/"],
+:root:not(.dark) .nv-page [class*="from-white/"][class*="to-transparent"],
+:root:not(.dark) .nv-page [class*="from-white/"][class*="via-white/"] {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Accent gradient backgrounds on stat cards ── */
+:root:not(.dark) .nv-page [class*="from-cyan-400/20"],
+:root:not(.dark) .nv-page [class*="from-emerald-400/20"],
+:root:not(.dark) .nv-page [class*="from-violet-400/20"],
+:root:not(.dark) .nv-page [class*="from-amber-400/20"] {
+  background: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ── Accent-tinted borders on stat cards ── */
+:root:not(.dark) .nv-page [class*="border-cyan-400/20"],
+:root:not(.dark) .nv-page [class*="border-emerald-400/20"],
+:root:not(.dark) .nv-page [class*="border-violet-400/20"],
+:root:not(.dark) .nv-page [class*="border-amber-400/20"] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Why Navix pain-point cards ── */
+:root:not(.dark) .nv-page [class*="from-cyan-400/"][class*="to-white/"],
+:root:not(.dark) .nv-page [class*="from-violet-500/"][class*="to-white/"] {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ── Theme toggle ── */
+:root:not(.dark) .nv-page button[aria-label*="theme" i],
+:root:not(.dark) button[aria-label*="theme" i] {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #475569 !important;
+}
+
+:root:not(.dark) .nv-page button[aria-label*="theme" i]:hover,
+:root:not(.dark) button[aria-label*="theme" i]:hover {
+  border-color: rgba(6, 182, 212, 0.3) !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #0f172a !important;
+}
+
+/* ── Glow box-shadows — mute in light mode ── */
+:root:not(.dark) .nv-page [class*="shadow-[0_0_15px"],
+:root:not(.dark) .nv-page [class*="shadow-[0_0_8px"],
+:root:not(.dark) .nv-page [class*="shadow-[0_0_6px"],
+:root:not(.dark) .nv-page [class*="shadow-[0_0_10px"],
+:root:not(.dark) .nv-page [class*="shadow-[inset_0_0"] {
+  box-shadow: none !important;
+}
+
+/* ── Loading skeleton pulses ── */
+:root:not(.dark) .nv-page .animate-pulse [class*="bg-white/"] {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ── Ensure SVGs inside gradient CTA buttons stay dark ── */
+:root:not(.dark) .nv-page [class*="from-cyan-400"][class*="to-violet"] .text-slate-950,
+:root:not(.dark) .nv-page [class*="from-cyan-400"][class*="to-violet"] svg {
+  color: #020617 !important;
+}
+
+/* ── Hero subtitle boost ── */
+:root:not(.dark) .nv-page .text-zinc-400 {
+  color: #475569 !important;
+}
+
+:root:not(.dark) .nv-page .text-zinc-500 {
+  color: #64748b !important;
+}
+
+/* ── Route card inner surfaces ── */
+:root:not(.dark) .nv-route-card [class*="border-white/5"],
+:root:not(.dark) .nv-route-card [class*="bg-white/[0.02]"],
+:root:not(.dark) .nv-route-card [class*="bg-white/[0.04]"] {
+  background-color: rgb(241, 245, 249) !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ── Hover states: darken slightly ── */
+:root:not(.dark) .nv-page [class*="hover:bg-white/"] {
+  transition: background-color 0.15s ease;
+}
+
+:root:not(.dark) .nv-page [class*="hover:bg-white/"]:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* ── CTA outline buttons ── */
+:root:not(.dark) .nv-page a[class*="border-white/"][class*="bg-white/"],
+:root:not(.dark) .nv-page button[class*="border-white/"][class*="bg-white/"] {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* ── Footer text links ── */
+:root:not(.dark) .nv-footer a {
+  color: #475569 !important;
+}
+
+:root:not(.dark) .nv-footer a:hover {
+  color: #0f172a !important;
+}
+
+:root:not(.dark) .nv-footer p {
+  color: #64748b !important;
+}
+
+:root:not(.dark) .nv-footer [class*="border-white/"] {
+  border-color: rgba(0, 0, 0, 0.06) !important;
 }

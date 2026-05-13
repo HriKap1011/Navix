@@ -1,7 +1,76 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+type PopularRoute = {
+  origin: string;
+  destination: string;
+  label: string;
+  emoji: string;
+  tag?: string;
+};
+
+const POPULAR_ROUTES: PopularRoute[] = [
+  { origin: "Delhi", destination: "Mumbai", label: "Delhi → Mumbai", emoji: "🚄", tag: "Most searched" },
+  { origin: "Bangalore", destination: "Goa", label: "Bangalore → Goa", emoji: "🏖️", tag: "Weekend getaway" },
+  { origin: "Hyderabad", destination: "Chennai", label: "Hyderabad → Chennai", emoji: "🚌" },
+  { origin: "Pune", destination: "Bangalore", label: "Pune → Bangalore", emoji: "✈️" },
+  { origin: "Kolkata", destination: "Patna", label: "Kolkata → Patna", emoji: "🚊" },
+  { origin: "Jaipur", destination: "Udaipur", label: "Jaipur → Udaipur", emoji: "🏰" },
+];
+
+const PLACEHOLDER_EXAMPLES = [
+  { origin: "e.g. Hyderabad", destination: "e.g. Bangalore" },
+  { origin: "e.g. Delhi", destination: "e.g. Mumbai" },
+  { origin: "e.g. Pune", destination: "e.g. Goa" },
+  { origin: "e.g. Chennai", destination: "e.g. Coimbatore" },
+  { origin: "e.g. Kolkata", destination: "e.g. Patna" },
+];
+
+type RecentSearch = {
+  origin: string;
+  destination: string;
+  date?: string;
+  timestamp: number;
+};
+
+const RECENT_SEARCHES_KEY = "navix_recent_searches";
+const MAX_RECENT = 4;
+
+function getRecentSearches(): RecentSearch[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentSearch(search: Omit<RecentSearch, "timestamp">) {
+  const existing = getRecentSearches();
+  const deduped = existing.filter(
+    (s) =>
+      !(
+        s.origin.toLowerCase() === search.origin.toLowerCase() &&
+        s.destination.toLowerCase() === search.destination.toLowerCase()
+      )
+  );
+  const updated = [{ ...search, timestamp: Date.now() }, ...deduped].slice(
+    0,
+    MAX_RECENT
+  );
+  try {
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+  } catch {
+    // ignore
+  }
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 type ValidationError = "origin" | "destination" | "date" | null;
 
@@ -13,6 +82,26 @@ export function SearchForm() {
   const [date, setDate] = useState("");
   const [useFlexibleDates, setUseFlexibleDates] = useState(false);
   const [flexibleMonth, setFlexibleMonth] = useState("");
+  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
+  const [placeholderIdx, setPlaceholderIdx] = useState(0);
+
+  // Rotate placeholders
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIdx((prev) => (prev + 1) % PLACEHOLDER_EXAMPLES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Load recent searches on mount
+  useEffect(() => {
+    setRecentSearches(getRecentSearches());
+  }, []);
+
+  const currentPlaceholder = useMemo(
+    () => PLACEHOLDER_EXAMPLES[placeholderIdx],
+    [placeholderIdx]
+  );
 
   const getMinDate = (): string => {
     const today = new Date();
@@ -43,7 +132,6 @@ export function SearchForm() {
   const validateForm = (): boolean => {
     const newErrors: ValidationError[] = [];
 
-    // Both origin and destination must be filled or both empty
     const originFilled = origin.trim().length > 0;
     const destinationFilled = destination.trim().length > 0;
 
@@ -52,12 +140,10 @@ export function SearchForm() {
       if (!destinationFilled) newErrors.push("destination");
     }
 
-    // If either origin or destination is filled, date or flexible dates must be filled
     if ((originFilled || destinationFilled) && !date && !flexibleMonth) {
       newErrors.push("date");
     }
 
-    // Validate specific date is within range
     if (date) {
       const selectedDate = new Date(date);
       const today = new Date();
@@ -81,7 +167,16 @@ export function SearchForm() {
       return;
     }
 
-    // All validations passed, navigate to results
+    // Save to recent searches
+    if (origin.trim() && destination.trim()) {
+      saveRecentSearch({
+        origin: origin.trim(),
+        destination: destination.trim(),
+        date: date || flexibleMonth || undefined,
+      });
+      setRecentSearches(getRecentSearches());
+    }
+
     const params = new URLSearchParams();
     if (origin.trim()) params.set("origin", origin.trim());
     if (destination.trim()) params.set("destination", destination.trim());
@@ -90,6 +185,27 @@ export function SearchForm() {
 
     router.push(`/results?${params.toString()}`);
   };
+
+  const applyRoute = useCallback(
+    (o: string, d: string, dt?: string) => {
+      setOrigin(o);
+      setDestination(d);
+      if (dt) setDate(dt);
+      setErrors([]);
+    },
+    []
+  );
+
+  const clearRecent = useCallback(() => {
+    try {
+      localStorage.removeItem(RECENT_SEARCHES_KEY);
+    } catch {
+      // ignore
+    }
+    setRecentSearches([]);
+  }, []);
+
+  const hasEmptyInputs = !origin.trim() && !destination.trim();
 
   return (
     <form
@@ -150,7 +266,7 @@ export function SearchForm() {
             </span>
             <input
               type="text"
-              placeholder="City, station, or stop"
+              placeholder={currentPlaceholder.origin}
               autoComplete="off"
               value={origin}
               onChange={(e) => {
@@ -159,7 +275,7 @@ export function SearchForm() {
                   setErrors(errors.filter((e) => e !== "origin"));
                 }
               }}
-              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-500 outline-none transition duration-200 hover:border-white/[0.18] ${
+              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-600 outline-none transition duration-200 hover:border-white/[0.18] ${
                 errors.includes("origin")
                   ? "border-red-500/50 bg-red-950/20 focus:border-red-400/50 focus:bg-red-950/30 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.14)]"
                   : "border-white/10 bg-black/45 focus:border-cyan-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(34,211,238,0.14)]"
@@ -200,7 +316,7 @@ export function SearchForm() {
             </span>
             <input
               type="text"
-              placeholder="Where you need to arrive"
+              placeholder={currentPlaceholder.destination}
               autoComplete="off"
               value={destination}
               onChange={(e) => {
@@ -209,7 +325,7 @@ export function SearchForm() {
                   setErrors(errors.filter((e) => e !== "destination"));
                 }
               }}
-              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-500 outline-none transition duration-200 hover:border-white/[0.18] ${
+              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-600 outline-none transition duration-200 hover:border-white/[0.18] ${
                 errors.includes("destination")
                   ? "border-red-500/50 bg-red-950/20 focus:border-red-400/50 focus:bg-red-950/30 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.14)]"
                   : "border-white/10 bg-black/45 focus:border-violet-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(167,139,250,0.14)]"
@@ -312,7 +428,100 @@ export function SearchForm() {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col gap-5 border-t border-white/[0.06] pt-8 sm:flex-row sm:items-center sm:justify-between">
+      {/* ── Quick suggestions & recent searches ── */}
+      {hasEmptyInputs && (
+        <div className="mt-8 space-y-6 border-t border-white/[0.06] pt-8">
+
+          {/* Recent Searches */}
+          {recentSearches.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <svg className="h-3.5 w-3.5 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                    Recent searches
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={clearRecent}
+                  className="text-[11px] font-medium text-zinc-600 hover:text-zinc-400 transition-colors"
+                >
+                  Clear all
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {recentSearches.map((search, i) => (
+                  <button
+                    key={`recent-${i}`}
+                    type="button"
+                    onClick={() => applyRoute(search.origin, search.destination, search.date)}
+                    className="group/recent inline-flex items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-sm transition-all duration-200 hover:border-cyan-500/30 hover:bg-cyan-500/[0.06]"
+                  >
+                    <svg className="h-3.5 w-3.5 text-zinc-600 group-hover/recent:text-cyan-400 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span className="text-zinc-400 group-hover/recent:text-zinc-200 transition-colors font-medium">
+                      {search.origin}
+                    </span>
+                    <span className="text-zinc-600">→</span>
+                    <span className="text-zinc-400 group-hover/recent:text-zinc-200 transition-colors font-medium">
+                      {search.destination}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Popular Routes */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <svg className="h-3.5 w-3.5 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                Popular routes
+              </span>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {POPULAR_ROUTES.map((route) => (
+                <button
+                  key={route.label}
+                  type="button"
+                  onClick={() => applyRoute(route.origin, route.destination)}
+                  className="group/pop flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-left transition-all duration-200 hover:border-cyan-500/30 hover:bg-cyan-500/[0.06] hover:-translate-y-0.5"
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-lg transition-transform duration-200 group-hover/pop:scale-110 border border-white/[0.06]">
+                    {route.emoji}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-zinc-300 truncate group-hover/pop:text-white transition-colors">
+                      {route.label}
+                    </p>
+                    {route.tag && (
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-cyan-400/70 mt-0.5">
+                        {route.tag}
+                      </p>
+                    )}
+                  </div>
+                  <svg className="h-4 w-4 text-zinc-700 group-hover/pop:text-cyan-400 transition-all shrink-0 group-hover/pop:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* ── Submit bar ── */}
+      <div className={`flex flex-col gap-5 border-t border-white/[0.06] pt-8 sm:flex-row sm:items-center sm:justify-between ${hasEmptyInputs ? "mt-6" : "mt-8"}`}>
         <p className="max-w-lg text-xs leading-relaxed text-zinc-500 sm:text-sm">
           Results include comparison-friendly route cards and booking partner
           handoffs—prioritizing clarity over clutter.
