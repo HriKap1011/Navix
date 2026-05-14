@@ -230,6 +230,21 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
           </div>
         </div>
 
+        {/* Transparent Reasoning for Recommended Route */}
+        {isTopPick && route.recommendationReasoning && (
+          <div className="mb-4 p-3.5 rounded-xl border border-cyan-500/20 bg-cyan-500/[0.03]">
+            <p className="text-xs font-bold text-cyan-400 mb-2">Navix recommends this route because:</p>
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+              {route.recommendationReasoning.map((reason, idx) => (
+                <li key={idx} className="flex items-center gap-1.5 text-xs text-zinc-300">
+                  <span className="text-cyan-500 font-bold">•</span>
+                  <span>{reason}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* ── Timeline ── */}
         <div className="nv-inner-surface flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3.5">
           <div className="text-left">

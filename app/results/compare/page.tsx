@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buildRouteOptions } from "../_data/mock-routes";
+import { calculateSmartScores } from "../_utils/scoring";
 
 type SearchParams = {
   origin?: string;
@@ -21,10 +22,11 @@ export default async function ComparePage({
 
   // Generate all routes for the corridor
   const allRoutes = buildRouteOptions(origin, destination, params.date || params.flexibleMonth || "");
+  const allWithScores = calculateSmartScores(allRoutes);
   
   // Filter only the selected routes
-  const selectedRoutes = allRoutes.filter((r) => ids.includes(r.id));
-  const unselectedRoutes = allRoutes.filter((r) => !ids.includes(r.id));
+  const selectedRoutes = allWithScores.filter((r) => ids.includes(r.id));
+  const unselectedRoutes = allWithScores.filter((r) => !ids.includes(r.id));
 
   if (selectedRoutes.length === 0) {
     return (
