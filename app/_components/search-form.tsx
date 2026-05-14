@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -76,12 +76,14 @@ type ValidationError = "origin" | "destination" | "date" | null;
 
 export function SearchForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
   const [errors, setErrors] = useState<ValidationError[]>([]);
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
-  const [date, setDate] = useState("");
-  const [useFlexibleDates, setUseFlexibleDates] = useState(false);
-  const [flexibleMonth, setFlexibleMonth] = useState("");
+  const [origin, setOrigin] = useState(searchParams.get("origin") || "");
+  const [destination, setDestination] = useState(searchParams.get("destination") || "");
+  const [date, setDate] = useState(searchParams.get("date") || "");
+  const [flexibleMonth, setFlexibleMonth] = useState(searchParams.get("flexibleMonth") || "");
+  const [useFlexibleDates, setUseFlexibleDates] = useState(!!searchParams.get("flexibleMonth"));
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
 

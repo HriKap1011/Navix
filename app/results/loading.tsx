@@ -3,6 +3,25 @@ import Link from "next/link";
 export default function Loading() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#030306] font-sans text-zinc-100 [color-scheme:dark]">
+      <style>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .shimmer-bg {
+          position: relative;
+          overflow: hidden;
+          background-color: rgba(255, 255, 255, 0.04);
+        }
+        .shimmer-bg::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+          animation: shimmer 1.6s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* Background elements */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -38,7 +57,7 @@ export default function Loading() {
               </span>
             </span>
           </div>
-          <div className="h-9 w-24 rounded-full bg-white/[0.05] animate-pulse" />
+          <div className="h-9 w-24 rounded-full shimmer-bg" />
         </div>
       </header>
 
@@ -46,20 +65,20 @@ export default function Loading() {
         <div className="overflow-visible rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] p-6 shadow-[0_30px_90px_-36px_rgba(34,211,238,0.35)] backdrop-blur-xl sm:p-8">
           {/* Journey Display Skeleton */}
           <div className="mb-8 pb-8 border-b border-white/10">
-            <div className="h-10 w-3/4 max-w-md rounded-lg bg-white/[0.05] animate-pulse" />
-            <div className="mt-4 h-6 w-1/3 max-w-xs rounded-md bg-white/[0.05] animate-pulse" />
+            <div className="h-10 w-3/4 max-w-md rounded-lg shimmer-bg" />
+            <div className="mt-4 h-6 w-1/3 max-w-xs rounded-md shimmer-bg" />
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="w-full">
-              <div className="h-4 w-16 rounded bg-white/[0.05] animate-pulse" />
-              <div className="mt-5 h-8 w-2/3 max-w-sm rounded-lg bg-white/[0.05] animate-pulse" />
+              <div className="h-4 w-16 rounded shimmer-bg" />
+              <div className="mt-5 h-8 w-2/3 max-w-sm rounded-lg shimmer-bg" />
               <div className="mt-4 space-y-2">
-                <div className="h-4 w-full max-w-lg rounded bg-white/[0.05] animate-pulse" />
-                <div className="h-4 w-3/4 max-w-md rounded bg-white/[0.05] animate-pulse" />
+                <div className="h-4 w-full max-w-lg rounded shimmer-bg" />
+                <div className="h-4 w-3/4 max-w-md rounded shimmer-bg" />
               </div>
             </div>
-            <div className="h-11 w-32 shrink-0 rounded-2xl bg-white/[0.05] animate-pulse" />
+            <div className="h-11 w-32 shrink-0 rounded-2xl shimmer-bg" />
           </div>
         </div>
 
@@ -68,70 +87,78 @@ export default function Loading() {
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 sm:p-7"
+              className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 sm:p-8"
             >
-              <div className="space-y-5">
-                {/* Header */}
-                <div className="flex justify-between gap-3">
-                  <div className="space-y-2 w-1/2">
-                    <div className="h-3 w-24 rounded bg-white/[0.05] animate-pulse" />
-                    <div className="h-6 w-full rounded bg-white/[0.05] animate-pulse" />
-                  </div>
+              {/* Header */}
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="space-y-3 flex-1">
                   <div className="flex gap-2">
-                    <div className="h-7 w-20 rounded-full bg-white/[0.05] animate-pulse" />
-                    <div className="h-7 w-24 rounded-full bg-white/[0.05] animate-pulse" />
+                    <div className="h-5 w-20 rounded-full shimmer-bg" />
+                    <div className="h-5 w-24 rounded-full shimmer-bg" />
                   </div>
+                  <div className="h-7 w-3/4 max-w-sm rounded-lg shimmer-bg" />
                 </div>
+                {/* Score Ring Skeleton */}
+                <div className="h-14 w-14 rounded-full shimmer-bg flex-shrink-0" />
+              </div>
 
-                {/* Timeline */}
-                <div className="rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3.5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="space-y-1.5">
-                      <div className="h-3 w-12 rounded bg-white/[0.05] animate-pulse" />
-                      <div className="h-7 w-16 rounded bg-white/[0.05] animate-pulse" />
-                    </div>
-                    <div className="flex-1 space-y-1.5 flex flex-col items-center">
-                      <div className="h-1 w-full rounded bg-white/[0.05] animate-pulse" />
-                      <div className="h-3 w-14 rounded bg-white/[0.05] animate-pulse" />
-                    </div>
-                    <div className="space-y-1.5 text-right">
-                      <div className="h-3 w-12 ml-auto rounded bg-white/[0.05] animate-pulse" />
-                      <div className="h-7 w-16 ml-auto rounded bg-white/[0.05] animate-pulse" />
-                    </div>
+              {/* Timeline */}
+              <div className="rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3.5 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <div className="h-6 w-16 rounded shimmer-bg" />
+                    <div className="h-3 w-10 rounded shimmer-bg" />
                   </div>
-                </div>
-
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3.5 space-y-2">
-                    <div className="h-3 w-16 rounded bg-white/[0.05] animate-pulse" />
-                    <div className="h-6 w-20 rounded bg-white/[0.05] animate-pulse" />
+                  <div className="flex-1 mx-6 flex flex-col items-center gap-2">
+                    <div className="h-px w-full bg-white/10" />
+                    <div className="h-4 w-20 rounded-full shimmer-bg" />
                   </div>
-                  <div className="rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3.5 space-y-2">
-                    <div className="h-3 w-20 rounded bg-white/[0.05] animate-pulse" />
-                    <div className="h-6 w-16 rounded bg-white/[0.05] animate-pulse" />
-                  </div>
-                </div>
-
-                {/* Availability */}
-                <div className="rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3">
-                  <div className="flex justify-between mb-2.5">
-                    <div className="h-3 w-24 rounded bg-white/[0.05] animate-pulse" />
-                    <div className="h-3 w-16 rounded bg-white/[0.05] animate-pulse" />
-                  </div>
-                  <div className="h-1.5 w-full rounded-full bg-white/[0.05] animate-pulse" />
-                </div>
-
-                {/* Legs */}
-                <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
-                  <div className="h-3 w-20 rounded bg-white/[0.05] animate-pulse mb-4" />
-                  <div className="space-y-2.5">
-                    {[1, 2].map((j) => (
-                      <div key={j} className="h-10 w-full rounded-xl bg-white/[0.03] animate-pulse" />
-                    ))}
+                  <div className="space-y-1 text-right">
+                    <div className="h-6 w-16 rounded shimmer-bg ml-auto" />
+                    <div className="h-3 w-10 rounded shimmer-bg ml-auto" />
                   </div>
                 </div>
               </div>
+
+              {/* Stats Grid (2x2) */}
+              <div className="grid grid-cols-2 gap-2.5 mb-4">
+                {[1, 2, 3, 4].map((s) => (
+                  <div key={s} className="rounded-xl border border-white/5 bg-white/[0.02] px-3.5 py-3 space-y-2">
+                    <div className="h-3 w-16 rounded shimmer-bg" />
+                    <div className="h-5 w-24 rounded shimmer-bg" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Travel Legs */}
+              <div className="space-y-1.5 mb-4">
+                <div className="h-3 w-24 rounded shimmer-bg mb-2" />
+                {[1, 2].map((l) => (
+                  <div key={l} className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5">
+                    <div className="h-7 w-7 rounded-full shimmer-bg flex-shrink-0" />
+                    <div className="flex-1 space-y-1">
+                      <div className="h-4 w-1/2 rounded shimmer-bg" />
+                      <div className="h-3 w-1/4 rounded shimmer-bg" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Route Intelligence (2x2) */}
+              <div className="pt-3 mt-1 border-t border-white/[0.06]">
+                <div className="h-3 w-24 rounded shimmer-bg mb-2.5" />
+                <div className="grid grid-cols-2 gap-2">
+                  {[1, 2, 3, 4].map((m) => (
+                    <div key={m} className="rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5 space-y-1.5">
+                      <div className="h-3 w-12 rounded shimmer-bg" />
+                      <div className="h-4 w-20 rounded shimmer-bg" />
+                    </div>
+                  ))}
+                </div>
+                {/* Seasonal tip */}
+                <div className="mt-2.5 h-10 w-full rounded-lg bg-white/[0.015] border border-white/[0.04] shimmer-bg" />
+              </div>
+
             </div>
           ))}
         </section>

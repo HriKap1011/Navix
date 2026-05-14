@@ -37,6 +37,7 @@ export type RouteOption = {
   difficulty: TravelDifficulty;
   travelInsights: TravelInsights;
   navixScore: number;
+  comfortScore: number;
 };
 
 export type RouteLeg = {
@@ -263,10 +264,9 @@ export function buildRouteOptions(
   const seed = getHash(`${origin}-${destination}-${dateInput ?? "flexible"}`);
   const durationOffset = seed % 55;
   const priceOffset = seed % 420;
-  const recommendedIndex = seed % routeTemplates.length;
   const timeJitterMin = (seed % 30) - 15;
 
-  return routeTemplates.map((template, index) => {
+  const routes = routeTemplates.map((template, index) => {
     const directionalBoost = index % 2 === 0 ? 1 : -1;
     const adjustedDuration =
       template.duration +
@@ -317,15 +317,15 @@ export function buildRouteOptions(
       Math.max(40, template.baseConfidence + ((seed >> (index + 2)) % 17) - 8),
     );
 
-    const isRec = index === recommendedIndex;
-
     // Navix Score with jitter
     const scoreJitter = ((seed >> (index + 3)) % 9) - 4;
-    const navixScore = Math.min(96, Math.max(55, template.baseNavixScore + scoreJitter + (isRec ? 4 : 0)));
+    const navixScore = Math.min(96, Math.max(55, template.baseNavixScore + scoreJitter));
 
     // Travel insights with slight jitter
     const crowdJitter = ((seed >> (index + 1)) % 15) - 7;
     const crowdLevel = Math.min(95, Math.max(10, template.baseCrowdLevel + crowdJitter));
+
+    const comfortScore = Math.min(98, Math.max(40, navixScore - 10 + ((seed >> (index + 4)) % 20)));
 
     const travelInsights: TravelInsights = {
       demandLevel: template.baseDemand,
@@ -345,7 +345,7 @@ export function buildRouteOptions(
       legs,
       recommendationTag: template.recommendationTag,
       tagTone: template.tagTone,
-      isRecommended: isRec,
+      isRecommended: false,
       departureTime: formatTime(depRaw.hour, depRaw.min),
       arrivalTime: formatTime(finalArr.hour, finalArr.min),
       layoverDuration: formatDuration(Math.max(10, layoverMin)),
@@ -354,6 +354,23 @@ export function buildRouteOptions(
       difficulty: template.difficulty,
       travelInsights,
       navixScore,
+      comfortScore,
     };
   });
+
+  // Find the route with the best score
+  if (routes.length > 0) {
+    let bestRouteIndex = 0;
+    let maxScore = routes[0].navixScore;
+
+    for (let i = 1; i < routes.length; i++) {
+      if (routes[i].navixScore > maxScore) {
+        maxScore = routes[i].navixScore;
+        bestRouteIndex = i;
+      }
+    }
+    routes[bestRouteIndex].isRecommended = true;
+  }
+
+  return routes;
 }
