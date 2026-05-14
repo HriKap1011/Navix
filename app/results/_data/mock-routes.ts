@@ -38,6 +38,8 @@ export type RouteOption = {
   travelInsights: TravelInsights;
   navixScore: number;
   comfortScore: number;
+  seatLikelihood: number;
+  recommendationReasoning?: string[];
 };
 
 export type RouteLeg = {
@@ -326,6 +328,7 @@ export function buildRouteOptions(
     const crowdLevel = Math.min(95, Math.max(10, template.baseCrowdLevel + crowdJitter));
 
     const comfortScore = Math.min(98, Math.max(40, navixScore - 10 + ((seed >> (index + 4)) % 20)));
+    const seatLikelihood = Math.min(99, Math.max(10, availability - 5 + ((seed >> (index + 5)) % 10)));
 
     const travelInsights: TravelInsights = {
       demandLevel: template.baseDemand,
@@ -355,6 +358,7 @@ export function buildRouteOptions(
       travelInsights,
       navixScore,
       comfortScore,
+      seatLikelihood,
     };
   });
 

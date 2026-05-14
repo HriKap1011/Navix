@@ -3,6 +3,7 @@ import { RouteCard } from "./_components/route-card";
 import { TripSelector } from "./_components/trip-selector";
 import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
 import { ComparisonDrawer } from "./_components/comparison-drawer";
+import { calculateSmartScores } from "./_utils/scoring";
 
 const capitalizeCity = (city: string): string => {
   return city
@@ -45,10 +46,11 @@ export default async function ResultsPage({
     date = formatFlexibleMonth(params.flexibleMonth);
   }
   
-  const rawRouteOptions = buildRouteOptions(origin, destination, params.date);
+  const rawRouteOptions = buildRouteOptions(origin, destination, params.date || params.flexibleMonth || "");
+  const rawWithScores = calculateSmartScores(rawRouteOptions);
 
   // Filter
-  let routeOptions = [...rawRouteOptions];
+  let routeOptions = [...rawWithScores];
   if (mode !== "all") {
     routeOptions = routeOptions.filter(route => 
       route.travelModes.some(m => m.toLowerCase().includes(mode.toLowerCase()))
@@ -76,10 +78,9 @@ export default async function ResultsPage({
     routeOptions.sort((a, b) => b.navixScore - a.navixScore);
   }
 
-  // Simulate complex routing engine delay to show polished loading skeleton
-  await new Promise((resolve) => setTimeout(resolve, 1500));
 
-  const sortedByPrice = [...rawRouteOptions].sort((a, b) => {
+
+  const sortedByPrice = [...rawWithScores].sort((a, b) => {
     const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
     const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
     return priceA - priceB;
@@ -147,7 +148,7 @@ export default async function ResultsPage({
     return `/results?${current.toString()}`;
   };
 
-  const selectedRoutes = rawRouteOptions.filter(r => compareIds.includes(r.id));
+  const selectedRoutes = rawWithScores.filter(r => compareIds.includes(r.id));
   
   const comparePageHref = `/results/compare?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&ids=${compareIds.join(",")}${params.date ? `&date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `&flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : ""}`;
 
