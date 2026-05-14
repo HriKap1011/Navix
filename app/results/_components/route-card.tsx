@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { RouteOption, TravelDifficulty } from "../_data/mock-routes";
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
@@ -122,9 +123,11 @@ type RouteCardProps = {
   route: RouteOption;
   priceRank?: number;
   isTopPick?: boolean;
+  compareHref?: string;
+  isCompared?: boolean;
 };
 
-export function RouteCard({ route, priceRank = 0, isTopPick = false }: RouteCardProps) {
+export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref, isCompared = false }: RouteCardProps) {
   const priceEmoji = priceEmotionEmojis[Math.min(Math.max(priceRank, 0), 3)];
   const avail = availabilityColor(route.estimatedAvailability);
   const diff = difficultyConfig[route.difficulty];
@@ -146,7 +149,7 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false }: RouteCard
           : route.isRecommended
             ? "nv-recommended border-cyan-300/35 from-cyan-400/[0.1] to-white/[0.04] shadow-[0_24px_80px_-40px_rgba(34,211,238,0.4)] hover:-translate-y-1.5 hover:border-cyan-200/55 hover:shadow-[0_30px_95px_-30px_rgba(34,211,238,0.65)]"
             : "border-white/10 from-white/[0.06] to-white/[0.02] hover:-translate-y-1.5 hover:border-cyan-400/40 hover:bg-white/[0.04] hover:shadow-[0_28px_80px_-30px_rgba(34,211,238,0.5)]"
-      } ${isTopPick ? "lg:col-span-2" : ""}`}
+      }`}
     >
       {/* Decorative glows */}
       <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -190,8 +193,8 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false }: RouteCard
             </h2>
           </div>
 
-          {/* Navix Score Ring */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-1">
+          {/* Navix Score Ring and Compare */}
+          <div className="flex-shrink-0 flex flex-col items-center gap-1.5">
             <div className="relative w-14 h-14">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                 <circle cx="18" cy="18" r="15.5" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="2.5" />
@@ -211,6 +214,19 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false }: RouteCard
               </div>
             </div>
             <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-zinc-600">NX Score</span>
+            
+            {compareHref && (
+              <Link
+                href={compareHref}
+                className={`mt-1 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider transition ${
+                  isCompared
+                    ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200"
+                    : "border-white/10 bg-white/[0.02] text-zinc-500 hover:border-white/20 hover:text-zinc-300"
+                }`}
+              >
+                {isCompared ? "✓ Added" : "+ Compare"}
+              </Link>
+            )}
           </div>
         </div>
 
@@ -322,7 +338,7 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false }: RouteCard
         {/* ── Travel Context Insights ── */}
         <div className="pt-3 mt-1 border-t border-white/[0.06]">
           <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-2.5 px-0.5">Route Intelligence</p>
-          <div className={`grid gap-2 ${isTopPick ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-2"}`}>
+          <div className="grid grid-cols-2 gap-2">
             {/* Demand */}
             <div className="rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2.5">
               <p className="text-[9px] font-bold uppercase tracking-wider text-zinc-600 mb-1.5">Demand</p>

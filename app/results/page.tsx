@@ -2,6 +2,7 @@ import Link from "next/link";
 import { RouteCard } from "./_components/route-card";
 import { TripSelector } from "./_components/trip-selector";
 import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
+import { ComparisonDrawer } from "./_components/comparison-drawer";
 
 const capitalizeCity = (city: string): string => {
   return city
@@ -21,6 +22,9 @@ type SearchParams = {
   destination?: string;
   date?: string;
   flexibleMonth?: string;
+  sort?: string;
+  mode?: string;
+  compare?: string;
 };
 
 export default async function ResultsPage({
@@ -31,6 +35,8 @@ export default async function ResultsPage({
   const params = await searchParams;
   const origin = params.origin?.trim() || "Mumbai";
   const destination = params.destination?.trim() || "Bengaluru";
+  const sort = params.sort || "score";
+  const mode = params.mode || "all";
   
   let date = "Flexible dates";
   if (params.date) {
@@ -39,13 +45,41 @@ export default async function ResultsPage({
     date = formatFlexibleMonth(params.flexibleMonth);
   }
   
-  const routeOptions = buildRouteOptions(origin, destination, params.date);
+  const rawRouteOptions = buildRouteOptions(origin, destination, params.date);
+
+  // Filter
+  let routeOptions = [...rawRouteOptions];
+  if (mode !== "all") {
+    routeOptions = routeOptions.filter(route => 
+      route.travelModes.some(m => m.toLowerCase().includes(mode.toLowerCase()))
+    );
+  }
+  
+  // Sort
+  if (sort === "price") {
+    routeOptions.sort((a, b) => {
+      const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
+      const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
+      return priceA - priceB;
+    });
+  } else if (sort === "duration") {
+    routeOptions.sort((a, b) => {
+      const getMin = (d: string) => {
+        const h = d.match(/(\d+)h/);
+        const m = d.match(/(\d+)m/);
+        return (h ? parseInt(h[1]) * 60 : 0) + (m ? parseInt(m[1]) : 0);
+      };
+      return getMin(a.duration) - getMin(b.duration);
+    });
+  } else {
+    // Default: score
+    routeOptions.sort((a, b) => b.navixScore - a.navixScore);
+  }
 
   // Simulate complex routing engine delay to show polished loading skeleton
   await new Promise((resolve) => setTimeout(resolve, 1500));
 
-  // Sort routes by estimated price and create a rank map
-  const sortedByPrice = [...routeOptions].sort((a, b) => {
+  const sortedByPrice = [...rawRouteOptions].sort((a, b) => {
     const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
     const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
     return priceA - priceB;
@@ -55,6 +89,67 @@ export default async function ResultsPage({
   sortedByPrice.forEach((route, index) => {
     priceRankMap.set(route.id, index);
   });
+
+  const createHref = (newParams: Record<string, string>) => {
+    const current = new URLSearchParams();
+    if (origin) current.set("origin", origin);
+    if (destination) current.set("destination", destination);
+    if (params.date) current.set("date", params.date);
+    if (params.flexibleMonth) current.set("flexibleMonth", params.flexibleMonth);
+    if (sort !== "score") current.set("sort", sort);
+    if (mode !== "all") current.set("mode", mode);
+    if (params.compare) current.set("compare", params.compare);
+    
+    for (const [key, value] of Object.entries(newParams)) {
+      if (value === "") current.delete(key);
+      else current.set(key, value);
+    }
+    return `/results?${current.toString()}`;
+  };
+
+  const compareIds = params.compare ? params.compare.split(",") : [];
+
+  const getCompareHref = (id: string) => {
+    const current = new URLSearchParams();
+    if (origin) current.set("origin", origin);
+    if (destination) current.set("destination", destination);
+    if (params.date) current.set("date", params.date);
+    if (params.flexibleMonth) current.set("flexibleMonth", params.flexibleMonth);
+    if (sort !== "score") current.set("sort", sort);
+    if (mode !== "all") current.set("mode", mode);
+    
+    let newCompare = [...compareIds];
+    if (newCompare.includes(id)) {
+      newCompare = newCompare.filter(i => i !== id);
+    } else {
+      if (newCompare.length < 3) {
+        newCompare.push(id);
+      } else {
+        newCompare[2] = id; // Replace last if full
+      }
+    }
+    
+    if (newCompare.length > 0) {
+      current.set("compare", newCompare.join(","));
+    }
+    
+    return `/results?${current.toString()}`;
+  };
+
+  const getClearCompareHref = () => {
+    const current = new URLSearchParams();
+    if (origin) current.set("origin", origin);
+    if (destination) current.set("destination", destination);
+    if (params.date) current.set("date", params.date);
+    if (params.flexibleMonth) current.set("flexibleMonth", params.flexibleMonth);
+    if (sort !== "score") current.set("sort", sort);
+    if (mode !== "all") current.set("mode", mode);
+    return `/results?${current.toString()}`;
+  };
+
+  const selectedRoutes = rawRouteOptions.filter(r => compareIds.includes(r.id));
+  
+  const comparePageHref = `/results/compare?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&ids=${compareIds.join(",")}${params.date ? `&date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `&flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : ""}`;
 
   const dateParam = params.date ? `date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : "";
   const editSearchHref = `/?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${dateParam ? "&" + dateParam : ""}#plan`;
@@ -131,8 +226,7 @@ export default async function ResultsPage({
                 Smart route options for your trip
               </h2>
               <p className="nv-text-secondary mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
-                Compare multi-modal legs side by side. Prices and times are mock
-                data for MVP—real routing plugs in later.
+                Compare multi-modal legs side by side. Ranked by Navix Score.
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
                 <TripSelector 
@@ -153,13 +247,68 @@ export default async function ResultsPage({
           </div>
         </div>
 
+        {/* Controls Section */}
+        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3">
+          {/* Filters */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-zinc-500">Filter:</span>
+            <div className="flex gap-1.5">
+              {[
+                { label: "All", value: "all" },
+                { label: "Flight", value: "flight" },
+                { label: "Train", value: "train" },
+                { label: "Bus", value: "bus" },
+              ].map((opt) => (
+                <Link
+                  key={opt.value}
+                  href={createHref({ mode: opt.value === "all" ? "" : opt.value })}
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                    mode === opt.value
+                      ? "bg-cyan-400/20 text-cyan-200 border border-cyan-400/30"
+                      : "bg-white/[0.03] text-zinc-400 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white"
+                  }`}
+                >
+                  {opt.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Sorting */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-zinc-500">Sort by:</span>
+            <div className="flex gap-1.5">
+              {[
+                { label: "Recommended", value: "score" },
+                { label: "Price", value: "price" },
+                { label: "Duration", value: "duration" },
+              ].map((opt) => (
+                <Link
+                  key={opt.value}
+                  href={createHref({ sort: opt.value === "score" ? "" : opt.value })}
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                    sort === opt.value
+                      ? "bg-violet-400/20 text-violet-200 border border-violet-400/30"
+                      : "bg-white/[0.03] text-zinc-400 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white"
+                  }`}
+                >
+                  {opt.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {routeOptions.length > 0 ? (
-          <section className="mt-8 grid gap-5 lg:grid-cols-2">
-            {routeOptions.map((route) => (
+          <section className="mt-6 grid gap-5 lg:grid-cols-2">
+            {routeOptions.slice(0, 4).map((route) => (
               <RouteCard 
                 key={route.id} 
                 route={route}
                 priceRank={priceRankMap.get(route.id) || 0}
+                isTopPick={route.isRecommended}
+                compareHref={getCompareHref(route.id)}
+                isCompared={compareIds.includes(route.id)}
               />
             ))}
           </section>
@@ -279,6 +428,8 @@ export default async function ResultsPage({
           </section>
         )}
       </main>
+
+      <ComparisonDrawer routes={selectedRoutes} clearHref={getClearCompareHref()} comparePageHref={comparePageHref} />
     </div>
   );
 }
