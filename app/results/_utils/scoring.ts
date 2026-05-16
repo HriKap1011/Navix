@@ -89,7 +89,9 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
     let tag = r.recommendationTag;
     let tone = r.tagTone;
 
-    // Prioritize badges: Best > Cheapest > Fastest
+    const minTransfersVal = Math.min(...scoredRoutes.map(r => r.legs.length - 1));
+
+    // Prioritize badges: Best > Cheapest > Fastest > Fewer Transfers
     if (isBest) {
       tag = "Best Route";
       tone = "cyan";
@@ -99,6 +101,9 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
     } else if (isFastest) {
       tag = "Fastest";
       tone = "violet";
+    } else if (r.legs.length - 1 === minTransfersVal) {
+      tag = "Fewer Transfers";
+      tone = "amber";
     }
 
     const reasoning: string[] = [];
