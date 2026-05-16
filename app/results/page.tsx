@@ -80,15 +80,35 @@ export default async function ResultsPage({
 
 
 
-  const sortedByPrice = [...rawWithScores].sort((a, b) => {
-    const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
-    const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
-    return priceA - priceB;
-  });
+  const priceValues = rawWithScores.map(r => parseFloat(r.estimatedPrice.replace(/[^0-9.]/g, ""))).sort((a, b) => a - b);
+  const maxPriceValue = Math.max(...priceValues);
+  
+  const getQuartile = (arr: number[], q: number) => {
+    if (arr.length === 0) return 0;
+    const pos = (arr.length - 1) * q;
+    const base = Math.floor(pos);
+    const rest = pos - base;
+    return arr[base + 1] !== undefined ? arr[base] + rest * (arr[base + 1] - arr[base]) : arr[base];
+  };
+
+  const q1 = getQuartile(priceValues, 0.25);
+  const q3 = getQuartile(priceValues, 0.75);
+  const iqr = q3 - q1;
 
   const priceRankMap = new Map<string, number>();
-  sortedByPrice.forEach((route, index) => {
-    priceRankMap.set(route.id, index);
+  rawWithScores.forEach((route) => {
+    const p = parseFloat(route.estimatedPrice.replace(/[^0-9.]/g, ""));
+    let rank = 1; // Default: Fair
+    
+    if (p <= q1) {
+      rank = 0; // Great Deal
+    } else if (p === maxPriceValue && (p > q3 * 1.3 || p > q3 + 1.5 * iqr)) {
+      rank = 3; // Extreme Outlier / Highest
+    } else if (p > q3) {
+      rank = 2; // Expensive
+    }
+    
+    priceRankMap.set(route.id, rank);
   });
 
   const createHref = (newParams: Record<string, string>) => {
@@ -302,7 +322,7 @@ export default async function ResultsPage({
 
         {routeOptions.length > 0 ? (
           <section className="mt-6 grid gap-5 lg:grid-cols-2">
-            {routeOptions.slice(0, 4).map((route) => (
+            {routeOptions.slice(0, 6).map((route) => (
               <RouteCard 
                 key={route.id} 
                 route={route}
