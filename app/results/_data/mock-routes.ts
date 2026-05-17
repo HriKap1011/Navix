@@ -40,6 +40,11 @@ export type RouteOption = {
   comfortScore: number;
   seatLikelihood: number;
   recommendationReasoning?: string[];
+  waitlistCode?: string;
+  confirmationLikelihood?: "High" | "Medium" | "Low" | "Very Low";
+  confirmationProbability?: number;
+  peakDemandFactor?: string;
+  rescueRecommendation?: string;
 };
 
 export type RouteLeg = {
@@ -131,7 +136,7 @@ function getNearbyStations(cityName: string): { code: string; name: string }[] {
   if (matchedKey) {
     return NEARBY_STATIONS[matchedKey];
   }
-  
+
   // Dynamic fallback generator
   const baseCode = cityName.substring(0, 3).toUpperCase().replace(/[()]/g, "");
   const baseName = cityName.replace(/\s*\([^)]*\)*/g, "");
@@ -213,12 +218,36 @@ export function formatTravelDate(date: string) {
 }
 
 const MODES: Record<string, { speed: number; costPerKm: number; baseFare: number; }> = {
-  "Flight": { speed: 600, costPerKm: 4.5, baseFare: 1500 },
-  "Train": { speed: 80, costPerKm: 1.2, baseFare: 200 },
-  "Sleeper Bus": { speed: 50, costPerKm: 1.8, baseFare: 100 },
-  "Intercity Bus": { speed: 55, costPerKm: 1.4, baseFare: 50 },
-  "Cab": { speed: 65, costPerKm: 12, baseFare: 300 },
+  "Flight": { speed: 650, costPerKm: 5.5, baseFare: 2500 },
+  "Train": { speed: 55, costPerKm: 1.0, baseFare: 180 }, // Default Express
+  "Sleeper Bus": { speed: 42, costPerKm: 2.2, baseFare: 400 },
+  "Intercity Bus": { speed: 46, costPerKm: 1.8, baseFare: 200 },
+  "Cab": { speed: 60, costPerKm: 16, baseFare: 500 },
 };
+
+const INDIAN_TRAINS = [
+  "Rajdhani Express (12309)",
+  "Vande Bharat Express (22436)",
+  "Sampoorna Kranti Express (12393)",
+  "Duronto Express (12273)",
+  "Poorva Express (12382)",
+  "Deccan Queen (12123)",
+  "Shiv Ganga Express (12560)",
+  "Shatabdi Express (12004)",
+  "Humsafar Express (22317)",
+  "Gitanjali Express (12859)",
+];
+
+const INDIAN_BUSES = [
+  "Zingbus Premium AC Sleeper",
+  "IntrCity SmartBus AC Sleeper",
+  "NueGo Electric AC Coach",
+  "VRL Travels AC Sleeper",
+  "SRS Travels AC Sleeper",
+  "UPSRTC Janrath AC Coach",
+  "BSRTC AC Deluxe Coach",
+  "KSRTC Airavat Club Class",
+];
 
 function createLeg(fromData: any, toData: any, modeName: string, startTimeHr: number, startTimeMin: number, seedVal: number, priceMult = 1.0) {
   const mode = MODES[modeName] || MODES["Intercity Bus"];
@@ -226,13 +255,29 @@ function createLeg(fromData: any, toData: any, modeName: string, startTimeHr: nu
   if (dist < 50) dist = 50;
 
   const isFlight = modeName === "Flight";
-  const boardingTimeMin = isFlight ? 90 : 30;
+  const boardingTimeMin = isFlight ? 120 : 30; // 2h for airport security, 30m for other modes
 
-  const travelTimeMin = (dist / mode.speed) * 60;
-  const timeMin = boardingTimeMin + travelTimeMin * (0.9 + 0.2 * ((seedVal % 100) / 100));
+  // Believable Indian travel velocities
+  let actualSpeed = mode.speed;
+  let isPremiumTrain = false;
+  if (modeName === "Train") {
+    isPremiumTrain = (seedVal % 2 === 0);
+    actualSpeed = isPremiumTrain ? 75 : 55; // Premium: 75 km/h, Express: 55 km/h
+  }
 
-  const basePrice = dist * mode.costPerKm + mode.baseFare;
-  const price = basePrice * (0.8 + 0.4 * (((seedVal >> 2) % 100) / 100)) * priceMult;
+  const travelTimeMin = (dist / actualSpeed) * 60;
+  const timeMin = boardingTimeMin + travelTimeMin * (0.95 + 0.1 * ((seedVal % 100) / 100));
+
+  // Believable Indian travel costs
+  let actualCostPerKm = mode.costPerKm;
+  let actualBaseFare = mode.baseFare;
+  if (modeName === "Train" && isPremiumTrain) {
+    actualCostPerKm = 1.8; // Premium 3AC rate
+    actualBaseFare = 400;
+  }
+
+  const basePrice = dist * actualCostPerKm + actualBaseFare;
+  const price = basePrice * (0.9 + 0.2 * (((seedVal >> 2) % 100) / 100)) * priceMult;
 
   const arr = addMinutesToTime(startTimeHr, startTimeMin, timeMin);
 
@@ -248,11 +293,24 @@ function createLeg(fromData: any, toData: any, modeName: string, startTimeHr: nu
     }
   }
 
+  // Inject real names into leg mode string for enhanced visual realism
+  let displayMode = modeName;
+  if (modeName === "Train") {
+    const trainIdx = seedVal % INDIAN_TRAINS.length;
+    displayMode = `Train - ${INDIAN_TRAINS[trainIdx]}`;
+  } else if (modeName === "Sleeper Bus") {
+    const busIdx = seedVal % INDIAN_BUSES.length;
+    displayMode = `Sleeper Bus - ${INDIAN_BUSES[busIdx]}`;
+  } else if (modeName === "Intercity Bus") {
+    const busIdx = (seedVal + 3) % INDIAN_BUSES.length;
+    displayMode = `Intercity Bus - ${INDIAN_BUSES[busIdx]}`;
+  }
+
   return {
     leg: {
       from: fromName,
       to: toName,
-      mode: modeName,
+      mode: displayMode,
       duration: formatDuration(Math.round(timeMin)),
       departureTime: formatTime(startTimeHr, startTimeMin),
       arrivalTime: formatTime(arr.hour, arr.min)
@@ -317,6 +375,14 @@ export function getCorridorInsights(
   };
 }
 
+const CORRIDOR_HUBS: Record<string, string[]> = {
+  "delhi-patna": ["Kanpur", "Lucknow", "Varanasi"],
+  "bengaluru-hyderabad": ["Anantapur", "Kurnool"],
+  "mumbai-pune": ["Thane", "Kalyan"],
+  "delhi-varanasi": ["Kanpur", "Lucknow"],
+  "kolkata-patna": ["Asansol", "Gaya"],
+};
+
 export function buildRouteOptions(
   origin: string,
   destination: string,
@@ -335,13 +401,20 @@ export function buildRouteOptions(
   const destData = getCityData(formattedDest);
   const directDist = calculateDistance(originData.lat, originData.lon, destData.lat, destData.lon);
 
-  const intermediates = CITIES.filter(c => {
+  const corridorKey = `${originData.name.toLowerCase()}-${destData.name.toLowerCase()}`;
+  let intermediates = CITIES.filter(c => {
     if (c.name.toLowerCase() === originData.name.toLowerCase()) return false;
     if (c.name.toLowerCase() === destData.name.toLowerCase()) return false;
     const d1 = calculateDistance(originData.lat, originData.lon, c.lat, c.lon);
     const d2 = calculateDistance(c.lat, c.lon, destData.lat, destData.lon);
     return (d1 + d2) <= directDist * 1.5 + 400;
   });
+
+  const customHubs = CORRIDOR_HUBS[corridorKey];
+  if (customHubs) {
+    const matchedCities = CITIES.filter(c => customHubs.includes(c.name));
+    intermediates = [...matchedCities, ...intermediates.filter(c => !customHubs.includes(c.name))];
+  }
 
   for (let i = 0; i < intermediates.length; i++) {
     const swapIdx = (seed + i) % intermediates.length;
@@ -364,7 +437,7 @@ export function buildRouteOptions(
     customOrigin: originStations[0].code,
     customDest: destStations[0].code,
     isWaitlisted: true,
-    recommendationTag: "Bottlenecked",
+    recommendationTag: "Better Seat Availability",
     tagTone: "amber" as const
   });
 
@@ -377,7 +450,7 @@ export function buildRouteOptions(
     customOrigin: originStations[0].code,
     customDest: destStations[0].code,
     isWaitlisted: true,
-    recommendationTag: "High Waitlist",
+    recommendationTag: "Better Seat Availability",
     tagTone: "amber" as const
   });
 
@@ -391,7 +464,7 @@ export function buildRouteOptions(
       vias: [],
       customOrigin: secondaryOrigin.code,
       customDest: destStations[0].code,
-      recommendationTag: "Smart Boarding",
+      recommendationTag: "Easier Boarding Route",
       tagTone: "cyan" as const,
       availabilityBoost: 45
     });
@@ -407,7 +480,7 @@ export function buildRouteOptions(
       vias: [],
       customOrigin: secondaryOrigin2.code,
       customDest: destStations[0].code,
-      recommendationTag: "Alternate Boarding",
+      recommendationTag: "Comfortable Boarding",
       tagTone: "cyan" as const,
       availabilityBoost: 40
     });
@@ -423,7 +496,7 @@ export function buildRouteOptions(
       vias: [],
       customOrigin: originStations[0].code,
       customDest: secondaryDest.code,
-      recommendationTag: "Bypass Congestion",
+      recommendationTag: "Low Crowding Journey",
       tagTone: "emerald" as const,
       availabilityBoost: 50
     });
@@ -439,7 +512,7 @@ export function buildRouteOptions(
       vias: [],
       customOrigin: originStations[0].code,
       customDest: secondaryDest2.code,
-      recommendationTag: "Satellite Bypass",
+      recommendationTag: "Comfortable Boarding",
       tagTone: "emerald" as const,
       availabilityBoost: 48
     });
@@ -455,7 +528,7 @@ export function buildRouteOptions(
       vias: [transitHub],
       customOrigin: originStations[0].code,
       customDest: destStations[0].code,
-      recommendationTag: "Alternate Corridor",
+      recommendationTag: "Smart Alternate Corridor",
       tagTone: "violet" as const,
       availabilityBoost: 55
     });
@@ -471,7 +544,7 @@ export function buildRouteOptions(
       vias: [transitHubAlt],
       customOrigin: originStations[0].code,
       customDest: destStations[0].code,
-      recommendationTag: "Hub Transit",
+      recommendationTag: "Smart Alternate Corridor",
       tagTone: "violet" as const,
       availabilityBoost: 52
     });
@@ -487,7 +560,7 @@ export function buildRouteOptions(
       vias: [transitHub2],
       customOrigin: originStations[0].code,
       customDest: destStations[0].code,
-      recommendationTag: "Smart Split",
+      recommendationTag: "Easier Transfer",
       tagTone: "amber" as const,
       availabilityBoost: 60
     });
@@ -503,7 +576,7 @@ export function buildRouteOptions(
       vias: [transitHub2Alt],
       customOrigin: originStations[0].code,
       customDest: destStations[0].code,
-      recommendationTag: "Multi-modal Split",
+      recommendationTag: "Easier Transfer",
       tagTone: "amber" as const,
       availabilityBoost: 58
     });
@@ -516,7 +589,7 @@ export function buildRouteOptions(
       isDirect: true,
       modes: ["Flight"],
       vias: [],
-      recommendationTag: "Fastest",
+      recommendationTag: "Smoothest Journey",
       tagTone: "violet" as const
     });
   } else {
@@ -525,7 +598,7 @@ export function buildRouteOptions(
       isDirect: true,
       modes: ["Cab"],
       vias: [],
-      recommendationTag: "Direct Cab",
+      recommendationTag: "Direct Comfort",
       tagTone: "cyan" as const
     });
   }
@@ -537,7 +610,7 @@ export function buildRouteOptions(
     modes: ["Sleeper Bus"],
     vias: [],
     isOvernight: true,
-    recommendationTag: "Sleeper Bus",
+    recommendationTag: "Most Comfortable",
     tagTone: "cyan" as const,
     availabilityBoost: 65
   });
@@ -551,7 +624,7 @@ export function buildRouteOptions(
       modes: ["Flight", "Train"],
       vias: [airTransitHub],
       customDest: destStations[0].code,
-      recommendationTag: "Air Hybrid",
+      recommendationTag: "Smoother Alternate Route",
       tagTone: "violet" as const,
       availabilityBoost: 80
     });
@@ -565,7 +638,7 @@ export function buildRouteOptions(
       modes: ["Flight", "Intercity Bus"],
       vias: [airTransitHub],
       customDest: destStations[0].code,
-      recommendationTag: "Multi-modal Air",
+      recommendationTag: "Smoother Alternate Route",
       tagTone: "violet" as const,
       availabilityBoost: 85
     });
@@ -573,7 +646,10 @@ export function buildRouteOptions(
 
   return routesToBuild.map((rDef, index) => {
     let currentHr = (6 + (seed % 10) + index * 2) % 24;
-    if (rDef.isOvernight) currentHr = 21 + (index % 2);
+    // Real-world overnight scheduling for sleeper buses and long distance trains
+    if (rDef.isOvernight || rDef.type.includes("overnight") || (rDef.modes.includes("Sleeper Bus") && directDist > 250)) {
+      currentHr = 19 + (index % 4); // 7:00 PM - 10:00 PM
+    }
     let currentMin = (seed % 4) * 15;
 
     let totalDurMin = 0;
@@ -614,41 +690,81 @@ export function buildRouteOptions(
     } else if (rDef.type === "smart_split" || rDef.type.includes("sleeper")) {
       comfortScore = 72;
     }
-    
+
     // Randomized for testing purposes to allow all route types to rise to the top
     const seatLikelihood = Math.floor(10 + Math.random() * 90);
     const confidence = Math.floor(20 + Math.random() * 80);
     const crowdLevel = rDef.modes.includes("Flight") ? 30 : 65;
 
-    let urgency = "Standard booking window";
+    let waitlistCode: string | undefined = undefined;
+    let confirmationLikelihood: "High" | "Medium" | "Low" | "Very Low" | undefined = undefined;
+    let confirmationProbability: number | undefined = undefined;
+    let peakDemandFactor: string | undefined = undefined;
+    let rescueRecommendation: string | undefined = undefined;
+
+    const isTrain = rDef.modes.includes("Train") && !rDef.modes.includes("Flight");
+
+    if (isTrain && (rDef.isWaitlisted || seatLikelihood < 45 || rDef.type.startsWith("direct_train"))) {
+      const wlNum = Math.floor(15 + (seed % 50) + index * 3);
+      const wlCurrent = Math.floor(wlNum * 0.6);
+      waitlistCode = `GNWL ${wlNum} / WL ${wlCurrent}`;
+
+      confirmationProbability = Math.floor(15 + Math.random() * 35);
+      if (confirmationProbability > 40) {
+        confirmationLikelihood = "Medium";
+      } else if (confirmationProbability > 25) {
+        confirmationLikelihood = "Low";
+      } else {
+        confirmationLikelihood = "Very Low";
+      }
+
+      const demands = [
+        "Special Travel Season (RAC options available)",
+        "Peak Travel Window",
+        "Weekend Active Corridor",
+        "Summer Season (extra capacity services active)"
+      ];
+      peakDemandFactor = demands[(seed + index) % demands.length];
+
+      if (rDef.type.startsWith("direct_train")) {
+        rescueRecommendation = "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!";
+      } else {
+        rescueRecommendation = "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!";
+      }
+    } else if (isTrain) {
+      confirmationProbability = seatLikelihood;
+      confirmationLikelihood = seatLikelihood > 75 ? "High" : "Medium";
+    }
+
+    let urgency = "Seating active on alternatives";
     let tip = "Standard route";
     if (rDef.isWaitlisted || rDef.type.startsWith("direct_train")) {
-      urgency = "High waitlist — consider alternatives";
-      tip = "Bottlenecked direct corridor. High risk of non-confirmation. Tatkal booking required.";
+      urgency = "Standard booking window";
+      tip = "Optimize seat availability by choosing surrounding secondary terminals or hybrid routes.";
     } else if (rDef.type.startsWith("smart_boarding")) {
-      urgency = "Secondary station availability";
-      tip = `Boarding at a nearby secondary terminal (${rDef.customOrigin}) bypasses main hub congestion and waitlists.`;
+      urgency = "Comfortable station availability";
+      tip = `Boarding at a nearby secondary terminal (${rDef.customOrigin}) secures better seat availability and lower crowding.`;
     } else if (rDef.type.startsWith("congestion_bypass")) {
-      urgency = "Satellite terminal availability";
-      tip = `Booking to a nearby satellite station (${rDef.customDest}) avoids heavy terminal congestion.`;
+      urgency = "Comfortable satellite boarding";
+      tip = `Choosing a nearby satellite station (${rDef.customDest}) offers comfortable boarding and smooth post-arrival transit.`;
     } else if (rDef.type.startsWith("alternate_corridor")) {
-      urgency = "Multi-corridor booking open";
-      tip = `Breaking the journey via ${rDef.vias[0].name} avoids single-line waitlists by using two active corridors.`;
+      urgency = "Easier transfer routes open";
+      tip = `A smart alternate corridor secures a high-confidence connection with easier transfers.`;
     } else if (rDef.type.startsWith("smart_split")) {
-      urgency = "Train + Bus seats available";
-      tip = `Taking a train to ${rDef.vias[0].name} and a bus to destination bypasses the highly waitlisted rail sector.`;
+      urgency = "Comfortable hybrid seats";
+      tip = `Easier transfer via hybrid train and bus ensures low crowding and optimal seating.`;
     } else if (rDef.type === "premium_air") {
-      urgency = "Airfares volatile — check early";
-      tip = "Fastest direct travel avoiding all rail and road capacity bottlenecks entirely.";
+      urgency = "Air travel stable window";
+      tip = "Smoothest journey bypasses ground sectors entirely for maximum travel comfort.";
     } else if (rDef.type === "overnight_sleeper") {
-      urgency = "Express sleeper bus seats";
-      tip = "Comfortable overnight sleeper bus with high seating availability and lower fare.";
+      urgency = "Most comfortable sleeper coach";
+      tip = "Most comfortable sleeper travel ensures relaxed overnight rest and stable seat options.";
     } else if (rDef.type === "flight_train_hybrid") {
-      urgency = "High availability on Flight + Rail";
-      tip = `Flying to intermediate airport ${rDef.vias[0].name} and taking a train to destination bypasses direct rail waitlists and is 40% cheaper than direct flight.`;
+      urgency = "High seat confidence on hybrid";
+      tip = `A smoother alternate route via air-rail hybrid increases seat confidence and travel luxury.`;
     } else if (rDef.type === "flight_bus_hybrid") {
-      urgency = "Guaranteed seats on Flight + Bus";
-      tip = `Flying to ${rDef.vias[0].name} and taking an express bus to destination bypasses waitlisted rail and high direct flight tariffs.`;
+      urgency = "Low crowding hybrid seats";
+      tip = `A low crowding journey combining flight and express coach ensures maximum peace of mind.`;
     }
 
     return {
@@ -677,7 +793,12 @@ export function buildRouteOptions(
       },
       navixScore: 0,
       comfortScore,
-      seatLikelihood
+      seatLikelihood,
+      waitlistCode,
+      confirmationLikelihood,
+      confirmationProbability,
+      peakDemandFactor,
+      rescueRecommendation
     };
   });
 }
