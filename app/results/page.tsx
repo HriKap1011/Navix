@@ -4,6 +4,8 @@ import { TripSelector } from "./_components/trip-selector";
 import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
 import { ComparisonDrawer } from "./_components/comparison-drawer";
 import { calculateSmartScores } from "./_utils/scoring";
+import fs from "fs";
+import path from "path";
 
 const capitalizeCity = (city: string): string => {
   return city
@@ -48,6 +50,25 @@ export default async function ResultsPage({
   
   const rawRouteOptions = buildRouteOptions(origin, destination, params.date || params.flexibleMonth || "");
   const rawWithScores = calculateSmartScores(rawRouteOptions);
+
+  // Store top 10 routes with highest Navix score to a JSON file
+  try {
+    const sortedByHighestScore = [...rawWithScores].sort((a, b) => b.navixScore - a.navixScore);
+    const top10Routes = sortedByHighestScore.slice(0, 10);
+    const top10Json = JSON.stringify(top10Routes, null, 2);
+    
+    // Save to workspace root for checking
+    fs.writeFileSync(path.join(process.cwd(), "top-10-routes.json"), top10Json, "utf8");
+    
+    // Save to public directory to view in browser at /top-10-routes.json
+    const publicDir = path.join(process.cwd(), "public");
+    if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir);
+    }
+    fs.writeFileSync(path.join(publicDir, "top-10-routes.json"), top10Json, "utf8");
+  } catch (error) {
+    console.error("Failed to write top 10 routes to JSON file:", error);
+  }
 
   // Filter
   let routeOptions = [...rawWithScores];
@@ -110,6 +131,17 @@ export default async function ResultsPage({
     
     priceRankMap.set(route.id, rank);
   });
+
+  // Guarantee that at least 1 flight/air-hybrid option is shown in the top 6
+  let displayedRoutes = routeOptions.slice(0, 6);
+  const hasFlightOption = displayedRoutes.some(r => r.travelModes.includes("Flight"));
+  
+  if (!hasFlightOption && routeOptions.length > 6) {
+    const bestFlightRoute = routeOptions.find(r => r.travelModes.includes("Flight"));
+    if (bestFlightRoute) {
+      displayedRoutes[5] = bestFlightRoute;
+    }
+  }
 
   const createHref = (newParams: Record<string, string>) => {
     const current = new URLSearchParams();
@@ -322,7 +354,7 @@ export default async function ResultsPage({
 
         {routeOptions.length > 0 ? (
           <section className="mt-6 grid gap-5 lg:grid-cols-2">
-            {routeOptions.slice(0, 6).map((route) => (
+            {displayedRoutes.map((route) => (
               <RouteCard 
                 key={route.id} 
                 route={route}
