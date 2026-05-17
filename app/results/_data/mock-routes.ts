@@ -1,3 +1,5 @@
+import { analyzeTravelDemand } from "../_utils/demand-engine";
+
 export type TravelDifficulty = "Easy" | "Moderate" | "Challenging";
 
 export type TravelInsights = {
@@ -190,7 +192,7 @@ function formatDuration(totalMinutes: number) {
 }
 
 function formatRupees(price: number) {
-  return `INR ${price.toLocaleString("en-IN")}`;
+  return `INR ${Math.round(price).toLocaleString("en-IN")}`;
 }
 
 function formatTime(hours: number, minutes: number): string {
@@ -329,17 +331,22 @@ export function getCorridorInsights(
   const seed = getHash(`${origin}-${destination}-corridor`);
   const month = dateInput ? new Date(dateInput).getMonth() : new Date().getMonth();
 
+  const demandProfile = analyzeTravelDemand(origin, destination, dateInput);
+
   let seasonalContext: string;
-  let demandBoost = 0;
-  if (month >= 9 || month <= 1) {
+  let demandBoost = demandProfile.crowdModifier;
+
+  if (demandProfile.contextualMessage) {
+    seasonalContext = demandProfile.contextualMessage;
+  } else if (month >= 9 || month <= 1) {
     seasonalContext = "Peak festive season — high demand across rail and air corridors";
-    demandBoost = 15;
+    demandBoost += 15;
   } else if (month >= 2 && month <= 4) {
     seasonalContext = "Summer window — moderate demand; air travel recommended for long distances";
-    demandBoost = 5;
+    demandBoost += 5;
   } else {
     seasonalContext = "Monsoon period — expect occasional weather-related delays in rail and air transit";
-    demandBoost = -10;
+    demandBoost -= 10;
   }
 
   const basePop = 55 + (seed % 35);
@@ -400,6 +407,8 @@ export function buildRouteOptions(
   const originData = getCityData(formattedOrigin);
   const destData = getCityData(formattedDest);
   const directDist = calculateDistance(originData.lat, originData.lon, destData.lat, destData.lon);
+
+  const demandProfile = analyzeTravelDemand(origin, destination, dateInput);
 
   const corridorKey = `${originData.name.toLowerCase()}-${destData.name.toLowerCase()}`;
   let intermediates = CITIES.filter(c => {
@@ -669,7 +678,7 @@ export function buildRouteOptions(
       const res = createLeg(fromData, toData, rDef.modes[0], currentHr, currentMin, seed + index, priceMult);
       routeLegs.push(res.leg);
       totalDurMin = res.durationMin;
-      totalPrice = res.price;
+      totalPrice = res.price * demandProfile.priceMultiplier;
     } else {
       const viaData = rDef.vias[0];
       const leg1 = createLeg(fromData, viaData, rDef.modes[0], currentHr, currentMin, seed + index, priceMult);
@@ -681,7 +690,7 @@ export function buildRouteOptions(
       routeLegs.push(leg1.leg);
       routeLegs.push(leg2.leg);
       totalDurMin = leg1.durationMin + layover + leg2.durationMin;
-      totalPrice = leg1.price + leg2.price;
+      totalPrice = (leg1.price + leg2.price) * demandProfile.priceMultiplier;
     }
 
     let comfortScore = 65;
@@ -691,10 +700,14 @@ export function buildRouteOptions(
       comfortScore = 72;
     }
 
-    // Randomized for testing purposes to allow all route types to rise to the top
-    const seatLikelihood = Math.floor(10 + Math.random() * 90);
-    const confidence = Math.floor(20 + Math.random() * 80);
-    const crowdLevel = rDef.modes.includes("Flight") ? 30 : 65;
+    // Deterministic pseudo-random values based on seed and index to ensure stable scores
+    const pseudoRandom1 = ((seed * (index + 1) * 7) % 100) / 100;
+    const pseudoRandom2 = ((seed * (index + 2) * 13) % 100) / 100;
+    const baseSeatLikelihood = Math.floor(10 + pseudoRandom1 * 90);
+    const seatLikelihood = Math.max(5, Math.floor(baseSeatLikelihood * demandProfile.seatModifier));
+    const confidence = Math.floor(20 + pseudoRandom2 * 80);
+    const crowdLevel = Math.min(100, (rDef.modes.includes("Flight") ? 30 : 65) + demandProfile.crowdModifier);
+    comfortScore = Math.max(10, Math.min(100, comfortScore + demandProfile.comfortModifier));
 
     let waitlistCode: string | undefined = undefined;
     let confirmationLikelihood: "High" | "Medium" | "Low" | "Very Low" | undefined = undefined;
@@ -709,7 +722,8 @@ export function buildRouteOptions(
       const wlCurrent = Math.floor(wlNum * 0.6);
       waitlistCode = `GNWL ${wlNum} / WL ${wlCurrent}`;
 
-      confirmationProbability = Math.floor(15 + Math.random() * 35);
+      const pseudoRandom3 = ((seed * (index + 3) * 17) % 100) / 100;
+      confirmationProbability = Math.floor(15 + pseudoRandom3 * 35);
       if (confirmationProbability > 40) {
         confirmationLikelihood = "Medium";
       } else if (confirmationProbability > 25) {
@@ -724,7 +738,7 @@ export function buildRouteOptions(
         "Weekend Active Corridor",
         "Summer Season (extra capacity services active)"
       ];
-      peakDemandFactor = demands[(seed + index) % demands.length];
+      peakDemandFactor = demandProfile.activeFestival ? `${demandProfile.activeFestival} Rush` : demands[(seed + index) % demands.length];
 
       if (rDef.type.startsWith("direct_train")) {
         rescueRecommendation = "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!";
@@ -765,6 +779,10 @@ export function buildRouteOptions(
     } else if (rDef.type === "flight_bus_hybrid") {
       urgency = "Low crowding hybrid seats";
       tip = `A low crowding journey combining flight and express coach ensures maximum peace of mind.`;
+    }
+
+    if (demandProfile.contextualMessage) {
+      tip = demandProfile.contextualMessage;
     }
 
     return {
