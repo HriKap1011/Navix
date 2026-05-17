@@ -10,8 +10,72 @@ const getMinutes = (d: string) => {
 // Helper to parse price string to number
 const getPriceNum = (p: string) => parseFloat(p.replace(/[^0-9.]/g, ""));
 
+// Helper to parse hour from time string like "12:30" or "08:15"
+const getHour = (t: string) => {
+  const parts = t.split(":");
+  return parts.length >= 1 ? parseInt(parts[0]) : 12;
+};
+
+// Helper to compute travel pain/friction penalty (0 to 100)
+const calculateFrictionPenalty = (r: RouteOption) => {
+  let penalty = 0;
+
+  // 1. Excessive waiting / Long layovers
+  const layoverMin = getMinutes(r.layoverDuration);
+  if (layoverMin > 180) {
+    penalty += 25; // Excessive wait
+  } else if (layoverMin > 90) {
+    penalty += 15; // Long layover
+  } else if (layoverMin > 0 && layoverMin < 40) {
+    penalty += 10; // Stressful tight connection
+  }
+
+  // 2. Overnight transfer difficulty
+  if (r.legs.length > 1) {
+    const leg1ArrHour = getHour(r.legs[0].arrivalTime);
+    const leg2DepHour = getHour(r.legs[1].departureTime);
+    if ((leg1ArrHour >= 23 || leg1ArrHour < 5) || (leg2DepHour >= 23 || leg2DepHour < 5)) {
+      penalty += 20; // Inconvenient overnight transfer
+    }
+  }
+
+  // 3. Too many mode changes
+  if (r.travelModes.length >= 3) {
+    penalty += 25; // 3 or more modes
+  } else if (r.travelModes.length === 2) {
+    penalty += 12; // 2 modes
+  }
+
+  // 4. Inconvenient timings (very early morning or late night)
+  const depHour = getHour(r.departureTime);
+  if (depHour < 6) {
+    penalty += 12; // Early wake up
+  }
+  const arrHour = getHour(r.arrivalTime);
+  if (arrHour >= 23 || arrHour < 4) {
+    penalty += 12; // Late arrival
+  }
+
+  // 5. High seat risk discomfort
+  if (r.estimatedAvailability < 35 || r.seatLikelihood < 35) {
+    penalty += 15;
+  }
+
+  return Math.min(penalty, 100);
+};
+
 export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
   if (routes.length === 0) return routes;
+
+  // Compute friction penalties first to normalize them
+  const routesWithFriction = routes.map(r => {
+    const penalty = calculateFrictionPenalty(r);
+    const frictionScore = 100 - penalty; // Higher is better (less friction)
+    return {
+      r,
+      frictionScore
+    };
+  });
 
   // 1. Extract values for normalization
   const prices = routes.map(r => getPriceNum(r.estimatedPrice));
@@ -20,6 +84,7 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
   const comforts = routes.map(r => r.comfortScore);
   const availabilities = routes.map(r => r.estimatedAvailability);
   const seatLikelihoods = routes.map(r => r.seatLikelihood);
+  const frictionScores = routesWithFriction.map(rwf => rwf.frictionScore);
 
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
@@ -35,6 +100,9 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
   const minSeat = Math.min(...seatLikelihoods);
   const maxSeat = Math.max(...seatLikelihoods);
 
+  const minFriction = Math.min(...frictionScores);
+  const maxFriction = Math.max(...frictionScores);
+
   // Helper for normalization (handles division by zero)
   const normalize = (val: number, min: number, max: number, invert = false) => {
     if (max === min) return 1.0;
@@ -43,31 +111,35 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
   };
 
   // 2. Calculate scores for each route
-  const scoredRoutes = routes.map(r => {
+  const scoredRoutes = routesWithFriction.map(rwf => {
+    const r = rwf.r;
     const price = getPriceNum(r.estimatedPrice);
     const duration = getMinutes(r.duration);
     const transferCount = r.legs.length - 1;
 
     // Weights:
-    // Price: 30% (Lower is better)
-    // Duration: 25% (Lower is better)
-    // Transfers: 15% (Lower is better)
-    // Comfort: 10% (Higher is better)
-    // Availability: 10% (Higher is better)
-    // Seat Likelihood: 10% (Higher is better)
+    // Comfort: 20% (Higher is better)
+    // Travel Pain / Friction Score (No/low layovers, mode changes, timings): 20% (Higher is better)
+    // Seat Likelihood: 15% (Higher is better)
+    // Transfers (Low stress): 15% (Lower is better)
+    // Price: 15% (Lower is better)
+    // Duration: 10% (Lower is better)
+    // Availability Score: 5%
 
-    const priceScore = normalize(price, minPrice, maxPrice, true) * 0.30;
-    const durationScore = normalize(duration, minDuration, maxDuration, true) * 0.25;
+    const comfortScore = normalize(r.comfortScore, minComfort, maxComfort) * 0.20;
+    const frictionScore = normalize(rwf.frictionScore, minFriction, maxFriction) * 0.20;
+    const seatScore = normalize(r.seatLikelihood, minSeat, maxSeat) * 0.15;
     const transferScore = normalize(transferCount, minTransfers, maxTransfers, true) * 0.15;
-    const comfortScore = normalize(r.comfortScore, minComfort, maxComfort) * 0.10;
-    const availScore = normalize(r.estimatedAvailability, minAvail, maxAvail) * 0.10;
-    const seatScore = normalize(r.seatLikelihood, minSeat, maxSeat) * 0.10;
+    const priceScore = normalize(price, minPrice, maxPrice, true) * 0.15;
+    const durationScore = normalize(duration, minDuration, maxDuration, true) * 0.10;
+    const availScore = normalize(r.estimatedAvailability, minAvail, maxAvail) * 0.05;
 
-    const totalScore = (priceScore + durationScore + transferScore + comfortScore + availScore + seatScore) * 100;
+    const totalScore = (comfortScore + frictionScore + seatScore + transferScore + priceScore + durationScore + availScore) * 100;
 
     return {
       ...r,
       navixScore: Math.round(totalScore),
+      frictionScore: rwf.frictionScore // Keep tracked for reporting
     };
   });
 
@@ -91,18 +163,30 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
 
     const minTransfersVal = Math.min(...scoredRoutes.map(r => r.legs.length - 1));
 
-    // Prioritize badges: Best > Cheapest > Fastest > Fewer Transfers
+    // Prioritize comfort-first solution-oriented badges
     if (isBest) {
-      tag = "Best Route";
+      if (r.comfortScore > 85) {
+        tag = "Most Comfortable";
+      } else if (r.seatLikelihood > 85) {
+        tag = "Best Seat Confidence";
+      } else if (r.frictionScore > 90) {
+        tag = "Zero Timing Friction";
+      } else if (r.routeCombination.includes("via")) {
+        tag = "Recommended Alternate";
+      } else if (r.routeCombination.includes("ANVT") || r.routeCombination.includes("SDAH")) {
+        tag = "Easier Boarding Route";
+      } else {
+        tag = "Smoothest Journey";
+      }
       tone = "cyan";
     } else if (isCheapest) {
-      tag = "Cheapest";
+      tag = "Best Value Comfort";
       tone = "emerald";
     } else if (isFastest) {
-      tag = "Fastest";
+      tag = "Express Comfort";
       tone = "violet";
     } else if (r.legs.length - 1 === minTransfersVal) {
-      tag = "Fewer Transfers";
+      tag = "Easier Transfer";
       tone = "amber";
     }
 
@@ -112,31 +196,40 @@ export function calculateSmartScores(routes: RouteOption[]): RouteOption[] {
       const priceDiffPct = Math.round(((avgPrice - price) / avgPrice) * 100);
       
       if (priceDiffPct > 5) {
-        reasoning.push(`${priceDiffPct}% cheaper than average`);
+        reasoning.push(`Highly economical optimal route`);
       } else if (isCheapest) {
-        reasoning.push("Cheapest option available");
+        reasoning.push("Best value for comfortable budget travel");
       }
       
       const transferCount = r.legs.length - 1;
       if (transferCount <= minTransfers) {
-        reasoning.push("Fewer transfers");
+        reasoning.push("Saves transfer stress");
       }
       
       if (r.seatLikelihood > 70) {
-        reasoning.push("High seat availability");
+        reasoning.push("Highly confident seat availability");
       }
       
       if (r.comfortScore > 80) {
-        reasoning.push("Superior travel comfort");
+        reasoning.push("Superior comfort and low travel friction");
+      }
+
+      if (r.frictionScore > 90) {
+        reasoning.push("Daylight schedule with no waiting pain");
+      } else if (r.frictionScore > 75) {
+        reasoning.push("Bypasses overnight transfer stress");
       }
       
       if (reasoning.length === 0) {
-        reasoning.push("Best overall balance of time and cost");
+        reasoning.push("Bypasses active land sector congestion");
       }
     }
 
+    // Clean up temporary property to not pollute route object type if needed, or keep it
+    const { frictionScore, ...cleanedRoute } = r as any;
+
     return {
-      ...r,
+      ...cleanedRoute,
       recommendationTag: tag,
       tagTone: tone,
       isRecommended: isBest,

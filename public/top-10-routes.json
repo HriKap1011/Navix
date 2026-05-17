@@ -1,170 +1,56 @@
 [
   {
-    "id": "route-6",
-    "routeCombination": "Kolkata (HWH) -> Patna (PPTA)",
-    "duration": "6h 51m",
-    "estimatedPrice": "INR 830",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Kolkata (HWH)",
-        "to": "Patna (PPTA)",
-        "mode": "Train",
-        "duration": "6h 51m",
-        "departureTime": "22:30",
-        "arrivalTime": "05:21"
-      }
-    ],
-    "recommendationTag": "Best Route",
-    "tagTone": "cyan",
-    "isRecommended": true,
-    "departureTime": "22:30",
-    "arrivalTime": "05:21",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 98,
-    "confidenceScore": 25,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Very High",
-      "bookingUrgency": "Satellite terminal availability",
-      "seasonalTip": "Booking to a nearby satellite station (PPTA) avoids heavy terminal congestion.",
-      "crowdLevel": 65,
-      "priceTrend": "Stable",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 82,
-    "comfortScore": 65,
-    "seatLikelihood": 98,
-    "recommendationReasoning": [
-      "59% cheaper than average",
-      "Fewer transfers",
-      "High seat availability"
-    ]
-  },
-  {
-    "id": "route-1",
-    "routeCombination": "Kolkata (HWH) -> Patna (PNBE)",
-    "duration": "6h 47m",
-    "estimatedPrice": "INR 827",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Kolkata (HWH)",
-        "to": "Patna (PNBE)",
-        "mode": "Train",
-        "duration": "6h 47m",
-        "departureTime": "12:30",
-        "arrivalTime": "19:17"
-      }
-    ],
-    "recommendationTag": "Cheapest",
-    "tagTone": "emerald",
-    "isRecommended": false,
-    "departureTime": "12:30",
-    "arrivalTime": "19:17",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 89,
-    "confidenceScore": 40,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "High waitlist — consider alternatives",
-      "seasonalTip": "Bottlenecked direct corridor. High risk of non-confirmation. Tatkal booking required.",
-      "crowdLevel": 65,
-      "priceTrend": "Dropping",
-      "trendDescription": "High demand for direct rail."
-    },
-    "navixScore": 80,
-    "comfortScore": 65,
-    "seatLikelihood": 89
-  },
-  {
-    "id": "route-5",
-    "routeCombination": "Kolkata (HWH) -> Patna (DNR)",
-    "duration": "6h 50m",
-    "estimatedPrice": "INR 830",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Kolkata (HWH)",
-        "to": "Patna (DNR)",
-        "mode": "Train",
-        "duration": "6h 50m",
-        "departureTime": "20:30",
-        "arrivalTime": "03:20"
-      }
-    ],
-    "recommendationTag": "Fewer Transfers",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "20:30",
-    "arrivalTime": "03:20",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 77,
-    "confidenceScore": 76,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Satellite terminal availability",
-      "seasonalTip": "Booking to a nearby satellite station (DNR) avoids heavy terminal congestion.",
-      "crowdLevel": 65,
-      "priceTrend": "Rising",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 77,
-    "comfortScore": 65,
-    "seatLikelihood": 77
-  },
-  {
     "id": "route-3",
     "routeCombination": "Kolkata (SDAH) -> Patna (PNBE)",
-    "duration": "6h 48m",
-    "estimatedPrice": "INR 830",
+    "duration": "9h 21m",
+    "estimatedPrice": "INR 676",
     "travelModes": [
-      "Train"
+      "Train - Shatabdi Express (12004)"
     ],
     "legs": [
       {
         "from": "Kolkata (SDAH)",
         "to": "Patna (PNBE)",
-        "mode": "Train",
-        "duration": "6h 48m",
-        "departureTime": "16:30",
-        "arrivalTime": "23:18"
+        "mode": "Train - Shatabdi Express (12004)",
+        "duration": "9h 21m",
+        "departureTime": "15:15",
+        "arrivalTime": "00:36"
       }
     ],
-    "recommendationTag": "Fewer Transfers",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "16:30",
-    "arrivalTime": "23:18",
+    "recommendationTag": "Best Seat Confidence",
+    "tagTone": "cyan",
+    "isRecommended": true,
+    "departureTime": "15:15",
+    "arrivalTime": "00:36",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 72,
-    "confidenceScore": 47,
+    "estimatedAvailability": 97,
+    "confidenceScore": 42,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Secondary station availability",
-      "seasonalTip": "Boarding at a nearby secondary terminal (SDAH) bypasses main hub congestion and waitlists.",
+      "demandLevel": "Very High",
+      "bookingUrgency": "Comfortable station availability",
+      "seasonalTip": "Boarding at a nearby secondary terminal (SDAH) secures better seat availability and lower crowding.",
       "crowdLevel": 65,
-      "priceTrend": "Stable",
+      "priceTrend": "Rising",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 76,
+    "navixScore": 72,
     "comfortScore": 65,
-    "seatLikelihood": 72
+    "seatLikelihood": 97,
+    "confirmationLikelihood": "High",
+    "confirmationProbability": 97,
+    "recommendationReasoning": [
+      "Highly economical optimal route",
+      "Saves transfer stress",
+      "Highly confident seat availability",
+      "Bypasses overnight transfer stress"
+    ]
   },
   {
     "id": "route-11",
     "routeCombination": "Kolkata -> Patna",
-    "duration": "2h 21m",
-    "estimatedPrice": "INR 5,540",
+    "duration": "2h 45m",
+    "estimatedPrice": "INR 7,438",
     "travelModes": [
       "Flight"
     ],
@@ -173,241 +59,385 @@
         "from": "Kolkata",
         "to": "Patna",
         "mode": "Flight",
-        "duration": "2h 21m",
-        "departureTime": "08:30",
-        "arrivalTime": "10:51"
+        "duration": "2h 45m",
+        "departureTime": "07:15",
+        "arrivalTime": "10:00"
       }
     ],
-    "recommendationTag": "Fastest",
+    "recommendationTag": "Express Comfort",
     "tagTone": "violet",
     "isRecommended": false,
-    "departureTime": "08:30",
-    "arrivalTime": "10:51",
+    "departureTime": "07:15",
+    "arrivalTime": "10:00",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 96,
-    "confidenceScore": 34,
+    "estimatedAvailability": 36,
+    "confidenceScore": 87,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Airfares volatile — check early",
-      "seasonalTip": "Fastest direct travel avoiding all rail and road capacity bottlenecks entirely.",
+      "demandLevel": "Very High",
+      "bookingUrgency": "Air travel stable window",
+      "seasonalTip": "Smoothest journey bypasses ground sectors entirely for maximum travel comfort.",
       "crowdLevel": 30,
-      "priceTrend": "Rising",
+      "priceTrend": "Dropping",
       "trendDescription": "Stable alternative fares."
     },
     "navixScore": 70,
     "comfortScore": 90,
-    "seatLikelihood": 96
-  },
-  {
-    "id": "route-2",
-    "routeCombination": "Kolkata (HWH) -> Patna (PNBE)",
-    "duration": "6h 48m",
-    "estimatedPrice": "INR 827",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Kolkata (HWH)",
-        "to": "Patna (PNBE)",
-        "mode": "Train",
-        "duration": "6h 48m",
-        "departureTime": "14:30",
-        "arrivalTime": "21:18"
-      }
-    ],
-    "recommendationTag": "Cheapest",
-    "tagTone": "emerald",
-    "isRecommended": false,
-    "departureTime": "14:30",
-    "arrivalTime": "21:18",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 43,
-    "confidenceScore": 98,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Very High",
-      "bookingUrgency": "High waitlist — consider alternatives",
-      "seasonalTip": "Bottlenecked direct corridor. High risk of non-confirmation. Tatkal booking required.",
-      "crowdLevel": 65,
-      "priceTrend": "Rising",
-      "trendDescription": "High demand for direct rail."
-    },
-    "navixScore": 69,
-    "comfortScore": 65,
-    "seatLikelihood": 43
-  },
-  {
-    "id": "route-4",
-    "routeCombination": "Kolkata (KOAA) -> Patna (PNBE)",
-    "duration": "6h 49m",
-    "estimatedPrice": "INR 830",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Kolkata (KOAA)",
-        "to": "Patna (PNBE)",
-        "mode": "Train",
-        "duration": "6h 49m",
-        "departureTime": "18:30",
-        "arrivalTime": "01:19"
-      }
-    ],
-    "recommendationTag": "Fewer Transfers",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "18:30",
-    "arrivalTime": "01:19",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 39,
-    "confidenceScore": 23,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Secondary station availability",
-      "seasonalTip": "Boarding at a nearby secondary terminal (KOAA) bypasses main hub congestion and waitlists.",
-      "crowdLevel": 65,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 68,
-    "comfortScore": 65,
-    "seatLikelihood": 39
+    "seatLikelihood": 36
   },
   {
     "id": "route-12",
     "routeCombination": "Kolkata -> Patna",
-    "duration": "10h 46m",
-    "estimatedPrice": "INR 1,035",
+    "duration": "12h 11m",
+    "estimatedPrice": "INR 1,501",
     "travelModes": [
-      "Sleeper Bus"
+      "Sleeper Bus - Zingbus Premium AC Sleeper"
     ],
     "legs": [
       {
         "from": "Kolkata",
         "to": "Patna",
-        "mode": "Sleeper Bus",
-        "duration": "10h 46m",
-        "departureTime": "22:30",
-        "arrivalTime": "09:16"
+        "mode": "Sleeper Bus - Zingbus Premium AC Sleeper",
+        "duration": "12h 11m",
+        "departureTime": "22:15",
+        "arrivalTime": "10:26"
       }
     ],
-    "recommendationTag": "Fewer Transfers",
+    "recommendationTag": "Easier Transfer",
     "tagTone": "amber",
     "isRecommended": false,
-    "departureTime": "22:30",
-    "arrivalTime": "09:16",
+    "departureTime": "22:15",
+    "arrivalTime": "10:26",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 15,
-    "confidenceScore": 67,
+    "estimatedAvailability": 53,
+    "confidenceScore": 64,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Low",
+      "bookingUrgency": "Most comfortable sleeper coach",
+      "seasonalTip": "Most comfortable sleeper travel ensures relaxed overnight rest and stable seat options.",
+      "crowdLevel": 65,
+      "priceTrend": "Rising",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 68,
+    "comfortScore": 72,
+    "seatLikelihood": 53
+  },
+  {
+    "id": "route-1",
+    "routeCombination": "Kolkata (HWH) -> Patna (PNBE)",
+    "duration": "9h 20m",
+    "estimatedPrice": "INR 676",
+    "travelModes": [
+      "Train - Deccan Queen (12123)"
+    ],
+    "legs": [
+      {
+        "from": "Kolkata (HWH)",
+        "to": "Patna (PNBE)",
+        "mode": "Train - Deccan Queen (12123)",
+        "duration": "9h 20m",
+        "departureTime": "11:15",
+        "arrivalTime": "20:35"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "emerald",
+    "isRecommended": false,
+    "departureTime": "11:15",
+    "arrivalTime": "20:35",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 56,
+    "confidenceScore": 22,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
-      "bookingUrgency": "Express sleeper bus seats",
-      "seasonalTip": "Comfortable overnight sleeper bus with high seating availability and lower fare.",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Optimize seat availability by choosing surrounding secondary terminals or hybrid routes.",
+      "crowdLevel": 65,
+      "priceTrend": "Stable",
+      "trendDescription": "High demand for direct rail."
+    },
+    "navixScore": 66,
+    "comfortScore": 65,
+    "seatLikelihood": 56,
+    "waitlistCode": "GNWL 50 / WL 30",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 26,
+    "peakDemandFactor": "Peak Travel Window",
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!"
+  },
+  {
+    "id": "route-4",
+    "routeCombination": "Kolkata (KOAA) -> Patna (PNBE)",
+    "duration": "6h 59m",
+    "estimatedPrice": "INR 1,299",
+    "travelModes": [
+      "Train - Humsafar Express (22317)"
+    ],
+    "legs": [
+      {
+        "from": "Kolkata (KOAA)",
+        "to": "Patna (PNBE)",
+        "mode": "Train - Humsafar Express (22317)",
+        "duration": "6h 59m",
+        "departureTime": "17:15",
+        "arrivalTime": "00:14"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
+    "isRecommended": false,
+    "departureTime": "17:15",
+    "arrivalTime": "00:14",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 39,
+    "confidenceScore": 38,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Low",
+      "bookingUrgency": "Comfortable station availability",
+      "seasonalTip": "Boarding at a nearby secondary terminal (KOAA) secures better seat availability and lower crowding.",
       "crowdLevel": 65,
       "priceTrend": "Stable",
       "trendDescription": "Stable alternative fares."
     },
     "navixScore": 57,
-    "comfortScore": 72,
-    "seatLikelihood": 15
+    "comfortScore": 65,
+    "seatLikelihood": 39,
+    "waitlistCode": "GNWL 59 / WL 35",
+    "confirmationLikelihood": "Very Low",
+    "confirmationProbability": 22,
+    "peakDemandFactor": "Special Travel Season (RAC options available)",
+    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
   },
   {
-    "id": "route-7",
-    "routeCombination": "Kolkata (HWH) -> Varanasi -> Patna (PNBE)",
-    "duration": "13h 45m",
-    "estimatedPrice": "INR 1,547",
+    "id": "route-5",
+    "routeCombination": "Kolkata (HWH) -> Patna (DNR)",
+    "duration": "9h 22m",
+    "estimatedPrice": "INR 678",
     "travelModes": [
-      "Train"
+      "Train - Gitanjali Express (12859)"
     ],
     "legs": [
       {
         "from": "Kolkata (HWH)",
-        "to": "Varanasi (BSB)",
-        "mode": "Train",
-        "duration": "9h 00m",
-        "departureTime": "00:30",
-        "arrivalTime": "09:30"
-      },
-      {
-        "from": "Varanasi (BSB)",
-        "to": "Patna (PNBE)",
-        "mode": "Train",
-        "duration": "3h 30m",
-        "departureTime": "10:45",
-        "arrivalTime": "14:15"
+        "to": "Patna (DNR)",
+        "mode": "Train - Gitanjali Express (12859)",
+        "duration": "9h 22m",
+        "departureTime": "19:15",
+        "arrivalTime": "04:37"
       }
     ],
-    "recommendationTag": "Alternate Corridor",
-    "tagTone": "violet",
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
     "isRecommended": false,
-    "departureTime": "00:30",
-    "arrivalTime": "14:15",
-    "layoverDuration": "1h 15m",
-    "estimatedAvailability": 80,
-    "confidenceScore": 97,
+    "departureTime": "19:15",
+    "arrivalTime": "04:37",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 34,
+    "confidenceScore": 57,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Multi-corridor booking open",
-      "seasonalTip": "Breaking the journey via Varanasi avoids single-line waitlists by using two active corridors.",
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Comfortable satellite boarding",
+      "seasonalTip": "Choosing a nearby satellite station (DNR) offers comfortable boarding and smooth post-arrival transit.",
       "crowdLevel": 65,
       "priceTrend": "Dropping",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 47,
+    "navixScore": 55,
     "comfortScore": 65,
-    "seatLikelihood": 80
+    "seatLikelihood": 34,
+    "waitlistCode": "GNWL 62 / WL 37",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 33,
+    "peakDemandFactor": "Peak Travel Window",
+    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
   },
   {
-    "id": "route-8",
-    "routeCombination": "Kolkata (HWH) -> Bhubaneswar -> Patna (PNBE)",
-    "duration": "13h 52m",
-    "estimatedPrice": "INR 1,700",
+    "id": "route-6",
+    "routeCombination": "Kolkata (HWH) -> Patna (PPTA)",
+    "duration": "7h 00m",
+    "estimatedPrice": "INR 1,299",
     "travelModes": [
-      "Train"
+      "Train - Rajdhani Express (12309)"
     ],
     "legs": [
       {
         "from": "Kolkata (HWH)",
-        "to": "Bhubaneswar (BBS)",
-        "mode": "Train",
-        "duration": "5h 27m",
-        "departureTime": "02:30",
-        "arrivalTime": "07:57"
-      },
-      {
-        "from": "Bhubaneswar (BBS)",
-        "to": "Patna (PNBE)",
-        "mode": "Train",
-        "duration": "7h 10m",
-        "departureTime": "09:12",
-        "arrivalTime": "16:22"
+        "to": "Patna (PPTA)",
+        "mode": "Train - Rajdhani Express (12309)",
+        "duration": "7h 00m",
+        "departureTime": "21:15",
+        "arrivalTime": "04:15"
       }
     ],
-    "recommendationTag": "Hub Transit",
-    "tagTone": "violet",
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
     "isRecommended": false,
-    "departureTime": "02:30",
-    "arrivalTime": "16:22",
-    "layoverDuration": "1h 15m",
-    "estimatedAvailability": 67,
-    "confidenceScore": 43,
+    "departureTime": "21:15",
+    "arrivalTime": "04:15",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 30,
+    "confidenceScore": 55,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Multi-corridor booking open",
-      "seasonalTip": "Breaking the journey via Bhubaneswar avoids single-line waitlists by using two active corridors.",
+      "demandLevel": "High",
+      "bookingUrgency": "Comfortable satellite boarding",
+      "seasonalTip": "Choosing a nearby satellite station (PPTA) offers comfortable boarding and smooth post-arrival transit.",
       "crowdLevel": 65,
       "priceTrend": "Rising",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 42,
+    "navixScore": 54,
     "comfortScore": 65,
-    "seatLikelihood": 67
+    "seatLikelihood": 30,
+    "waitlistCode": "GNWL 65 / WL 39",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 40,
+    "peakDemandFactor": "Weekend Active Corridor",
+    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
+  },
+  {
+    "id": "route-2",
+    "routeCombination": "Kolkata (HWH) -> Patna (PNBE)",
+    "duration": "6h 59m",
+    "estimatedPrice": "INR 1,296",
+    "travelModes": [
+      "Train - Shiv Ganga Express (12560)"
+    ],
+    "legs": [
+      {
+        "from": "Kolkata (HWH)",
+        "to": "Patna (PNBE)",
+        "mode": "Train - Shiv Ganga Express (12560)",
+        "duration": "6h 59m",
+        "departureTime": "13:15",
+        "arrivalTime": "20:14"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
+    "isRecommended": false,
+    "departureTime": "13:15",
+    "arrivalTime": "20:14",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 15,
+    "confidenceScore": 69,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Optimize seat availability by choosing surrounding secondary terminals or hybrid routes.",
+      "crowdLevel": 65,
+      "priceTrend": "Dropping",
+      "trendDescription": "High demand for direct rail."
+    },
+    "navixScore": 50,
+    "comfortScore": 65,
+    "seatLikelihood": 15,
+    "waitlistCode": "GNWL 53 / WL 31",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 30,
+    "peakDemandFactor": "Weekend Active Corridor",
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!"
+  },
+  {
+    "id": "route-13",
+    "routeCombination": "Kolkata -> Varanasi -> Patna (PNBE)",
+    "duration": "9h 20m",
+    "estimatedPrice": "INR 6,655",
+    "travelModes": [
+      "Flight",
+      "Train - Gitanjali Express (12859)"
+    ],
+    "legs": [
+      {
+        "from": "Kolkata",
+        "to": "Varanasi",
+        "mode": "Flight",
+        "duration": "3h 01m",
+        "departureTime": "11:15",
+        "arrivalTime": "14:16"
+      },
+      {
+        "from": "Varanasi (BSB)",
+        "to": "Patna (PNBE)",
+        "mode": "Train - Gitanjali Express (12859)",
+        "duration": "4h 19m",
+        "departureTime": "16:16",
+        "arrivalTime": "20:35"
+      }
+    ],
+    "recommendationTag": "Smoother Alternate Route",
+    "tagTone": "violet",
+    "isRecommended": false,
+    "departureTime": "11:15",
+    "arrivalTime": "20:35",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 98,
+    "confidenceScore": 80,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "High seat confidence on hybrid",
+      "seasonalTip": "A smoother alternate route via air-rail hybrid increases seat confidence and travel luxury.",
+      "crowdLevel": 30,
+      "priceTrend": "Stable",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 50,
+    "comfortScore": 80,
+    "seatLikelihood": 98
+  },
+  {
+    "id": "route-14",
+    "routeCombination": "Kolkata -> Varanasi -> Patna (PNBE)",
+    "duration": "10h 06m",
+    "estimatedPrice": "INR 6,860",
+    "travelModes": [
+      "Flight",
+      "Intercity Bus - NueGo Electric AC Coach"
+    ],
+    "legs": [
+      {
+        "from": "Kolkata",
+        "to": "Varanasi",
+        "mode": "Flight",
+        "duration": "3h 01m",
+        "departureTime": "13:15",
+        "arrivalTime": "16:16"
+      },
+      {
+        "from": "Varanasi",
+        "to": "Patna (PNBE)",
+        "mode": "Intercity Bus - NueGo Electric AC Coach",
+        "duration": "5h 05m",
+        "departureTime": "18:16",
+        "arrivalTime": "23:21"
+      }
+    ],
+    "recommendationTag": "Smoother Alternate Route",
+    "tagTone": "violet",
+    "isRecommended": false,
+    "departureTime": "13:15",
+    "arrivalTime": "23:21",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 93,
+    "confidenceScore": 92,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Low crowding hybrid seats",
+      "seasonalTip": "A low crowding journey combining flight and express coach ensures maximum peace of mind.",
+      "crowdLevel": 30,
+      "priceTrend": "Dropping",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 43,
+    "comfortScore": 80,
+    "seatLikelihood": 93
   }
 ]
