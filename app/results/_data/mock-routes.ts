@@ -79,6 +79,68 @@ const CITIES = [
   { name: "Kanpur", lat: 26.4499, lon: 80.3319, hasAirport: true, hasTrainStation: true, station: "CNB", alternatives: ["CPA"] },
   { name: "Visakhapatnam", lat: 17.6868, lon: 83.2185, hasAirport: true, hasTrainStation: true, station: "VSKP", alternatives: ["DVD"] },
 ];
+const NEARBY_STATIONS: Record<string, { code: string; name: string }[]> = {
+  "Delhi": [
+    { code: "NDLS", name: "Delhi" },
+    { code: "ANVT", name: "Anand Vihar" },
+    { code: "DLI", name: "Old Delhi" },
+    { code: "NZM", name: "Hazrat Nizamuddin" },
+    { code: "GZB", name: "Ghaziabad" },
+  ],
+  "Mumbai": [
+    { code: "CSMT", name: "Mumbai" },
+    { code: "BDTS", name: "Bandra Terminus" },
+    { code: "LTT", name: "Lokmanya Tilak" },
+    { code: "TNA", name: "Thane" },
+    { code: "KYN", name: "Kalyan" },
+  ],
+  "Bengaluru": [
+    { code: "SBC", name: "Bengaluru" },
+    { code: "YPR", name: "Yesvantpur" },
+    { code: "SMVB", name: "SMVT Bengaluru" },
+    { code: "KJM", name: "Krishnarajapuram" },
+  ],
+  "Patna": [
+    { code: "PNBE", name: "Patna" },
+    { code: "DNR", name: "Danapur" },
+    { code: "PPTA", name: "Patliputra" },
+    { code: "RJPB", name: "Rajendra Nagar" },
+    { code: "ARA", name: "Ara" },
+  ],
+  "Kolkata": [
+    { code: "HWH", name: "Kolkata" },
+    { code: "SDAH", name: "Sealdah" },
+    { code: "KOAA", name: "Kolkata" },
+    { code: "SHM", name: "Shalimar" },
+  ],
+  "Chennai": [
+    { code: "MAS", name: "Chennai" },
+    { code: "MS", name: "Chennai Egmore" },
+    { code: "TBM", name: "Tambaram" },
+  ],
+  "Hyderabad": [
+    { code: "HYB", name: "Hyderabad" },
+    { code: "SC", name: "Secunderabad" },
+    { code: "KCG", name: "Kacheguda" },
+  ],
+};
+
+function getNearbyStations(cityName: string): { code: string; name: string }[] {
+  const normalized = cityName.split(" ")[0].replace(/[()]/g, "").toLowerCase();
+  const matchedKey = Object.keys(NEARBY_STATIONS).find(k => k.toLowerCase().startsWith(normalized) || normalized.startsWith(k.toLowerCase()));
+  if (matchedKey) {
+    return NEARBY_STATIONS[matchedKey];
+  }
+  
+  // Dynamic fallback generator
+  const baseCode = cityName.substring(0, 3).toUpperCase().replace(/[()]/g, "");
+  const baseName = cityName.replace(/\s*\([^)]*\)*/g, "");
+  return [
+    { code: baseCode, name: baseName },
+    { code: `${baseCode}C`, name: `${baseName} Central` },
+    { code: `${baseCode}N`, name: `${baseName} North` },
+  ];
+}
 
 function getHash(input: string) {
   let hash = 0;
@@ -92,16 +154,16 @@ function getHash(input: string) {
 function getCityData(cityName: string) {
   const city = CITIES.find(c => c.name.toLowerCase() === cityName.toLowerCase());
   if (city) return city;
-  
+
   const hash = getHash(cityName);
   return {
-     name: cityName,
-     lat: 10 + (hash % 20),
-     lon: 70 + ((hash >> 4) % 20),
-     hasAirport: (hash % 10) > 4,
-     hasTrainStation: true,
-     station: cityName.substring(0, 3).toUpperCase(),
-     alternatives: [cityName.substring(0, 3).toUpperCase() + "X"]
+    name: cityName,
+    lat: 10 + (hash % 20),
+    lon: 70 + ((hash >> 4) % 20),
+    hasAirport: (hash % 10) > 4,
+    hasTrainStation: true,
+    station: cityName.substring(0, 3).toUpperCase(),
+    alternatives: [cityName.substring(0, 3).toUpperCase() + "X"]
   };
 }
 
@@ -109,10 +171,10 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return Math.round(R * c);
 }
 
@@ -162,22 +224,34 @@ function createLeg(fromData: any, toData: any, modeName: string, startTimeHr: nu
   const mode = MODES[modeName] || MODES["Intercity Bus"];
   let dist = calculateDistance(fromData.lat, fromData.lon, toData.lat, toData.lon);
   if (dist < 50) dist = 50;
-  
+
   const isFlight = modeName === "Flight";
   const boardingTimeMin = isFlight ? 90 : 30;
-  
+
   const travelTimeMin = (dist / mode.speed) * 60;
   const timeMin = boardingTimeMin + travelTimeMin * (0.9 + 0.2 * ((seedVal % 100) / 100));
-  
+
   const basePrice = dist * mode.costPerKm + mode.baseFare;
   const price = basePrice * (0.8 + 0.4 * (((seedVal >> 2) % 100) / 100)) * priceMult;
 
   const arr = addMinutesToTime(startTimeHr, startTimeMin, timeMin);
 
+  let fromName = fromData.name;
+  let toName = toData.name;
+
+  if (modeName === "Train") {
+    if (!fromName.includes("(") && fromData.station) {
+      fromName = `${fromName} (${fromData.station})`;
+    }
+    if (!toName.includes("(") && toData.station) {
+      toName = `${toName} (${toData.station})`;
+    }
+  }
+
   return {
     leg: {
-      from: fromData.name,
-      to: toData.name,
+      from: fromName,
+      to: toName,
       mode: modeName,
       duration: formatDuration(Math.round(timeMin)),
       departureTime: formatTime(startTimeHr, startTimeMin),
@@ -252,9 +326,13 @@ export function buildRouteOptions(
     return [];
   }
 
-  const seed = getHash(`${origin}-${destination}-${dateInput ?? "flexible"}`);
-  const originData = getCityData(origin);
-  const destData = getCityData(destination);
+  const formatName = (name: string) => name.replace(/\(([^)]+)\)/g, (match, p1) => `(${p1.toUpperCase()})`);
+  const formattedOrigin = formatName(origin);
+  const formattedDest = formatName(destination);
+
+  const seed = getHash(`${formattedOrigin}-${formattedDest}-${dateInput ?? "flexible"}`);
+  const originData = getCityData(formattedOrigin);
+  const destData = getCityData(formattedDest);
   const directDist = calculateDistance(originData.lat, originData.lon, destData.lat, destData.lon);
 
   const intermediates = CITIES.filter(c => {
@@ -266,110 +344,322 @@ export function buildRouteOptions(
   });
 
   for (let i = 0; i < intermediates.length; i++) {
-     const swapIdx = (seed + i) % intermediates.length;
-     const temp = intermediates[i];
-     intermediates[i] = intermediates[swapIdx];
-     intermediates[swapIdx] = temp;
+    const swapIdx = (seed + i) % intermediates.length;
+    const temp = intermediates[i];
+    intermediates[i] = intermediates[swapIdx];
+    intermediates[swapIdx] = temp;
   }
+
+  const originStations = getNearbyStations(origin);
+  const destStations = getNearbyStations(destination);
 
   const routesToBuild = [];
 
-  // 1. Direct Train (Traditional waitlisted rail)
-  routesToBuild.push({ type: "direct_train", isDirect: true, modes: ["Train"], vias: [], isWaitlisted: true });
+  // 1. Direct Train 1 (Congested baseline)
+  routesToBuild.push({
+    type: "direct_train",
+    isDirect: true,
+    modes: ["Train"],
+    vias: [],
+    customOrigin: originStations[0].code,
+    customDest: destStations[0].code,
+    isWaitlisted: true,
+    recommendationTag: "Bottlenecked",
+    tagTone: "amber" as const
+  });
 
-  // 2. Bus + Train Hybrid (Solving rail bottleneck)
-  const layover1 = intermediates.length > 0 ? intermediates[0] : null;
-  if (layover1) {
-    routesToBuild.push({ type: "bus_train", isDirect: false, modes: ["Intercity Bus", "Train"], vias: [layover1] });
-  } else {
-    routesToBuild.push({ type: "alternate_rail", isDirect: true, modes: ["Train"], vias: [] });
+  // 2. Direct Train 2 (Alternative time, congested)
+  routesToBuild.push({
+    type: "direct_train_alt",
+    isDirect: true,
+    modes: ["Train"],
+    vias: [],
+    customOrigin: originStations[0].code,
+    customDest: destStations[0].code,
+    isWaitlisted: true,
+    recommendationTag: "High Waitlist",
+    tagTone: "amber" as const
+  });
+
+  // 3. Smart Boarding 1 (Secondary origin 1)
+  const secondaryOrigin = originStations.length > 1 ? originStations[1] : null;
+  if (secondaryOrigin) {
+    routesToBuild.push({
+      type: "smart_boarding",
+      isDirect: true,
+      modes: ["Train"],
+      vias: [],
+      customOrigin: secondaryOrigin.code,
+      customDest: destStations[0].code,
+      recommendationTag: "Smart Boarding",
+      tagTone: "cyan" as const,
+      availabilityBoost: 45
+    });
   }
 
-  // 3. Fast Air Option (Premium direct)
+  // 4. Smart Boarding 2 (Secondary origin 2)
+  const secondaryOrigin2 = originStations.length > 2 ? originStations[2] : (originStations.length > 1 ? originStations[1] : null);
+  if (secondaryOrigin2) {
+    routesToBuild.push({
+      type: "smart_boarding_alt",
+      isDirect: true,
+      modes: ["Train"],
+      vias: [],
+      customOrigin: secondaryOrigin2.code,
+      customDest: destStations[0].code,
+      recommendationTag: "Alternate Boarding",
+      tagTone: "cyan" as const,
+      availabilityBoost: 40
+    });
+  }
+
+  // 5. Congestion Bypass 1 (Satellite terminal 1)
+  const secondaryDest = destStations.length > 1 ? destStations[1] : null;
+  if (secondaryDest) {
+    routesToBuild.push({
+      type: "congestion_bypass",
+      isDirect: true,
+      modes: ["Train"],
+      vias: [],
+      customOrigin: originStations[0].code,
+      customDest: secondaryDest.code,
+      recommendationTag: "Bypass Congestion",
+      tagTone: "emerald" as const,
+      availabilityBoost: 50
+    });
+  }
+
+  // 6. Congestion Bypass 2 (Satellite terminal 2)
+  const secondaryDest2 = destStations.length > 2 ? destStations[2] : (destStations.length > 1 ? destStations[1] : null);
+  if (secondaryDest2) {
+    routesToBuild.push({
+      type: "congestion_bypass_alt",
+      isDirect: true,
+      modes: ["Train"],
+      vias: [],
+      customOrigin: originStations[0].code,
+      customDest: secondaryDest2.code,
+      recommendationTag: "Satellite Bypass",
+      tagTone: "emerald" as const,
+      availabilityBoost: 48
+    });
+  }
+
+  // 7. Alternate Corridor 1 (Rail-to-Rail double-leg via hub 1)
+  const transitHub = intermediates.length > 0 ? intermediates[0] : null;
+  if (transitHub) {
+    routesToBuild.push({
+      type: "alternate_corridor",
+      isDirect: false,
+      modes: ["Train", "Train"],
+      vias: [transitHub],
+      customOrigin: originStations[0].code,
+      customDest: destStations[0].code,
+      recommendationTag: "Alternate Corridor",
+      tagTone: "violet" as const,
+      availabilityBoost: 55
+    });
+  }
+
+  // 8. Alternate Corridor 2 (Rail-to-Rail double-leg via hub 2)
+  const transitHubAlt = intermediates.length > 1 ? intermediates[1] : null;
+  if (transitHubAlt) {
+    routesToBuild.push({
+      type: "alternate_corridor_alt",
+      isDirect: false,
+      modes: ["Train", "Train"],
+      vias: [transitHubAlt],
+      customOrigin: originStations[0].code,
+      customDest: destStations[0].code,
+      recommendationTag: "Hub Transit",
+      tagTone: "violet" as const,
+      availabilityBoost: 52
+    });
+  }
+
+  // 9. Smart Split 1 (Train + Bus via hub 1)
+  const transitHub2 = intermediates.length > 1 ? intermediates[1] : (intermediates.length > 0 ? intermediates[0] : null);
+  if (transitHub2) {
+    routesToBuild.push({
+      type: "smart_split",
+      isDirect: false,
+      modes: ["Train", "Intercity Bus"],
+      vias: [transitHub2],
+      customOrigin: originStations[0].code,
+      customDest: destStations[0].code,
+      recommendationTag: "Smart Split",
+      tagTone: "amber" as const,
+      availabilityBoost: 60
+    });
+  }
+
+  // 10. Smart Split 2 (Train + Bus via hub 2)
+  const transitHub2Alt = intermediates.length > 2 ? intermediates[2] : (intermediates.length > 0 ? intermediates[0] : null);
+  if (transitHub2Alt) {
+    routesToBuild.push({
+      type: "smart_split_alt",
+      isDirect: false,
+      modes: ["Train", "Intercity Bus"],
+      vias: [transitHub2Alt],
+      customOrigin: originStations[0].code,
+      customDest: destStations[0].code,
+      recommendationTag: "Multi-modal Split",
+      tagTone: "amber" as const,
+      availabilityBoost: 58
+    });
+  }
+
+  // 11. Premium Option (Air or Premium Cab/Sleeper Bus)
   if (originData.hasAirport && destData.hasAirport && directDist > 300) {
-    routesToBuild.push({ type: "premium_air", isDirect: true, modes: ["Flight"], vias: [] });
+    routesToBuild.push({
+      type: "premium_air",
+      isDirect: true,
+      modes: ["Flight"],
+      vias: [],
+      recommendationTag: "Fastest",
+      tagTone: "violet" as const
+    });
   } else {
-    routesToBuild.push({ type: "premium_cab", isDirect: true, modes: ["Cab"], vias: [] });
+    routesToBuild.push({
+      type: "premium_cab",
+      isDirect: true,
+      modes: ["Cab"],
+      vias: [],
+      recommendationTag: "Direct Cab",
+      tagTone: "cyan" as const
+    });
   }
 
-  // 4. Overnight Sleeper Bus (Reliable direct budget)
-  routesToBuild.push({ type: "overnight_sleeper", isDirect: true, modes: ["Sleeper Bus"], vias: [], isOvernight: true });
+  // 12. Overnight sleeper bus option
+  routesToBuild.push({
+    type: "overnight_sleeper",
+    isDirect: true,
+    modes: ["Sleeper Bus"],
+    vias: [],
+    isOvernight: true,
+    recommendationTag: "Sleeper Bus",
+    tagTone: "cyan" as const,
+    availabilityBoost: 65
+  });
 
-  // 5. Rail to Rail (Alternate corridor)
-  const layover2 = intermediates.length > 1 ? intermediates[1] : (intermediates.length > 0 ? intermediates[0] : null);
-  if (layover2) {
-    routesToBuild.push({ type: "rail_to_rail", isDirect: false, modes: ["Train", "Train"], vias: [layover2] });
-  } else {
-    routesToBuild.push({ type: "bus_direct", isDirect: true, modes: ["Intercity Bus"], vias: [] });
+  // 13. Flight + Train Hybrid (Air Hybrid)
+  const airTransitHub = intermediates.find(c => c.hasAirport);
+  if (originData.hasAirport && airTransitHub) {
+    routesToBuild.push({
+      type: "flight_train_hybrid",
+      isDirect: false,
+      modes: ["Flight", "Train"],
+      vias: [airTransitHub],
+      customDest: destStations[0].code,
+      recommendationTag: "Air Hybrid",
+      tagTone: "violet" as const,
+      availabilityBoost: 80
+    });
   }
 
-  // 6. Air + Bus/Train Combination (The 'Navix Special' multi-modal)
-  if (layover1 && (originData.hasAirport || destData.hasAirport)) {
-     const mode1 = originData.hasAirport && layover1.hasAirport ? "Flight" : "Train";
-     const mode2 = mode1 === "Flight" ? "Intercity Bus" : "Train";
-     routesToBuild.push({ type: "air_hybrid", isDirect: false, modes: [mode1, mode2], vias: [layover1] });
-  } else {
-     routesToBuild.push({ type: "nearby_boarding", isDirect: true, modes: ["Train"], vias: [], customOrigin: originData.alternatives?.[0] });
+  // 14. Flight + Bus Hybrid (Multi-modal Air)
+  if (originData.hasAirport && airTransitHub) {
+    routesToBuild.push({
+      type: "flight_bus_hybrid",
+      isDirect: false,
+      modes: ["Flight", "Intercity Bus"],
+      vias: [airTransitHub],
+      customDest: destStations[0].code,
+      recommendationTag: "Multi-modal Air",
+      tagTone: "violet" as const,
+      availabilityBoost: 85
+    });
   }
 
   return routesToBuild.map((rDef, index) => {
     let currentHr = (6 + (seed % 10) + index * 2) % 24;
     if (rDef.isOvernight) currentHr = 21 + (index % 2);
     let currentMin = (seed % 4) * 15;
-    
+
     let totalDurMin = 0;
     let totalPrice = 0;
     const routeLegs = [];
     let layoverDurationMin = 0;
 
-    const fromData = rDef.customOrigin ? { ...originData, name: `${originData.name} (${rDef.customOrigin})` } : originData;
-    const toData = rDef.customDest ? { ...destData, name: `${destData.name} (${rDef.customDest})` } : destData;
+    const originLabel = rDef.customOrigin ? `${originData.name} (${rDef.customOrigin})` : originData.name;
+    const destLabel = rDef.customDest ? `${destData.name} (${rDef.customDest})` : destData.name;
 
-    const priceMult = rDef.type === "overnight_sleeper" ? 0.8 : (rDef.modes.includes("Flight") ? 1.4 : 1.0);
+    const fromData = { ...originData, name: originLabel, station: rDef.customOrigin || originData.station };
+    const toData = { ...destData, name: destLabel, station: rDef.customDest || destData.station };
+
+    const priceMult = rDef.type === "premium_air" ? 1.4 : (rDef.type === "smart_split" ? 0.9 : 1.0);
 
     if (rDef.isDirect) {
-       const res = createLeg(fromData, toData, rDef.modes[0], currentHr, currentMin, seed + index, priceMult);
-       routeLegs.push(res.leg);
-       totalDurMin = res.durationMin;
-       totalPrice = res.price;
+      const res = createLeg(fromData, toData, rDef.modes[0], currentHr, currentMin, seed + index, priceMult);
+      routeLegs.push(res.leg);
+      totalDurMin = res.durationMin;
+      totalPrice = res.price;
     } else {
-       const viaData = rDef.vias[0];
-       const leg1 = createLeg(fromData, viaData, rDef.modes[0], currentHr, currentMin, seed + index, priceMult);
-       const layover = rDef.modes.includes("Flight") ? 120 : 60;
-       layoverDurationMin = layover;
-       const nextHr = (leg1.arrTime.hour + Math.floor((leg1.arrTime.min + layover) / 60)) % 24;
-       const nextMin = (leg1.arrTime.min + layover) % 60;
-       const leg2 = createLeg(viaData, toData, rDef.modes[1], nextHr, nextMin, seed + index * 2, priceMult);
-       routeLegs.push(leg1.leg);
-       routeLegs.push(leg2.leg);
-       totalDurMin = leg1.durationMin + layover + leg2.durationMin;
-       totalPrice = leg1.price + leg2.price;
+      const viaData = rDef.vias[0];
+      const leg1 = createLeg(fromData, viaData, rDef.modes[0], currentHr, currentMin, seed + index, priceMult);
+      const layover = rDef.modes.includes("Flight") ? 120 : 75;
+      layoverDurationMin = layover;
+      const nextHr = (leg1.arrTime.hour + Math.floor((leg1.arrTime.min + layover) / 60)) % 24;
+      const nextMin = (leg1.arrTime.min + layover) % 60;
+      const leg2 = createLeg(viaData, toData, rDef.modes[1], nextHr, nextMin, seed + index * 2, priceMult);
+      routeLegs.push(leg1.leg);
+      routeLegs.push(leg2.leg);
+      totalDurMin = leg1.durationMin + layover + leg2.durationMin;
+      totalPrice = leg1.price + leg2.price;
     }
 
-    const comfortScore = rDef.modes.includes("Flight") ? 90 : (rDef.modes.includes("Sleeper Bus") ? 75 : 65);
-    const seatLikelihood = rDef.isWaitlisted ? Math.floor(15 + (seed % 15)) : (rDef.modes.includes("Flight") ? 95 : 70);
-    const confidence = rDef.isWaitlisted ? 35 : (rDef.modes.includes("Flight") ? 98 : 85);
-    const crowdLevel = rDef.modes.includes("Flight") ? 30 : 70;
+    let comfortScore = 65;
+    if (rDef.modes.includes("Flight")) {
+      comfortScore = rDef.isDirect ? 90 : 80;
+    } else if (rDef.type === "smart_split" || rDef.type.includes("sleeper")) {
+      comfortScore = 72;
+    }
+    
+    // Randomized for testing purposes to allow all route types to rise to the top
+    const seatLikelihood = Math.floor(10 + Math.random() * 90);
+    const confidence = Math.floor(20 + Math.random() * 80);
+    const crowdLevel = rDef.modes.includes("Flight") ? 30 : 65;
 
     let urgency = "Standard booking window";
     let tip = "Standard route";
-    if (rDef.isWaitlisted) {
-       urgency = "High waitlist — consider alternatives";
-       tip = "Low confirmation probability for direct train";
-    } else if (rDef.type === "air_hybrid" || rDef.type === "bus_train") {
-       urgency = "Higher availability on multi-modal";
-       tip = "Smart combination to bypass rail waitlists";
+    if (rDef.isWaitlisted || rDef.type.startsWith("direct_train")) {
+      urgency = "High waitlist — consider alternatives";
+      tip = "Bottlenecked direct corridor. High risk of non-confirmation. Tatkal booking required.";
+    } else if (rDef.type.startsWith("smart_boarding")) {
+      urgency = "Secondary station availability";
+      tip = `Boarding at a nearby secondary terminal (${rDef.customOrigin}) bypasses main hub congestion and waitlists.`;
+    } else if (rDef.type.startsWith("congestion_bypass")) {
+      urgency = "Satellite terminal availability";
+      tip = `Booking to a nearby satellite station (${rDef.customDest}) avoids heavy terminal congestion.`;
+    } else if (rDef.type.startsWith("alternate_corridor")) {
+      urgency = "Multi-corridor booking open";
+      tip = `Breaking the journey via ${rDef.vias[0].name} avoids single-line waitlists by using two active corridors.`;
+    } else if (rDef.type.startsWith("smart_split")) {
+      urgency = "Train + Bus seats available";
+      tip = `Taking a train to ${rDef.vias[0].name} and a bus to destination bypasses the highly waitlisted rail sector.`;
+    } else if (rDef.type === "premium_air") {
+      urgency = "Airfares volatile — check early";
+      tip = "Fastest direct travel avoiding all rail and road capacity bottlenecks entirely.";
+    } else if (rDef.type === "overnight_sleeper") {
+      urgency = "Express sleeper bus seats";
+      tip = "Comfortable overnight sleeper bus with high seating availability and lower fare.";
+    } else if (rDef.type === "flight_train_hybrid") {
+      urgency = "High availability on Flight + Rail";
+      tip = `Flying to intermediate airport ${rDef.vias[0].name} and taking a train to destination bypasses direct rail waitlists and is 40% cheaper than direct flight.`;
+    } else if (rDef.type === "flight_bus_hybrid") {
+      urgency = "Guaranteed seats on Flight + Bus";
+      tip = `Flying to ${rDef.vias[0].name} and taking an express bus to destination bypasses waitlisted rail and high direct flight tariffs.`;
     }
 
     return {
       id: `route-${index + 1}`,
-      routeCombination: rDef.isDirect ? `${fromData.name} → ${toData.name}` : `${fromData.name} → ${rDef.vias[0].name} → ${toData.name}`,
+      routeCombination: rDef.isDirect ? `${fromData.name} -> ${toData.name}` : `${fromData.name} -> ${rDef.vias[0].name} -> ${toData.name}`,
       duration: formatDuration(totalDurMin),
       estimatedPrice: formatRupees(totalPrice),
       travelModes: [...new Set(routeLegs.map(l => l.mode))],
       legs: routeLegs,
-      recommendationTag: "", 
-      tagTone: "cyan",
+      recommendationTag: rDef.recommendationTag || "",
+      tagTone: rDef.tagTone || "cyan",
       isRecommended: false,
       departureTime: routeLegs[0].departureTime,
       arrivalTime: routeLegs[routeLegs.length - 1].arrivalTime,
@@ -383,7 +673,7 @@ export function buildRouteOptions(
         seasonalTip: tip,
         crowdLevel,
         priceTrend: ["Rising", "Stable", "Dropping"][(seed + index) % 3] as any,
-        trendDescription: rDef.isWaitlisted ? "High demand for direct rail." : "Stable multi-modal fares."
+        trendDescription: rDef.isWaitlisted ? "High demand for direct rail." : "Stable alternative fares."
       },
       navixScore: 0,
       comfortScore,
