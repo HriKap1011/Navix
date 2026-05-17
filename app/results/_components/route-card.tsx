@@ -183,13 +183,12 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
 
   return (
     <article
-      className={`nv-route-card group relative overflow-hidden rounded-3xl border bg-gradient-to-br p-5 transition-all duration-500 ease-out will-change-transform sm:p-6 ${
-        isTopPick
+      className={`nv-route-card group relative overflow-hidden rounded-3xl border bg-gradient-to-br p-5 transition-all duration-500 ease-out will-change-transform sm:p-6 ${isTopPick
           ? "nv-recommended nv-pick-glow border-cyan-300/50 from-cyan-400/[0.12] via-cyan-400/[0.04] to-violet-500/[0.06] shadow-[0_28px_90px_-30px_rgba(34,211,238,0.5)] hover:-translate-y-1.5 hover:border-cyan-200/65 hover:shadow-[0_36px_110px_-25px_rgba(34,211,238,0.7)]"
           : route.isRecommended
             ? "nv-recommended border-cyan-300/35 from-cyan-400/[0.1] to-white/[0.04] shadow-[0_24px_80px_-40px_rgba(34,211,238,0.4)] hover:-translate-y-1 hover:border-cyan-200/55 hover:shadow-[0_30px_95px_-30px_rgba(34,211,238,0.65)]"
             : "border-white/10 from-white/[0.06] to-white/[0.02] hover:-translate-y-1 hover:border-cyan-400/40 hover:bg-white/[0.04] hover:shadow-[0_28px_80px_-30px_rgba(34,211,238,0.5)]"
-      }`}
+        }`}
     >
       {/* Decorative glows */}
       <div className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -226,7 +225,7 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
                 {diff.label}
               </span>
             </div>
-            
+
             {/* Route Combination Title */}
             <h2 className="text-base sm:text-lg font-extrabold tracking-tight text-white capitalize leading-snug">
               {capitalizeRouteCombination(route.routeCombination)}
@@ -314,11 +313,10 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
                 e.stopPropagation();
                 window.location.href = compareHref;
               }}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                isCompared
+              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${isCompared
                   ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200 shadow-[0_0_15px_-3px_rgba(34,211,238,0.3)]"
                   : "border-white/10 bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-zinc-200 hover:bg-white/[0.04]"
-              }`}
+                }`}
             >
               {isCompared ? "✓ Added" : "+ Compare"}
             </button>
@@ -349,7 +347,7 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
         {/* ── Expandable Advanced Details ── */}
         {isExpanded && (
           <div className="pt-4 border-t border-white/[0.06] space-y-4 transition-all duration-500 ease-in-out">
-            
+
             {/* Route Optimization Reasoning */}
             {isTopPick && route.recommendationReasoning && (
               <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-cyan-500/[0.03]">
@@ -379,12 +377,11 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
                   </div>
                   <div className="text-left sm:text-right">
                     <span className="text-[8px] font-bold uppercase tracking-wider text-zinc-500 block mb-0.5">Seat Confidence Rating</span>
-                    <span className={`text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                      route.confirmationLikelihood === "High" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                      route.confirmationLikelihood === "Medium" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
-                      route.confirmationLikelihood === "Low" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                      "bg-red-500/10 text-red-500 border border-red-500/20"
-                    }`}>
+                    <span className={`text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${route.confirmationLikelihood === "High" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
+                        route.confirmationLikelihood === "Medium" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
+                          route.confirmationLikelihood === "Low" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
+                            "bg-red-500/10 text-red-500 border border-red-500/20"
+                      }`}>
                       {route.confirmationLikelihood} ({route.confirmationProbability}%)
                     </span>
                   </div>

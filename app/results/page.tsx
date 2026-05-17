@@ -4,6 +4,7 @@ import { TripSelector } from "./_components/trip-selector";
 import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
 import { ComparisonDrawer } from "./_components/comparison-drawer";
 import { calculateSmartScores } from "./_utils/scoring";
+import { analyzeTravelDemand } from "./_utils/demand-engine";
 import fs from "fs";
 import path from "path";
 
@@ -48,6 +49,7 @@ export default async function ResultsPage({
     date = formatFlexibleMonth(params.flexibleMonth);
   }
   
+  const demandProfile = analyzeTravelDemand(origin, destination, params.date || params.flexibleMonth || "");
   const rawRouteOptions = buildRouteOptions(origin, destination, params.date || params.flexibleMonth || "");
   const rawWithScores = calculateSmartScores(rawRouteOptions);
 
@@ -266,6 +268,16 @@ export default async function ResultsPage({
               {date}
             </p>
           </div>
+
+          {demandProfile.contextualMessage && (
+            <div className="mb-8 flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-5 py-4 text-amber-200/90 shadow-[0_0_20px_-5px_rgba(245,158,11,0.15)]">
+              <span className="text-xl">⚠️</span>
+              <div>
+                <p className="text-sm font-semibold text-amber-200">{demandProfile.contextualMessage}</p>
+                <p className="mt-1 text-xs text-amber-200/70">High demand detected. Expect lower seat availability and dynamic pricing.</p>
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
