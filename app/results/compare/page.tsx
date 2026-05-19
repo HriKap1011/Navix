@@ -77,7 +77,7 @@ export default async function ComparePage({
       <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#030306]/80 backdrop-blur-xl backdrop-saturate-150">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-2.5">
-            <Link href={`/results?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] transition">
+            <Link href={`/results?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition">
               <svg className="h-4 w-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
@@ -105,11 +105,11 @@ export default async function ComparePage({
           {selectedRoutes.map((route) => (
             <div key={route.id} className={`relative rounded-3xl border p-6 bg-gradient-to-br ${
               route.isRecommended 
-                ? "border-cyan-400/30 from-cyan-400/[0.08] to-violet-500/[0.05] shadow-[0_20px_50px_-20px_rgba(34,211,238,0.3)]" 
+                ? "border-cyan-400/30 from-cyan-400/[0.06] to-violet-500/[0.04] shadow-[0_20px_50px_-20px_rgba(34,211,238,0.15)]" 
                 : "border-white/10 from-white/[0.04] to-white/[0.01]"
             }`}>
               {route.isRecommended && (
-                <span className="absolute -top-2.5 -right-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 px-3 py-1 text-[10px] font-bold uppercase text-slate-950 shadow-lg">
+                <span className="absolute -top-2.5 -right-2.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[10px] font-bold uppercase text-cyan-200 backdrop-blur-md shadow-lg">
                   Top Pick
                 </span>
               )}
@@ -139,7 +139,7 @@ export default async function ComparePage({
         {/* Add Routes Section */}
         {ids.length < 3 && unselectedRoutes.length > 0 && (
           <div className="mb-8 p-4 rounded-2xl border border-white/[0.05] bg-white/[0.01]">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-600 mb-3">Add another route to compare</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">Add another route to compare</p>
             <div className="flex flex-wrap gap-2">
               {unselectedRoutes.map((route) => (
                 <Link
@@ -163,7 +163,7 @@ export default async function ComparePage({
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.03]">
-                  <th className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-500 w-48">Metric</th>
+                  <th className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 w-48">Metric</th>
                   {selectedRoutes.map((route) => (
                     <th key={route.id} className="p-4 text-sm font-bold text-white">
                       {route.routeCombination.split(" → ").map(c => c.charAt(0)).join(" → ")}
@@ -174,7 +174,7 @@ export default async function ComparePage({
               <tbody>
                 {/* Navix Score */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Navix Score</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Navix Score</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-bold ${
                       route.navixScore === bestNavix ? "text-cyan-400 bg-cyan-400/[0.05]" : "text-zinc-300"
@@ -189,7 +189,7 @@ export default async function ComparePage({
 
                 {/* Comfort Score */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Comfort Score</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Comfort Score</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-bold ${
                       route.comfortScore === bestComfort ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
@@ -201,7 +201,7 @@ export default async function ComparePage({
 
                 {/* Price */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Price</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Price</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-bold tabular-nums ${
                       getPriceNum(route.estimatedPrice) === bestPrice ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
@@ -213,7 +213,7 @@ export default async function ComparePage({
 
                 {/* Duration */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Duration</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Duration</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${
                       getMinutes(route.duration) === bestDuration ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
@@ -225,7 +225,7 @@ export default async function ComparePage({
 
                 {/* Transfers */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Transfers</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Transfers</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-semibold ${
                       (route.legs.length - 1) === bestTransfers ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
@@ -237,7 +237,7 @@ export default async function ComparePage({
 
                 {/* Layover Duration */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Total Layover</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Total Layover</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${
                       getMinutes(route.layoverDuration) === bestLayover ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
@@ -249,7 +249,7 @@ export default async function ComparePage({
 
                 {/* Availability */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Availability</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Availability</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${
                       route.estimatedAvailability === bestAvail ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
@@ -261,7 +261,7 @@ export default async function ComparePage({
 
                 {/* Travel Modes */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Modes Used</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Modes Used</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className="p-4 text-sm font-semibold text-zinc-300">
                       <div className="flex gap-1.5 flex-wrap">
@@ -277,7 +277,7 @@ export default async function ComparePage({
 
                 {/* Departure Time */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Departure</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Departure</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className="p-4 text-sm font-semibold text-zinc-300 tabular-nums">
                       {route.departureTime}
@@ -287,7 +287,7 @@ export default async function ComparePage({
 
                 {/* Arrival Time */}
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
-                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-bold uppercase tracking-wider text-zinc-400">Arrival</td>
+                  <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Arrival</td>
                   {selectedRoutes.map((route) => (
                     <td key={route.id} className="p-4 text-sm font-semibold text-zinc-300 tabular-nums">
                       {route.arrivalTime}

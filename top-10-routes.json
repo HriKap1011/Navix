@@ -1,444 +1,443 @@
 [
   {
+    "id": "route-1",
+    "routeCombination": "Delhi (NDLS) -> Mumbai (CSMT)",
+    "duration": "15h 32m",
+    "estimatedPrice": "INR 3,332",
+    "travelModes": [
+      "Train - Humsafar Express (22317)"
+    ],
+    "legs": [
+      {
+        "from": "Delhi (NDLS)",
+        "to": "Mumbai (CSMT)",
+        "mode": "Train - Humsafar Express (22317)",
+        "duration": "15h 32m",
+        "departureTime": "14:00",
+        "arrivalTime": "05:32"
+      }
+    ],
+    "recommendationTag": "Zero Timing Friction",
+    "tagTone": "cyan",
+    "isRecommended": true,
+    "departureTime": "14:00",
+    "arrivalTime": "05:32",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 57,
+    "confidenceScore": 42,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Low",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Stable",
+      "trendDescription": "High demand for direct rail."
+    },
+    "navixScore": 75,
+    "comfortScore": 50,
+    "seatLikelihood": 57,
+    "waitlistCode": "GNWL 43 / WL 25",
+    "confirmationLikelihood": "Very Low",
+    "confirmationProbability": 24,
+    "peakDemandFactor": "Special Travel Season (RAC options available)",
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!",
+    "recommendationReasoning": [
+      "Highly economical optimal route",
+      "Saves transfer stress",
+      "Daylight schedule with no waiting pain"
+    ]
+  },
+  {
+    "id": "route-2",
+    "routeCombination": "Delhi (NDLS) -> Mumbai (CSMT)",
+    "duration": "21h 01m",
+    "estimatedPrice": "INR 1,794",
+    "travelModes": [
+      "Train - Gitanjali Express (12859)"
+    ],
+    "legs": [
+      {
+        "from": "Delhi (NDLS)",
+        "to": "Mumbai (CSMT)",
+        "mode": "Train - Gitanjali Express (12859)",
+        "duration": "21h 01m",
+        "departureTime": "16:00",
+        "arrivalTime": "13:01"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "emerald",
+    "isRecommended": false,
+    "departureTime": "16:00",
+    "arrivalTime": "13:01",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 54,
+    "confidenceScore": 93,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Dropping",
+      "trendDescription": "High demand for direct rail."
+    },
+    "navixScore": 72,
+    "comfortScore": 50,
+    "seatLikelihood": 54,
+    "waitlistCode": "GNWL 46 / WL 27",
+    "confirmationLikelihood": "Very Low",
+    "confirmationProbability": 16,
+    "peakDemandFactor": "Peak Travel Window",
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!"
+  },
+  {
+    "id": "route-3",
+    "routeCombination": "Delhi (ANVT) -> Mumbai (CSMT)",
+    "duration": "15h 34m",
+    "estimatedPrice": "INR 3,332",
+    "travelModes": [
+      "Train - Rajdhani Express (12309)"
+    ],
+    "legs": [
+      {
+        "from": "Delhi (ANVT)",
+        "to": "Mumbai (CSMT)",
+        "mode": "Train - Rajdhani Express (12309)",
+        "duration": "15h 34m",
+        "departureTime": "18:00",
+        "arrivalTime": "09:34"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
+    "isRecommended": false,
+    "departureTime": "18:00",
+    "arrivalTime": "09:34",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 52,
+    "confidenceScore": 64,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Comfortable station availability",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Rising",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 71,
+    "comfortScore": 50,
+    "seatLikelihood": 52,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 52
+  },
+  {
+    "id": "route-4",
+    "routeCombination": "Delhi (DLI) -> Mumbai (CSMT)",
+    "duration": "21h 04m",
+    "estimatedPrice": "INR 1,794",
+    "travelModes": [
+      "Train - Vande Bharat Express (22436)"
+    ],
+    "legs": [
+      {
+        "from": "Delhi (DLI)",
+        "to": "Mumbai (CSMT)",
+        "mode": "Train - Vande Bharat Express (22436)",
+        "duration": "21h 04m",
+        "departureTime": "20:00",
+        "arrivalTime": "17:04"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "emerald",
+    "isRecommended": false,
+    "departureTime": "20:00",
+    "arrivalTime": "17:04",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 50,
+    "confidenceScore": 36,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Very High",
+      "bookingUrgency": "Comfortable station availability",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Stable",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 69,
+    "comfortScore": 50,
+    "seatLikelihood": 50,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 50
+  },
+  {
     "id": "route-11",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "3h 17m",
-    "estimatedPrice": "INR 10,217",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "3h 45m",
+    "estimatedPrice": "INR 16,723",
     "travelModes": [
       "Flight"
     ],
     "legs": [
       {
         "from": "Delhi",
-        "to": "Patna",
+        "to": "Mumbai",
         "mode": "Flight",
-        "duration": "3h 17m",
-        "departureTime": "02:00",
-        "arrivalTime": "05:17"
+        "duration": "3h 45m",
+        "departureTime": "10:00",
+        "arrivalTime": "13:45"
       }
     ],
-    "recommendationTag": "Most Comfortable",
-    "tagTone": "cyan",
-    "isRecommended": true,
-    "departureTime": "02:00",
-    "arrivalTime": "05:17",
+    "recommendationTag": "Express Comfort",
+    "tagTone": "violet",
+    "isRecommended": false,
+    "departureTime": "10:00",
+    "arrivalTime": "13:45",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
+    "estimatedAvailability": 35,
+    "confidenceScore": 74,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "High",
       "bookingUrgency": "Air travel stable window",
-      "seasonalTip": "Smoothest journey bypasses ground sectors entirely for maximum travel comfort.",
-      "crowdLevel": 30,
-      "priceTrend": "Stable",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 70,
+      "priceTrend": "Dropping",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 78,
-    "comfortScore": 90,
-    "seatLikelihood": 10,
-    "recommendationReasoning": [
-      "Saves transfer stress",
-      "Superior comfort and low travel friction"
-    ]
+    "navixScore": 69,
+    "comfortScore": 75,
+    "seatLikelihood": 35
   },
   {
-    "id": "route-1",
-    "routeCombination": "Delhi (NDLS) -> Patna (PNBE)",
-    "duration": "11h 29m",
-    "estimatedPrice": "INR 1,961",
-    "travelModes": [
-      "Train - Rajdhani Express (12309)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Patna (PNBE)",
-        "mode": "Train - Rajdhani Express (12309)",
-        "duration": "11h 29m",
-        "departureTime": "06:00",
-        "arrivalTime": "17:29"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "06:00",
-    "arrivalTime": "17:29",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Optimize seat availability by choosing surrounding secondary terminals or hybrid routes.",
-      "crowdLevel": 65,
-      "priceTrend": "Rising",
-      "trendDescription": "High demand for direct rail."
-    },
-    "navixScore": 74,
-    "comfortScore": 65,
-    "seatLikelihood": 10,
-    "waitlistCode": "GNWL 15 / WL 9",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 15,
-    "peakDemandFactor": "Special Travel Season (RAC options available)",
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!"
-  },
-  {
-    "id": "route-3",
-    "routeCombination": "Delhi (ANVT) -> Patna (PNBE)",
-    "duration": "11h 30m",
-    "estimatedPrice": "INR 1,961",
+    "id": "route-5",
+    "routeCombination": "Delhi (NDLS) -> Mumbai (BDTS)",
+    "duration": "15h 36m",
+    "estimatedPrice": "INR 3,338",
     "travelModes": [
       "Train - Sampoorna Kranti Express (12393)"
     ],
     "legs": [
       {
-        "from": "Delhi (ANVT)",
-        "to": "Patna (PNBE)",
+        "from": "Delhi (NDLS)",
+        "to": "Mumbai (BDTS)",
         "mode": "Train - Sampoorna Kranti Express (12393)",
-        "duration": "11h 30m",
-        "departureTime": "10:00",
-        "arrivalTime": "21:30"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "10:00",
-    "arrivalTime": "21:30",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Comfortable station availability",
-      "seasonalTip": "Boarding at a nearby secondary terminal (ANVT) secures better seat availability and lower crowding.",
-      "crowdLevel": 65,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 74,
-    "comfortScore": 65,
-    "seatLikelihood": 10,
-    "waitlistCode": "GNWL 21 / WL 12",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 15,
-    "peakDemandFactor": "Weekend Active Corridor",
-    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
-  },
-  {
-    "id": "route-12",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "20h 20m",
-    "estimatedPrice": "INR 2,317",
-    "travelModes": [
-      "Sleeper Bus - VRL Travels AC Sleeper"
-    ],
-    "legs": [
-      {
-        "from": "Delhi",
-        "to": "Patna",
-        "mode": "Sleeper Bus - VRL Travels AC Sleeper",
-        "duration": "20h 20m",
+        "duration": "15h 36m",
         "departureTime": "22:00",
-        "arrivalTime": "18:20"
+        "arrivalTime": "13:36"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "amber",
     "isRecommended": false,
     "departureTime": "22:00",
-    "arrivalTime": "18:20",
+    "arrivalTime": "13:36",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Very High",
-      "bookingUrgency": "Most comfortable sleeper coach",
-      "seasonalTip": "Most comfortable sleeper travel ensures relaxed overnight rest and stable seat options.",
-      "crowdLevel": 65,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 74,
-    "comfortScore": 72,
-    "seatLikelihood": 10
-  },
-  {
-    "id": "route-6",
-    "routeCombination": "Delhi (NDLS) -> Patna (PPTA)",
-    "duration": "15h 33m",
-    "estimatedPrice": "INR 1,049",
-    "travelModes": [
-      "Train - Deccan Queen (12123)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Patna (PPTA)",
-        "mode": "Train - Deccan Queen (12123)",
-        "duration": "15h 33m",
-        "departureTime": "16:00",
-        "arrivalTime": "07:33"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "16:00",
-    "arrivalTime": "07:33",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Comfortable satellite boarding",
-      "seasonalTip": "Choosing a nearby satellite station (PPTA) offers comfortable boarding and smooth post-arrival transit.",
-      "crowdLevel": 65,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 73,
-    "comfortScore": 65,
-    "seatLikelihood": 10,
-    "waitlistCode": "GNWL 30 / WL 18",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 15,
-    "peakDemandFactor": "Peak Travel Window",
-    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
-  },
-  {
-    "id": "route-5",
-    "routeCombination": "Delhi (NDLS) -> Patna (DNR)",
-    "duration": "11h 32m",
-    "estimatedPrice": "INR 1,965",
-    "travelModes": [
-      "Train - Poorva Express (12382)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Patna (DNR)",
-        "mode": "Train - Poorva Express (12382)",
-        "duration": "11h 32m",
-        "departureTime": "14:00",
-        "arrivalTime": "01:32"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "14:00",
-    "arrivalTime": "01:32",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
+    "estimatedAvailability": 48,
+    "confidenceScore": 87,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Low",
       "bookingUrgency": "Comfortable satellite boarding",
-      "seasonalTip": "Choosing a nearby satellite station (DNR) offers comfortable boarding and smooth post-arrival transit.",
-      "crowdLevel": 65,
-      "priceTrend": "Stable",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Dropping",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 66,
-    "comfortScore": 65,
-    "seatLikelihood": 10,
-    "waitlistCode": "GNWL 27 / WL 16",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 15,
-    "peakDemandFactor": "Special Travel Season (RAC options available)",
-    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
+    "navixScore": 68,
+    "comfortScore": 50,
+    "seatLikelihood": 48,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 48
   },
   {
-    "id": "route-2",
-    "routeCombination": "Delhi (NDLS) -> Patna (PNBE)",
-    "duration": "15h 29m",
-    "estimatedPrice": "INR 1,047",
-    "travelModes": [
-      "Train - Vande Bharat Express (22436)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Patna (PNBE)",
-        "mode": "Train - Vande Bharat Express (22436)",
-        "duration": "15h 29m",
-        "departureTime": "08:00",
-        "arrivalTime": "23:29"
-      }
-    ],
-    "recommendationTag": "Best Value Comfort",
-    "tagTone": "emerald",
-    "isRecommended": false,
-    "departureTime": "08:00",
-    "arrivalTime": "23:29",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Optimize seat availability by choosing surrounding secondary terminals or hybrid routes.",
-      "crowdLevel": 65,
-      "priceTrend": "Stable",
-      "trendDescription": "High demand for direct rail."
-    },
-    "navixScore": 65,
-    "comfortScore": 65,
-    "seatLikelihood": 10,
-    "waitlistCode": "GNWL 18 / WL 10",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 15,
-    "peakDemandFactor": "Peak Travel Window",
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!"
-  },
-  {
-    "id": "route-4",
-    "routeCombination": "Delhi (DLI) -> Patna (PNBE)",
-    "duration": "15h 31m",
-    "estimatedPrice": "INR 1,047",
+    "id": "route-6",
+    "routeCombination": "Delhi (NDLS) -> Mumbai (LTT)",
+    "duration": "21h 06m",
+    "estimatedPrice": "INR 1,798",
     "travelModes": [
       "Train - Duronto Express (12273)"
     ],
     "legs": [
       {
-        "from": "Delhi (DLI)",
-        "to": "Patna (PNBE)",
+        "from": "Delhi (NDLS)",
+        "to": "Mumbai (LTT)",
         "mode": "Train - Duronto Express (12273)",
-        "duration": "15h 31m",
-        "departureTime": "12:00",
-        "arrivalTime": "03:31"
+        "duration": "21h 06m",
+        "departureTime": "00:00",
+        "arrivalTime": "21:06"
       }
     ],
-    "recommendationTag": "Best Value Comfort",
-    "tagTone": "emerald",
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
     "isRecommended": false,
-    "departureTime": "12:00",
-    "arrivalTime": "03:31",
+    "departureTime": "00:00",
+    "arrivalTime": "21:06",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
+    "estimatedAvailability": 46,
+    "confidenceScore": 58,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Comfortable satellite boarding",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Rising",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 62,
+    "comfortScore": 50,
+    "seatLikelihood": 46,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 46
+  },
+  {
+    "id": "route-12",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "27h 39m",
+    "estimatedPrice": "INR 3,967",
+    "travelModes": [
+      "Sleeper Bus - VRL Travels AC Sleeper"
+    ],
+    "legs": [
+      {
+        "from": "Delhi",
+        "to": "Mumbai",
+        "mode": "Sleeper Bus - VRL Travels AC Sleeper",
+        "duration": "27h 39m",
+        "departureTime": "22:00",
+        "arrivalTime": "01:39"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
+    "isRecommended": false,
+    "departureTime": "22:00",
+    "arrivalTime": "01:39",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 33,
+    "confidenceScore": 45,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Very High",
-      "bookingUrgency": "Comfortable station availability",
-      "seasonalTip": "Boarding at a nearby secondary terminal (DLI) secures better seat availability and lower crowding.",
-      "crowdLevel": 65,
+      "bookingUrgency": "Most comfortable sleeper coach",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
       "priceTrend": "Rising",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 65,
-    "comfortScore": 65,
-    "seatLikelihood": 10,
-    "waitlistCode": "GNWL 24 / WL 14",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 15,
-    "peakDemandFactor": "Summer Season (extra capacity services active)",
+    "navixScore": 48,
+    "comfortScore": 57,
+    "seatLikelihood": 33
+  },
+  {
+    "id": "route-9",
+    "routeCombination": "Delhi (NDLS) -> Lucknow -> Mumbai (CSMT)",
+    "duration": "33h 44m",
+    "estimatedPrice": "INR 4,298",
+    "travelModes": [
+      "Train - Shiv Ganga Express (12560)",
+      "Intercity Bus - VRL Travels AC Sleeper"
+    ],
+    "legs": [
+      {
+        "from": "Delhi (NDLS)",
+        "to": "Lucknow (LKO)",
+        "mode": "Train - Shiv Ganga Express (12560)",
+        "duration": "6h 10m",
+        "departureTime": "06:00",
+        "arrivalTime": "12:10"
+      },
+      {
+        "from": "Lucknow",
+        "to": "Mumbai (CSMT)",
+        "mode": "Intercity Bus - VRL Travels AC Sleeper",
+        "duration": "26h 19m",
+        "departureTime": "13:25",
+        "arrivalTime": "15:44"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "amber",
+    "isRecommended": false,
+    "departureTime": "06:00",
+    "arrivalTime": "15:44",
+    "layoverDuration": "1h 15m",
+    "estimatedAvailability": 39,
+    "confidenceScore": 52,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Low",
+      "bookingUrgency": "Comfortable hybrid seats",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Rising",
+      "trendDescription": "Stable alternative fares."
+    },
+    "navixScore": 41,
+    "comfortScore": 57,
+    "seatLikelihood": 39,
+    "waitlistCode": "GNWL 67 / WL 40",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 27,
+    "peakDemandFactor": "Special Travel Season (RAC options available)",
     "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
   },
   {
-    "id": "route-13",
-    "routeCombination": "Delhi -> Varanasi -> Patna (PNBE)",
-    "duration": "8h 23m",
-    "estimatedPrice": "INR 7,153",
+    "id": "route-8",
+    "routeCombination": "Delhi (NDLS) -> Lucknow -> Mumbai (CSMT)",
+    "duration": "25h 46m",
+    "estimatedPrice": "INR 4,277",
     "travelModes": [
-      "Flight",
-      "Train - Poorva Express (12382)"
+      "Train - Deccan Queen (12123)",
+      "Train - Sampoorna Kranti Express (12393)"
     ],
     "legs": [
       {
-        "from": "Delhi",
-        "to": "Varanasi",
-        "mode": "Flight",
-        "duration": "3h 02m",
-        "departureTime": "06:00",
-        "arrivalTime": "09:02"
+        "from": "Delhi (NDLS)",
+        "to": "Lucknow (LKO)",
+        "mode": "Train - Deccan Queen (12123)",
+        "duration": "8h 13m",
+        "departureTime": "04:00",
+        "arrivalTime": "12:13"
       },
       {
-        "from": "Varanasi (BSB)",
-        "to": "Patna (PNBE)",
-        "mode": "Train - Poorva Express (12382)",
-        "duration": "3h 21m",
-        "departureTime": "11:02",
-        "arrivalTime": "14:23"
+        "from": "Lucknow (LKO)",
+        "to": "Mumbai (CSMT)",
+        "mode": "Train - Sampoorna Kranti Express (12393)",
+        "duration": "16h 18m",
+        "departureTime": "13:28",
+        "arrivalTime": "05:46"
       }
     ],
-    "recommendationTag": "Smoother Alternate Route",
+    "recommendationTag": "Smart Alternate Corridor",
     "tagTone": "violet",
     "isRecommended": false,
-    "departureTime": "06:00",
-    "arrivalTime": "14:23",
-    "layoverDuration": "2h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Moderate",
+    "departureTime": "04:00",
+    "arrivalTime": "05:46",
+    "layoverDuration": "1h 15m",
+    "estimatedAvailability": 42,
+    "confidenceScore": 80,
+    "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "High seat confidence on hybrid",
-      "seasonalTip": "A smoother alternate route via air-rail hybrid increases seat confidence and travel luxury.",
-      "crowdLevel": 30,
-      "priceTrend": "Rising",
+      "demandLevel": "Very High",
+      "bookingUrgency": "Easier transfer routes open",
+      "seasonalTip": "Summer travel rush active.",
+      "crowdLevel": 100,
+      "priceTrend": "Dropping",
       "trendDescription": "Stable alternative fares."
     },
-    "navixScore": 47,
-    "comfortScore": 80,
-    "seatLikelihood": 10
-  },
-  {
-    "id": "route-14",
-    "routeCombination": "Delhi -> Varanasi -> Patna (PNBE)",
-    "duration": "10h 11m",
-    "estimatedPrice": "INR 6,950",
-    "travelModes": [
-      "Flight",
-      "Intercity Bus - UPSRTC Janrath AC Coach"
-    ],
-    "legs": [
-      {
-        "from": "Delhi",
-        "to": "Varanasi",
-        "mode": "Flight",
-        "duration": "3h 02m",
-        "departureTime": "08:00",
-        "arrivalTime": "11:02"
-      },
-      {
-        "from": "Varanasi",
-        "to": "Patna (PNBE)",
-        "mode": "Intercity Bus - UPSRTC Janrath AC Coach",
-        "duration": "5h 09m",
-        "departureTime": "13:02",
-        "arrivalTime": "18:11"
-      }
-    ],
-    "recommendationTag": "Smoother Alternate Route",
-    "tagTone": "violet",
-    "isRecommended": false,
-    "departureTime": "08:00",
-    "arrivalTime": "18:11",
-    "layoverDuration": "2h 00m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 20,
-    "difficulty": "Moderate",
-    "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Low crowding hybrid seats",
-      "seasonalTip": "A low crowding journey combining flight and express coach ensures maximum peace of mind.",
-      "crowdLevel": 30,
-      "priceTrend": "Stable",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 46,
-    "comfortScore": 80,
-    "seatLikelihood": 10
+    "navixScore": 36,
+    "comfortScore": 50,
+    "seatLikelihood": 42,
+    "waitlistCode": "GNWL 64 / WL 38",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 36,
+    "peakDemandFactor": "Summer Season (extra capacity services active)",
+    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
   }
 ]
