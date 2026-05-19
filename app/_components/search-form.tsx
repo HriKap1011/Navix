@@ -238,7 +238,7 @@ export function SearchForm() {
       <div className="grid gap-5 lg:grid-cols-12 lg:gap-6">
         {/* Source */}
         <label className={`group/f lg:col-span-4 ${errors.includes("origin") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-          <span className={`mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+          <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
             errors.includes("origin")
               ? "text-red-400"
               : "text-zinc-500 group-focus-within/f:text-cyan-400/95"
@@ -288,7 +288,7 @@ export function SearchForm() {
 
         {/* Destination */}
         <label className={`group/f lg:col-span-4 ${errors.includes("destination") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-          <span className={`mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+          <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
             errors.includes("destination")
               ? "text-red-400"
               : "text-zinc-500 group-focus-within/f:text-violet-300/95"
@@ -340,7 +340,7 @@ export function SearchForm() {
         <div className="lg:col-span-4">
           {!useFlexibleDates ? (
             <label className={`group/f block ${errors.includes("date") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-              <span className={`mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+              <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
                 errors.includes("date")
                   ? "text-red-400"
                   : "text-zinc-500 group-focus-within/f:text-sky-300/95"
@@ -385,7 +385,7 @@ export function SearchForm() {
             </label>
           ) : (
             <label className={`group/f block ${errors.includes("date") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-              <span className={`mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+              <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
                 errors.includes("date")
                   ? "text-red-400"
                   : "text-zinc-500 group-focus-within/f:text-sky-300/95"
@@ -443,14 +443,14 @@ export function SearchForm() {
                     <circle cx="12" cy="12" r="10" />
                     <polyline points="12 6 12 12 16 14" />
                   </svg>
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
                     Recent searches
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={clearRecent}
-                  className="text-[11px] font-medium text-zinc-600 hover:text-zinc-400 transition-colors"
+                  className="text-xs font-medium text-zinc-600 hover:text-zinc-400 transition-colors"
                 >
                   Clear all
                 </button>
@@ -486,7 +486,7 @@ export function SearchForm() {
               <svg className="h-3.5 w-3.5 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
                 Popular routes
               </span>
             </div>
@@ -530,7 +530,7 @@ export function SearchForm() {
         </p>
         <button
           type="submit"
-          className="group/btn inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-10 py-4 text-[15px] font-semibold text-slate-950 shadow-[0_18px_46px_-14px_rgba(34,211,238,0.55)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_22px_52px_-12px_rgba(167,139,250,0.42)] active:scale-[0.98] sm:w-auto"
+          className="group/btn inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-10 py-4 text-base font-bold text-slate-950 shadow-[0_15px_40px_-10px_rgba(34,211,238,0.4)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_20px_45px_-10px_rgba(167,139,250,0.4)] active:scale-[0.98] sm:w-auto"
         >
           Find Smarter Routes
           <svg

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { SearchForm } from "./_components/search-form";
 
 export default function Home() {
@@ -44,7 +45,7 @@ export default function Home() {
               <span className="nv-text-primary text-[15px] font-semibold tracking-tight text-white sm:text-base">
                 Navix
               </span>
-              <span className="nv-text-muted mt-0.5 hidden text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-500 sm:block">
+              <span className="nv-text-muted mt-0.5 hidden text-xs font-medium text-zinc-500 sm:block">
                 Smarter routes. Fewer tabs. One decision.
               </span>
             </span>
@@ -205,7 +206,7 @@ export default function Home() {
           </div>
 
           <div className="relative mx-auto max-w-6xl w-full animate-fade-in-up">
-            <p className="mb-6 inline-flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-200/90 shadow-sm backdrop-blur-md sm:text-xs transition-colors hover:bg-white/[0.08] cursor-default">
+            <p className="mb-6 inline-flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-cyan-200/90 shadow-sm backdrop-blur-md transition-colors hover:bg-white/[0.08] cursor-default">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.75)] animate-pulse" />
               Smart multi-modal travel decision engine
             </p>
@@ -248,13 +249,13 @@ export default function Home() {
             <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="#plan"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-10 py-4 text-center text-[16px] font-bold text-slate-950 shadow-[0_0_40px_-10px_rgba(34,211,238,0.6)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_60px_-15px_rgba(167,139,250,0.6)] active:scale-95 sm:w-auto"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-500 px-10 py-4 text-center text-base font-bold text-slate-950 shadow-[0_0_40px_-10px_rgba(34,211,238,0.6)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_60px_-15px_rgba(167,139,250,0.6)] active:scale-95 sm:w-auto"
               >
                 Find Smarter Routes
               </Link>
               <Link
                 href="#why-navix"
-                className="inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] px-9 py-4 text-center text-[16px] font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.1] hover:text-white active:scale-95"
+                className="inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] px-9 py-4 text-center text-base font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.1] hover:text-white active:scale-95"
               >
                 Why Navix
               </Link>
@@ -268,18 +269,20 @@ export default function Home() {
           className="relative z-10 -mt-4 px-4 pb-16 sm:-mt-8 sm:px-6 sm:pb-20 lg:px-8"
         >
           <div className="mx-auto max-w-6xl">
-            <SearchForm />
+            <Suspense fallback={<div className="h-[280px] w-full rounded-[1.75rem] border border-white/[0.05] bg-white/[0.02] animate-pulse" />}>
+              <SearchForm />
+            </Suspense>
           </div>
         </section>
 
         {/* Why Navix */}
         <section
           id="why-navix"
-          className="nv-section relative border-y border-white/[0.05] bg-gradient-to-b from-[#030306] via-violet-950/[0.1] to-[#030306] px-4 py-24 sm:px-6 sm:py-32 lg:px-8"
+          className="nv-section relative border-y border-white/[0.05] bg-gradient-to-b from-[#030306] via-violet-950/[0.1] to-[#030306] px-4 py-16 sm:px-6 sm:py-24 lg:px-8"
         >
           <div className="mx-auto max-w-6xl">
             <div className="text-center max-w-3xl mx-auto mb-20 animate-fade-in-up">
-              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-400/90 mb-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-4">
                 Why Navix
               </p>
               <h2 className="nv-text-primary text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -360,12 +363,12 @@ export default function Home() {
         {/* Features */}
         <section
           id="features"
-          className="relative px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+          className="relative px-4 py-16 sm:px-6 sm:py-24 lg:px-8"
         >
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300/90">
+                <p className="text-xs font-semibold uppercase tracking-wider text-violet-300/90">
                   MVP capabilities
                 </p>
                 <h2 className="nv-text-primary mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
@@ -445,13 +448,13 @@ export default function Home() {
         </section>
 
         {/* Statistics / Trust */}
-        <section className="nv-section relative border-y border-white/[0.05] bg-gradient-to-b from-[#030306] via-cyan-950/[0.07] to-[#030306] px-4 py-24 sm:px-6 sm:py-32 lg:px-8 overflow-hidden">
+        <section className="nv-section relative border-y border-white/[0.05] bg-gradient-to-b from-[#030306] via-cyan-950/[0.07] to-[#030306] px-4 py-16 sm:px-6 sm:py-24 lg:px-8 overflow-hidden">
           {/* Background accents */}
           <div className="nv-ambient pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/[0.06] rounded-full blur-[150px]" />
 
           <div className="mx-auto max-w-6xl relative z-10">
             <div className="text-center max-w-3xl mx-auto mb-20">
-              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-400/90 mb-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400/90 mb-4">
                 Built for impact
               </p>
               <h2 className="nv-text-primary text-4xl font-extrabold tracking-tight text-white sm:text-5xl">

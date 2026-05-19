@@ -250,7 +250,7 @@ export default async function ResultsPage({
           </Link>
           <Link
             href={editSearchHref}
-            className="shrink-0 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-xs font-semibold text-zinc-200 transition hover:border-cyan-400/40 hover:bg-white/[0.1] hover:text-white sm:text-sm"
+            className="shrink-0 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-xs font-semibold text-zinc-200 transition hover:border-cyan-400/40 hover:bg-white/[0.1] hover:text-white sm:text-sm"
           >
             Edit search
           </Link>
@@ -327,7 +327,7 @@ export default async function ResultsPage({
                 <Link
                   key={opt.value}
                   href={createHref({ mode: opt.value === "all" ? "" : opt.value })}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
                     mode === opt.value
                       ? "bg-cyan-400/20 text-cyan-200 border border-cyan-400/30"
                       : "bg-white/[0.03] text-zinc-400 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white"
@@ -351,7 +351,7 @@ export default async function ResultsPage({
                 <Link
                   key={opt.value}
                   href={createHref({ sort: opt.value === "score" ? "" : opt.value })}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
                     sort === opt.value
                       ? "bg-violet-400/20 text-violet-200 border border-violet-400/30"
                       : "bg-white/[0.03] text-zinc-400 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white"
@@ -383,7 +383,7 @@ export default async function ResultsPage({
             <div className="pointer-events-none absolute -top-32 -right-32 h-80 w-80 rounded-full bg-cyan-500/[0.06] blur-[100px]" />
             <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-violet-500/[0.06] blur-[100px]" />
 
-            <div className="relative z-10 flex flex-col items-center px-6 py-16 text-center sm:px-12 sm:py-20">
+            <div className="relative z-10 flex flex-col items-center px-6 py-24 text-center sm:px-12 sm:py-32">
               {/* Travel compass illustration */}
               <div className="relative mb-8">
                 <div className="flex h-28 w-28 items-center justify-center rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent shadow-[0_0_60px_-15px_rgba(34,211,238,0.2)]">
@@ -423,7 +423,7 @@ export default async function ResultsPage({
 
               {/* Suggestions */}
               <div className="mt-8 w-full max-w-md">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
                   What you can try
                 </p>
                 <div className="space-y-2">
@@ -464,7 +464,7 @@ export default async function ResultsPage({
 
               {/* Popular routes suggestion */}
               <div className="mt-12 w-full max-w-lg">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
                   Popular routes that work great
                 </p>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">

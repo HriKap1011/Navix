@@ -184,10 +184,10 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
   return (
     <article
       className={`nv-route-card group relative overflow-hidden rounded-3xl border bg-gradient-to-br p-5 transition-all duration-500 ease-out will-change-transform sm:p-6 ${isTopPick
-          ? "nv-recommended nv-pick-glow border-cyan-300/50 from-cyan-400/[0.12] via-cyan-400/[0.04] to-violet-500/[0.06] shadow-[0_28px_90px_-30px_rgba(34,211,238,0.5)] hover:-translate-y-1.5 hover:border-cyan-200/65 hover:shadow-[0_36px_110px_-25px_rgba(34,211,238,0.7)]"
-          : route.isRecommended
-            ? "nv-recommended border-cyan-300/35 from-cyan-400/[0.1] to-white/[0.04] shadow-[0_24px_80px_-40px_rgba(34,211,238,0.4)] hover:-translate-y-1 hover:border-cyan-200/55 hover:shadow-[0_30px_95px_-30px_rgba(34,211,238,0.65)]"
-            : "border-white/10 from-white/[0.06] to-white/[0.02] hover:-translate-y-1 hover:border-cyan-400/40 hover:bg-white/[0.04] hover:shadow-[0_28px_80px_-30px_rgba(34,211,238,0.5)]"
+        ? "nv-recommended nv-pick-glow border-cyan-300/50 from-cyan-400/[0.12] via-cyan-400/[0.04] to-violet-500/[0.06] shadow-[0_28px_90px_-30px_rgba(34,211,238,0.5)] hover:-translate-y-1.5 hover:border-cyan-200/65 hover:shadow-[0_36px_110px_-25px_rgba(34,211,238,0.7)]"
+        : route.isRecommended
+          ? "nv-recommended border-cyan-300/35 from-cyan-400/[0.1] to-white/[0.04] shadow-[0_24px_80px_-40px_rgba(34,211,238,0.4)] hover:-translate-y-1 hover:border-cyan-200/55 hover:shadow-[0_30px_95px_-30px_rgba(34,211,238,0.65)]"
+          : "border-white/10 from-white/[0.06] to-white/[0.02] hover:-translate-y-1 hover:border-cyan-400/40 hover:bg-white/[0.04] hover:shadow-[0_28px_80px_-30px_rgba(34,211,238,0.5)]"
         }`}
     >
       {/* Decorative glows */}
@@ -314,8 +314,8 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
                 window.location.href = compareHref;
               }}
               className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-300 ${isCompared
-                  ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200 shadow-[0_0_15px_-3px_rgba(34,211,238,0.3)]"
-                  : "border-white/10 bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-zinc-200 hover:bg-white/[0.04]"
+                ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200 shadow-[0_0_15px_-3px_rgba(34,211,238,0.3)]"
+                : "border-white/10 bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-zinc-200 hover:bg-white/[0.04]"
                 }`}
             >
               {isCompared ? "✓ Added" : "+ Compare"}
@@ -378,9 +378,9 @@ export function RouteCard({ route, priceRank = 0, isTopPick = false, compareHref
                   <div className="text-left sm:text-right">
                     <span className="text-[8px] font-bold uppercase tracking-wider text-zinc-500 block mb-0.5">Seat Confidence Rating</span>
                     <span className={`text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${route.confirmationLikelihood === "High" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-                        route.confirmationLikelihood === "Medium" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
-                          route.confirmationLikelihood === "Low" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                            "bg-red-500/10 text-red-500 border border-red-500/20"
+                      route.confirmationLikelihood === "Medium" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
+                        route.confirmationLikelihood === "Low" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
+                          "bg-red-500/10 text-red-500 border border-red-500/20"
                       }`}>
                       {route.confirmationLikelihood} ({route.confirmationProbability}%)
                     </span>
