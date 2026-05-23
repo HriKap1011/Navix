@@ -2,6 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { fetchCitiesFromApi, City } from "../results/_utils/api";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -77,7 +78,7 @@ type ValidationError = "origin" | "destination" | "date" | null;
 export function SearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [origin, setOrigin] = useState(searchParams.get("origin") || "");
   const [destination, setDestination] = useState(searchParams.get("destination") || "");
@@ -86,6 +87,90 @@ export function SearchForm() {
   const [useFlexibleDates, setUseFlexibleDates] = useState(!!searchParams.get("flexibleMonth"));
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
+
+  // Auto-suggestion & custom validation states
+  const [citiesList, setCitiesList] = useState<City[]>([]);
+  const [originSuggestions, setOriginSuggestions] = useState<City[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<City[]>([]);
+  const [showOriginDropdown, setShowOriginDropdown] = useState(false);
+  const [showDestinationDropdown, setShowDestinationDropdown] = useState(false);
+  const [customErrorMsg, setCustomErrorMsg] = useState<string | null>(null);
+
+  // Fetch cities list on mount
+  useEffect(() => {
+    async function loadCities() {
+      const res = await fetchCitiesFromApi();
+      setCitiesList(res.cities);
+    }
+    loadCities();
+  }, []);
+
+  // Filter input change handlers
+  const handleOriginChange = (val: string) => {
+    setOrigin(val);
+    setCustomErrorMsg(null);
+    if (errors.includes("origin")) {
+      setErrors(errors.filter((e) => e !== "origin"));
+    }
+    if (val.trim()) {
+      const filtered = citiesList.filter((c) =>
+        c.name.toLowerCase().includes(val.toLowerCase())
+      );
+      setOriginSuggestions(filtered);
+      setShowOriginDropdown(true);
+    } else {
+      setOriginSuggestions([]);
+      setShowOriginDropdown(false);
+    }
+  };
+
+  const handleDestinationChange = (val: string) => {
+    setDestination(val);
+    setCustomErrorMsg(null);
+    if (errors.includes("destination")) {
+      setErrors(errors.filter((e) => e !== "destination"));
+    }
+    if (val.trim()) {
+      const filtered = citiesList.filter((c) =>
+        c.name.toLowerCase().includes(val.toLowerCase())
+      );
+      setDestinationSuggestions(filtered);
+      setShowDestinationDropdown(true);
+    } else {
+      setDestinationSuggestions([]);
+      setShowDestinationDropdown(false);
+    }
+  };
+
+  // Input focus handlers
+  const handleOriginFocus = () => {
+    if (origin.trim()) {
+      const filtered = citiesList.filter((c) =>
+        c.name.toLowerCase().includes(origin.toLowerCase())
+      );
+      setOriginSuggestions(filtered);
+      setShowOriginDropdown(true);
+    }
+  };
+
+  const handleDestinationFocus = () => {
+    if (destination.trim()) {
+      const filtered = citiesList.filter((c) =>
+        c.name.toLowerCase().includes(destination.toLowerCase())
+      );
+      setDestinationSuggestions(filtered);
+      setShowDestinationDropdown(true);
+    }
+  };
+
+  // Blur handlers (with timeout to allow clicks)
+  const handleOriginBlur = () => {
+    setTimeout(() => setShowOriginDropdown(false), 200);
+  };
+
+  const handleDestinationBlur = () => {
+    setTimeout(() => setShowDestinationDropdown(false), 200);
+  };
 
   // Rotate placeholders
   useEffect(() => {
@@ -133,17 +218,53 @@ export function SearchForm() {
 
   const validateForm = (): boolean => {
     const newErrors: ValidationError[] = [];
+    let errorMsg: string | null = null;
 
-    const originFilled = origin.trim().length > 0;
-    const destinationFilled = destination.trim().length > 0;
+    const originTrimmed = origin.trim();
+    const destinationTrimmed = destination.trim();
 
-    if (originFilled !== destinationFilled) {
-      if (!originFilled) newErrors.push("origin");
-      if (!destinationFilled) newErrors.push("destination");
+    if (!originTrimmed) {
+      newErrors.push("origin");
+    }
+    if (!destinationTrimmed) {
+      newErrors.push("destination");
     }
 
-    if ((originFilled || destinationFilled) && !date && !flexibleMonth) {
+    // Check if source and destination are supported cities
+    if (originTrimmed) {
+      const isValidSrc = citiesList.some(
+        (c) => c.name.toLowerCase() === originTrimmed.toLowerCase()
+      );
+      if (!isValidSrc) {
+        newErrors.push("origin");
+        errorMsg = `Source city '${originTrimmed}' is not supported. Please select a city from the dropdown.`;
+      }
+    }
+
+    if (destinationTrimmed) {
+      const isValidDest = citiesList.some(
+        (c) => c.name.toLowerCase() === destinationTrimmed.toLowerCase()
+      );
+      if (!isValidDest) {
+        newErrors.push("destination");
+        if (!errorMsg) {
+          errorMsg = `Destination city '${destinationTrimmed}' is not supported. Please select a city from the dropdown.`;
+        }
+      }
+    }
+
+    // Check same city
+    if (originTrimmed && destinationTrimmed && originTrimmed.toLowerCase() === destinationTrimmed.toLowerCase()) {
+      newErrors.push("origin");
+      newErrors.push("destination");
+      errorMsg = "Source and destination cities cannot be the same.";
+    }
+
+    if (!date && !flexibleMonth) {
       newErrors.push("date");
+      if (!errorMsg) {
+        errorMsg = "Please select a travel date or month.";
+      }
     }
 
     if (date) {
@@ -155,11 +276,15 @@ export function SearchForm() {
 
       if (selectedDate < today || selectedDate > maxDate) {
         newErrors.push("date");
+        if (!errorMsg) {
+          errorMsg = "Selected date is outside the valid range (up to 5 years).";
+        }
       }
     }
 
     setErrors(newErrors);
-    return newErrors.length === 0;
+    setCustomErrorMsg(errorMsg);
+    return newErrors.length === 0 && !errorMsg;
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -194,6 +319,7 @@ export function SearchForm() {
       setDestination(d);
       if (dt) setDate(dt);
       setErrors([]);
+      setCustomErrorMsg(null);
     },
     []
   );
@@ -235,25 +361,33 @@ export function SearchForm() {
         </span>
       </div>
 
+      {customErrorMsg && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-red-200/90 shadow-[0_0_20px_-5px_rgba(239,68,68,0.15)] animate-in fade-in duration-200">
+          <span className="text-xl">⚠️</span>
+          <div>
+            <p className="text-sm font-semibold text-red-200">Validation Warning</p>
+            <p className="mt-1 text-xs text-red-200/70">{customErrorMsg}</p>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-5 lg:grid-cols-12 lg:gap-6">
         {/* Source */}
-        <label className={`group/f lg:col-span-4 ${errors.includes("origin") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-          <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
-            errors.includes("origin")
+        <label className={`group/f lg:col-span-4 relative ${errors.includes("origin") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
+          <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${errors.includes("origin")
               ? "text-red-400"
               : "text-zinc-500 group-focus-within/f:text-cyan-400/95"
-          }`}>
+            }`}>
             Source
             {errors.includes("origin") && (
               <span className="ml-2 text-red-400">Please fill this</span>
             )}
           </span>
           <div className="relative">
-            <span className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
-              errors.includes("origin")
+            <span className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${errors.includes("origin")
                 ? "text-red-400/85"
                 : "text-zinc-500 group-focus-within/f:text-cyan-400/85"
-            }`}>
+              }`}>
               <svg
                 className="h-5 w-5"
                 viewBox="0 0 24 24"
@@ -271,39 +405,66 @@ export function SearchForm() {
               placeholder={currentPlaceholder.origin}
               autoComplete="off"
               value={origin}
-              onChange={(e) => {
-                setOrigin(e.target.value);
-                if (errors.includes("origin")) {
-                  setErrors(errors.filter((e) => e !== "origin"));
-                }
-              }}
-              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-600 outline-none transition duration-200 hover:border-white/[0.18] ${
-                errors.includes("origin")
+              onChange={(e) => handleOriginChange(e.target.value)}
+              onFocus={handleOriginFocus}
+              onBlur={handleOriginBlur}
+              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-600 outline-none transition duration-200 hover:border-white/[0.18] ${errors.includes("origin")
                   ? "border-red-500/50 bg-red-950/20 focus:border-red-400/50 focus:bg-red-950/30 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.14)]"
                   : "border-white/10 bg-black/45 focus:border-cyan-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(34,211,238,0.14)]"
-              }`}
+                }`}
             />
           </div>
+          {showOriginDropdown && originSuggestions.length > 0 && (
+            <div className="absolute left-0 right-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-2xl border border-white/[0.08] bg-[#0c0c14]/95 p-2 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-1 duration-200">
+              {originSuggestions.map((city) => (
+                <button
+                  key={`origin-suggest-${city.name}`}
+                  type="button"
+                  onMouseDown={(e) => {
+                    // Prevent blur before selection
+                    e.preventDefault();
+                  }}
+                  onClick={() => {
+                    setOrigin(city.name);
+                    setShowOriginDropdown(false);
+                    setOriginSuggestions([]);
+                  }}
+                  className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm text-zinc-300 transition duration-150 hover:bg-white/[0.06] hover:text-white"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-zinc-500">📍</span>
+                    <div>
+                      <p className="font-semibold text-zinc-200">{city.name}</p>
+                      <p className="text-[10px] text-zinc-500 mt-0.5">
+                        {city.has_airport ? "Airport" : ""} {city.has_airport && city.has_train_station ? "·" : ""} {city.has_train_station ? "Train Station" : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="rounded-lg bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-xs font-bold text-zinc-400">
+                    {city.code}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </label>
 
         {/* Destination */}
-        <label className={`group/f lg:col-span-4 ${errors.includes("destination") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-          <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
-            errors.includes("destination")
+        <label className={`group/f lg:col-span-4 relative ${errors.includes("destination") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
+          <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${errors.includes("destination")
               ? "text-red-400"
               : "text-zinc-500 group-focus-within/f:text-violet-300/95"
-          }`}>
+            }`}>
             Destination
             {errors.includes("destination") && (
               <span className="ml-2 text-red-400">Please fill this</span>
             )}
           </span>
           <div className="relative">
-            <span className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
-              errors.includes("destination")
+            <span className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${errors.includes("destination")
                 ? "text-red-400/85"
                 : "text-zinc-500 group-focus-within/f:text-violet-300/85"
-            }`}>
+              }`}>
               <svg
                 className="h-5 w-5"
                 viewBox="0 0 24 24"
@@ -321,30 +482,58 @@ export function SearchForm() {
               placeholder={currentPlaceholder.destination}
               autoComplete="off"
               value={destination}
-              onChange={(e) => {
-                setDestination(e.target.value);
-                if (errors.includes("destination")) {
-                  setErrors(errors.filter((e) => e !== "destination"));
-                }
-              }}
-              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-600 outline-none transition duration-200 hover:border-white/[0.18] ${
-                errors.includes("destination")
+              onChange={(e) => handleDestinationChange(e.target.value)}
+              onFocus={handleDestinationFocus}
+              onBlur={handleDestinationBlur}
+              className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[15px] text-white placeholder:text-zinc-600 outline-none transition duration-200 hover:border-white/[0.18] ${errors.includes("destination")
                   ? "border-red-500/50 bg-red-950/20 focus:border-red-400/50 focus:bg-red-950/30 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.14)]"
                   : "border-white/10 bg-black/45 focus:border-violet-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(167,139,250,0.14)]"
-              }`}
+                }`}
             />
           </div>
+          {showDestinationDropdown && destinationSuggestions.length > 0 && (
+            <div className="absolute left-0 right-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-2xl border border-white/[0.08] bg-[#0c0c14]/95 p-2 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-1 duration-200">
+              {destinationSuggestions.map((city) => (
+                <button
+                  key={`dest-suggest-${city.name}`}
+                  type="button"
+                  onMouseDown={(e) => {
+                    // Prevent blur before selection
+                    e.preventDefault();
+                  }}
+                  onClick={() => {
+                    setDestination(city.name);
+                    setShowDestinationDropdown(false);
+                    setDestinationSuggestions([]);
+                  }}
+                  className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm text-zinc-300 transition duration-150 hover:bg-white/[0.06] hover:text-white"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-zinc-500">📍</span>
+                    <div>
+                      <p className="font-semibold text-zinc-200">{city.name}</p>
+                      <p className="text-[10px] text-zinc-500 mt-0.5">
+                        {city.has_airport ? "Airport" : ""} {city.has_airport && city.has_train_station ? "·" : ""} {city.has_train_station ? "Train Station" : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="rounded-lg bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-xs font-bold text-zinc-400">
+                    {city.code}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </label>
 
         {/* Travel Date or Flexible Dates */}
         <div className="lg:col-span-4">
           {!useFlexibleDates ? (
             <label className={`group/f block ${errors.includes("date") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-              <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
-                errors.includes("date")
+              <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${errors.includes("date")
                   ? "text-red-400"
                   : "text-zinc-500 group-focus-within/f:text-sky-300/95"
-              }`}>
+                }`}>
                 Travel date
                 {errors.includes("date") && (
                   <span className="ml-2 text-red-400">
@@ -363,11 +552,10 @@ export function SearchForm() {
                 }}
                 min={getMinDate()}
                 max={getMaxDate()}
-                className={`w-full cursor-pointer rounded-2xl border px-4 py-4 text-[15px] text-white outline-none transition duration-200 hover:border-white/[0.18] [color-scheme:dark] ${
-                  errors.includes("date")
+                className={`w-full cursor-pointer rounded-2xl border px-4 py-4 text-[15px] text-white outline-none transition duration-200 hover:border-white/[0.18] [color-scheme:dark] ${errors.includes("date")
                     ? "border-red-500/50 bg-red-950/20 focus:border-red-400/50 focus:bg-red-950/30 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.14)]"
                     : "border-white/10 bg-black/45 focus:border-sky-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(56,189,248,0.14)]"
-                }`}
+                  }`}
               />
               <button
                 type="button"
@@ -385,11 +573,10 @@ export function SearchForm() {
             </label>
           ) : (
             <label className={`group/f block ${errors.includes("date") ? "ring-2 ring-red-500/50 rounded-2xl p-2" : ""}`}>
-              <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${
-                errors.includes("date")
+              <span className={`mb-2 block text-xs font-semibold uppercase tracking-wider transition-colors ${errors.includes("date")
                   ? "text-red-400"
                   : "text-zinc-500 group-focus-within/f:text-sky-300/95"
-              }`}>
+                }`}>
                 Month & Year
                 {errors.includes("date") && (
                   <span className="ml-2 text-red-400">Please select a month</span>
@@ -406,11 +593,10 @@ export function SearchForm() {
                 }}
                 min={getMinMonth()}
                 max={getMaxMonth()}
-                className={`w-full cursor-pointer rounded-2xl border px-4 py-4 text-[15px] text-white outline-none transition duration-200 hover:border-white/[0.18] [color-scheme:dark] ${
-                  errors.includes("date")
+                className={`w-full cursor-pointer rounded-2xl border px-4 py-4 text-[15px] text-white outline-none transition duration-200 hover:border-white/[0.18] [color-scheme:dark] ${errors.includes("date")
                     ? "border-red-500/50 bg-red-950/20 focus:border-red-400/50 focus:bg-red-950/30 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.14)]"
                     : "border-white/10 bg-black/45 focus:border-sky-400/50 focus:bg-black/60 focus:shadow-[0_0_0_3px_rgba(56,189,248,0.14)]"
-                }`}
+                  }`}
               />
               <button
                 type="button"

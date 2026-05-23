@@ -27,6 +27,9 @@ class DataStore:
             print(f"Error loading {path}: {e}")
             return default
 
+    def is_valid_city(self, name: str) -> bool:
+        return any(c["name"].lower() == name.strip().lower() for c in self.cities)
+
     def get_city(self, name: str) -> Dict[str, Any]:
         for c in self.cities:
             if c["name"].lower() == name.lower():

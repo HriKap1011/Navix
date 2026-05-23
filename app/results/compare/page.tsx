@@ -22,8 +22,24 @@ export default async function ComparePage({
   const ids = params.ids ? params.ids.split(",").slice(0, 3) : [];
 
   // Generate all routes for the corridor
-  const allWithScores = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
-  
+  const { routes: allWithScores, error } = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#030306] flex flex-col items-center justify-center text-white p-4 text-center">
+        <span className="text-5xl mb-4">⚠️</span>
+        <h1 className="text-2xl font-bold mb-2 text-red-400">Comparison Failed</h1>
+        <p className="text-zinc-500 mb-6 max-w-md">{error}</p>
+        <Link
+          href={`/results?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`}
+          className="rounded-xl bg-gradient-to-r from-red-400 to-rose-500 px-5 py-2.5 text-sm font-bold text-slate-950 hover:opacity-90 transition"
+        >
+          Back to Results
+        </Link>
+      </div>
+    );
+  }
+
   // Filter only the selected routes
   const selectedRoutes = allWithScores.filter((r) => ids.includes(r.id));
   const unselectedRoutes = allWithScores.filter((r) => !ids.includes(r.id));
@@ -57,7 +73,7 @@ export default async function ComparePage({
   const bestDuration = Math.min(...selectedRoutes.map(r => getMinutes(r.duration)));
   const bestTransfers = Math.min(...selectedRoutes.map(r => r.legs.length - 1));
   const bestLayover = Math.min(...selectedRoutes.map(r => getMinutes(r.layoverDuration)));
-  
+
   const bestNavix = Math.max(...selectedRoutes.map(r => r.navixScore));
   const bestComfort = Math.max(...selectedRoutes.map(r => r.comfortScore));
   const bestAvail = Math.max(...selectedRoutes.map(r => r.estimatedAvailability));
@@ -103,17 +119,16 @@ export default async function ComparePage({
         {/* Summary Cards */}
         <div className="grid gap-4 sm:gap-6 mb-8" style={{ gridTemplateColumns: `repeat(${selectedRoutes.length}, minmax(0, 1fr))` }}>
           {selectedRoutes.map((route) => (
-            <div key={route.id} className={`relative rounded-3xl border p-6 bg-gradient-to-br ${
-              route.isRecommended 
-                ? "border-cyan-400/30 from-cyan-400/[0.06] to-violet-500/[0.04] shadow-[0_20px_50px_-20px_rgba(34,211,238,0.15)]" 
+            <div key={route.id} className={`relative rounded-3xl border p-6 bg-gradient-to-br ${route.isRecommended
+                ? "border-cyan-400/30 from-cyan-400/[0.06] to-violet-500/[0.04] shadow-[0_20px_50px_-20px_rgba(34,211,238,0.15)]"
                 : "border-white/10 from-white/[0.04] to-white/[0.01]"
-            }`}>
+              }`}>
               {route.isRecommended && (
                 <span className="absolute -top-2.5 -right-2.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[10px] font-bold uppercase text-cyan-200 backdrop-blur-md shadow-lg">
                   Top Pick
                 </span>
               )}
-              
+
               {/* Remove button */}
               <Link
                 href={`/results/compare?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&ids=${ids.filter(i => i !== route.id).join(",")}${params.date ? `&date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `&flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : ""}`}
@@ -176,9 +191,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Navix Score</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-bold ${
-                      route.navixScore === bestNavix ? "text-cyan-400 bg-cyan-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-bold ${route.navixScore === bestNavix ? "text-cyan-400 bg-cyan-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       <div className="flex items-center gap-1.5">
                         {route.navixScore}
                         {route.navixScore === bestNavix && <span>👑</span>}
@@ -191,9 +205,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Comfort Score</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-bold ${
-                      route.comfortScore === bestComfort ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-bold ${route.comfortScore === bestComfort ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       {route.comfortScore}
                     </td>
                   ))}
@@ -203,9 +216,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Price</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-bold tabular-nums ${
-                      getPriceNum(route.estimatedPrice) === bestPrice ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-bold tabular-nums ${getPriceNum(route.estimatedPrice) === bestPrice ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       {route.estimatedPrice}
                     </td>
                   ))}
@@ -215,9 +227,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Duration</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${
-                      getMinutes(route.duration) === bestDuration ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${getMinutes(route.duration) === bestDuration ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       {route.duration}
                     </td>
                   ))}
@@ -227,9 +238,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Transfers</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-semibold ${
-                      (route.legs.length - 1) === bestTransfers ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-semibold ${(route.legs.length - 1) === bestTransfers ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       {route.legs.length - 1} {route.legs.length - 1 === 1 ? "transfer" : "transfers"}
                     </td>
                   ))}
@@ -239,9 +249,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Total Layover</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${
-                      getMinutes(route.layoverDuration) === bestLayover ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${getMinutes(route.layoverDuration) === bestLayover ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       {route.layoverDuration}
                     </td>
                   ))}
@@ -251,9 +260,8 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Availability</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${
-                      route.estimatedAvailability === bestAvail ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
-                    }`}>
+                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${route.estimatedAvailability === bestAvail ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                      }`}>
                       {route.estimatedAvailability}%
                     </td>
                   ))}

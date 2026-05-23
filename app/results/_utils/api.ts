@@ -25,7 +25,7 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
   // Use backend timing if present, else fallback list
   const departureTimes = ["06:45", "10:30", "14:15", "18:00", "21:30"];
   const departureTime = r.departure_time || departureTimes[idx % departureTimes.length];
-  
+
   // Calculate arrival time based on duration
   const parseDurationToMin = (d: string) => {
     const h = d.match(/(\d+)h/);
@@ -42,23 +42,23 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
   // Build legs representing the travel modes
   const legs = r.legs && r.legs.length > 0
     ? r.legs.map((leg: any) => ({
-        from: leg.from_city,
-        to: leg.to_city,
-        mode: leg.mode,
-        duration: leg.duration,
-        departureTime: leg.departure_time,
-        arrivalTime: leg.arrival_time
-      }))
+      from: leg.from_city,
+      to: leg.to_city,
+      mode: leg.mode,
+      duration: leg.duration,
+      departureTime: leg.departure_time,
+      arrivalTime: leg.arrival_time
+    }))
     : r.transport_modes.map((mode: string, lIdx: number) => {
-        return {
-          from: lIdx === 0 ? r.source : "Transit Station",
-          to: lIdx === r.transport_modes.length - 1 ? r.destination : "Transit Station",
-          mode: mode.includes("-") ? mode : `${mode} Express`,
-          duration: r.duration,
-          departureTime: departureTime,
-          arrivalTime: arrivalTime
-        };
-      });
+      return {
+        from: lIdx === 0 ? r.source : "Transit Station",
+        to: lIdx === r.transport_modes.length - 1 ? r.destination : "Transit Station",
+        mode: mode.includes("-") ? mode : `${mode} Express`,
+        duration: r.duration,
+        departureTime: departureTime,
+        arrivalTime: arrivalTime
+      };
+    });
 
   // Pick tag tone based on keywords in the recommendation reason
   let tagTone: "cyan" | "emerald" | "violet" | "amber" = "cyan";
@@ -78,7 +78,7 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
   let confirmationLikelihood: "High" | "Medium" | "Low" | "Very Low" | undefined = r.confirmation_likelihood;
   let confirmationProbability: number | undefined = r.confirmation_probability;
   let rescueRecommendation: string | undefined = r.rescue_recommendation;
-  
+
   const isTrain = r.transport_modes.includes("Train");
   if (!waitlistCode && isTrain && r.seat_likelihood < 50) {
     waitlistCode = `GNWL 25 / WL 12`;
@@ -127,13 +127,48 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
   };
 }
 
+export interface FetchRoutesResult {
+  routes: RouteOption[];
+  error?: string | null;
+}
+
+export interface City {
+  name: string;
+  lat: number;
+  lon: number;
+  has_airport: boolean;
+  has_train_station: boolean;
+  code: string;
+  station: string;
+}
+
+export interface FetchCitiesResult {
+  cities: City[];
+  error?: string | null;
+}
+
+const FALLBACK_CITIES: City[] = [
+  { name: "Delhi", lat: 28.7041, lon: 77.1025, has_airport: true, has_train_station: true, code: "DEL", station: "NDLS" },
+  { name: "Mumbai", lat: 19.0760, lon: 72.8777, has_airport: true, has_train_station: true, code: "BOM", station: "CSMT" },
+  { name: "Bengaluru", lat: 12.9716, lon: 77.5946, has_airport: true, has_train_station: true, code: "BLR", station: "SBC" },
+  { name: "Hyderabad", lat: 17.3850, lon: 78.4867, has_airport: true, has_train_station: true, code: "HYD", station: "HYB" },
+  { name: "Pune", lat: 18.5204, lon: 73.8567, has_airport: true, has_train_station: true, code: "PNQ", station: "PUNE" },
+  { name: "Kolkata", lat: 22.5726, lon: 88.3639, has_airport: true, has_train_station: true, code: "CCU", station: "HWH" },
+  { name: "Chennai", lat: 13.0827, lon: 80.2707, has_airport: true, has_train_station: true, code: "MAA", station: "MAS" },
+  { name: "Jaipur", lat: 26.9124, lon: 75.7873, has_airport: true, has_train_station: true, code: "JAI", station: "JP" },
+  { name: "Patna", lat: 25.5941, lon: 85.1376, has_airport: true, has_train_station: true, code: "PAT", station: "PNBE" },
+  { name: "Varanasi", lat: 25.3176, lon: 82.9739, has_airport: true, has_train_station: true, code: "VNS", station: "BSB" },
+  { name: "Lucknow", lat: 26.8467, lon: 80.9462, has_airport: true, has_train_station: true, code: "LKO", station: "LKO" },
+  { name: "Ahmedabad", lat: 23.0225, lon: 72.5714, has_airport: true, has_train_station: true, code: "AMD", station: "ADI" }
+];
+
 export async function fetchRoutesFromApi(
   origin: string,
   destination: string,
   date: string
-): Promise<RouteOption[]> {
+): Promise<FetchRoutesResult> {
   const backendUrl = "http://127.0.0.1:8000/search-routes";
-  
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000); // 2-second timeout
@@ -161,13 +196,78 @@ export async function fetchRoutesFromApi(
     const data = await response.json();
     if (data.success && Array.isArray(data.routes)) {
       console.log(`Successfully fetched ${data.routes.length} routes from FastAPI backend.`);
-      return data.routes.map((route: any, idx: number) => mapBackendRouteToRouteOption(route, idx));
+      return {
+        routes: data.routes.map((route: any, idx: number) => mapBackendRouteToRouteOption(route, idx)),
+        error: data.error || null
+      };
+    } else {
+      console.warn("Backend validation failed:", data.error);
+      return {
+        routes: [],
+        error: data.error || "Validation failed"
+      };
     }
   } catch (error) {
     console.warn("FastAPI backend is offline or returned an error. Falling back to local simulation data.", error);
+    
+    // Validate inputs locally for offline fallback mode
+    const sourceValid = FALLBACK_CITIES.some(
+      (c) => c.name.toLowerCase() === origin.trim().toLowerCase()
+    );
+    const destValid = FALLBACK_CITIES.some(
+      (c) => c.name.toLowerCase() === destination.trim().toLowerCase()
+    );
+
+    if (!origin.trim()) {
+      return { routes: [], error: "Source city cannot be empty" };
+    }
+    if (!destination.trim()) {
+      return { routes: [], error: "Destination city cannot be empty" };
+    }
+    if (!sourceValid) {
+      return { routes: [], error: `'${origin}' is not a supported source city` };
+    }
+    if (!destValid) {
+      return { routes: [], error: `'${destination}' is not a supported destination city` };
+    }
+    if (origin.trim().toLowerCase() === destination.trim().toLowerCase()) {
+      return { routes: [], error: "Source and destination cities cannot be the same" };
+    }
+
+    // Graceful fallback to frontend-only generator & scoring
+    const rawRouteOptions = buildRouteOptions(origin, destination, date);
+    return {
+      routes: calculateSmartScores(rawRouteOptions),
+      error: null
+    };
+  }
+}
+
+export async function fetchCitiesFromApi(): Promise<FetchCitiesResult> {
+  const backendUrl = "http://127.0.0.1:8000/cities";
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+    const response = await fetch(backendUrl, {
+      signal: controller.signal,
+      next: { revalidate: 0 }
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`API returned HTTP status ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (data.success && Array.isArray(data.cities)) {
+      return { cities: data.cities, error: null };
+    }
+  } catch (error) {
+    console.warn("FastAPI backend is offline or failed to fetch cities. Using local fallback list.", error);
   }
 
-  // Graceful fallback to frontend-only generator & scoring
-  const rawRouteOptions = buildRouteOptions(origin, destination, date);
-  return calculateSmartScores(rawRouteOptions);
+  return { cities: FALLBACK_CITIES, error: null };
 }

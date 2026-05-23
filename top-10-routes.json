@@ -1,443 +1,188 @@
 [
   {
-    "id": "route-1",
-    "routeCombination": "Delhi (NDLS) -> Mumbai (CSMT)",
-    "duration": "15h 32m",
-    "estimatedPrice": "INR 3,332",
+    "id": "NX-365-T3",
+    "routeCombination": "Lucknow -> Varanasi",
+    "duration": "4h 48m",
+    "estimatedPrice": "INR 628",
     "travelModes": [
-      "Train - Humsafar Express (22317)"
+      "Train"
     ],
     "legs": [
       {
-        "from": "Delhi (NDLS)",
-        "to": "Mumbai (CSMT)",
-        "mode": "Train - Humsafar Express (22317)",
-        "duration": "15h 32m",
-        "departureTime": "14:00",
-        "arrivalTime": "05:32"
+        "from": "LUC Station",
+        "to": "VARC Station",
+        "mode": "Train - Humsafar (22317)",
+        "duration": "4h 48m",
+        "departureTime": "12:00",
+        "arrivalTime": "16:48"
       }
     ],
-    "recommendationTag": "Zero Timing Friction",
-    "tagTone": "cyan",
+    "recommendationTag": "Easier boarding from nearby station",
+    "tagTone": "amber",
     "isRecommended": true,
-    "departureTime": "14:00",
-    "arrivalTime": "05:32",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 57,
-    "confidenceScore": 42,
+    "departureTime": "12:00",
+    "arrivalTime": "16:48",
+    "layoverDuration": "0m",
+    "estimatedAvailability": 39,
+    "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Easier boarding from nearby station",
+      "crowdLevel": 41,
       "priceTrend": "Stable",
-      "trendDescription": "High demand for direct rail."
+      "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 75,
-    "comfortScore": 50,
-    "seatLikelihood": 57,
-    "waitlistCode": "GNWL 43 / WL 25",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 24,
-    "peakDemandFactor": "Special Travel Season (RAC options available)",
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!",
+    "navixScore": 93,
+    "comfortScore": 59,
+    "seatLikelihood": 39,
     "recommendationReasoning": [
       "Highly economical optimal route",
       "Saves transfer stress",
       "Daylight schedule with no waiting pain"
-    ]
+    ],
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 39,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   },
   {
-    "id": "route-2",
-    "routeCombination": "Delhi (NDLS) -> Mumbai (CSMT)",
-    "duration": "21h 01m",
-    "estimatedPrice": "INR 1,794",
+    "id": "NX-365-T2",
+    "routeCombination": "Lucknow -> Varanasi",
+    "duration": "4h 48m",
+    "estimatedPrice": "INR 628",
     "travelModes": [
-      "Train - Gitanjali Express (12859)"
+      "Train"
     ],
     "legs": [
       {
-        "from": "Delhi (NDLS)",
-        "to": "Mumbai (CSMT)",
-        "mode": "Train - Gitanjali Express (12859)",
-        "duration": "21h 01m",
-        "departureTime": "16:00",
-        "arrivalTime": "13:01"
+        "from": "LUCC Station",
+        "to": "VAR Station",
+        "mode": "Train - SF Exp (12395)",
+        "duration": "4h 48m",
+        "departureTime": "08:15",
+        "arrivalTime": "13:03"
       }
     ],
     "recommendationTag": "Best Value Comfort",
-    "tagTone": "emerald",
+    "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "16:00",
-    "arrivalTime": "13:01",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 54,
-    "confidenceScore": 93,
+    "departureTime": "08:15",
+    "arrivalTime": "13:03",
+    "layoverDuration": "0m",
+    "estimatedAvailability": 36,
+    "confidenceScore": 85,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 43,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 90,
+    "comfortScore": 57,
+    "seatLikelihood": 36,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "RLWL 10 / WL 4",
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 36,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "NX-365-B1",
+    "routeCombination": "Lucknow -> Varanasi",
+    "duration": "6h 17m",
+    "estimatedPrice": "INR 1,241",
+    "travelModes": [
+      "Sleeper Bus"
+    ],
+    "legs": [
+      {
+        "from": "Lucknow",
+        "to": "Varanasi",
+        "mode": "Sleeper Bus - Zingbus Premium",
+        "duration": "6h 17m",
+        "departureTime": "20:00",
+        "arrivalTime": "02:17"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "20:00",
+    "arrivalTime": "02:17",
+    "layoverDuration": "0m",
+    "estimatedAvailability": 51,
+    "confidenceScore": 90,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Dropping",
-      "trendDescription": "High demand for direct rail."
+      "seasonalTip": "Easier Transfer",
+      "crowdLevel": 47,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 72,
-    "comfortScore": 50,
-    "seatLikelihood": 54,
-    "waitlistCode": "GNWL 46 / WL 27",
-    "confirmationLikelihood": "Very Low",
-    "confirmationProbability": 16,
-    "peakDemandFactor": "Peak Travel Window",
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar (ANVT) or choosing a smoother alternate air hybrid path!"
+    "navixScore": 53,
+    "comfortScore": 53,
+    "seatLikelihood": 51,
+    "recommendationReasoning": [
+      "Easier Transfer"
+    ],
+    "waitlistCode": null,
+    "confirmationLikelihood": null,
+    "confirmationProbability": null,
+    "rescueRecommendation": null
   },
   {
-    "id": "route-3",
-    "routeCombination": "Delhi (ANVT) -> Mumbai (CSMT)",
-    "duration": "15h 34m",
-    "estimatedPrice": "INR 3,332",
+    "id": "NX-365-T1",
+    "routeCombination": "Lucknow -> Varanasi",
+    "duration": "4h 48m",
+    "estimatedPrice": "INR 628",
     "travelModes": [
-      "Train - Rajdhani Express (12309)"
+      "Train"
     ],
     "legs": [
       {
-        "from": "Delhi (ANVT)",
-        "to": "Mumbai (CSMT)",
-        "mode": "Train - Rajdhani Express (12309)",
-        "duration": "15h 34m",
-        "departureTime": "18:00",
-        "arrivalTime": "09:34"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "18:00",
-    "arrivalTime": "09:34",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 52,
-    "confidenceScore": 64,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Comfortable station availability",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Rising",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 71,
-    "comfortScore": 50,
-    "seatLikelihood": 52,
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 52
-  },
-  {
-    "id": "route-4",
-    "routeCombination": "Delhi (DLI) -> Mumbai (CSMT)",
-    "duration": "21h 04m",
-    "estimatedPrice": "INR 1,794",
-    "travelModes": [
-      "Train - Vande Bharat Express (22436)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (DLI)",
-        "to": "Mumbai (CSMT)",
-        "mode": "Train - Vande Bharat Express (22436)",
-        "duration": "21h 04m",
-        "departureTime": "20:00",
-        "arrivalTime": "17:04"
+        "from": "LUC Station",
+        "to": "VAR Station",
+        "mode": "Train - Exp (12393)",
+        "duration": "4h 48m",
+        "departureTime": "07:30",
+        "arrivalTime": "12:18"
       }
     ],
     "recommendationTag": "Best Value Comfort",
-    "tagTone": "emerald",
+    "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "20:00",
-    "arrivalTime": "17:04",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 50,
-    "confidenceScore": 36,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Very High",
-      "bookingUrgency": "Comfortable station availability",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Stable",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 69,
-    "comfortScore": 50,
-    "seatLikelihood": 50,
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 50
-  },
-  {
-    "id": "route-11",
-    "routeCombination": "Delhi -> Mumbai",
-    "duration": "3h 45m",
-    "estimatedPrice": "INR 16,723",
-    "travelModes": [
-      "Flight"
-    ],
-    "legs": [
-      {
-        "from": "Delhi",
-        "to": "Mumbai",
-        "mode": "Flight",
-        "duration": "3h 45m",
-        "departureTime": "10:00",
-        "arrivalTime": "13:45"
-      }
-    ],
-    "recommendationTag": "Express Comfort",
-    "tagTone": "violet",
-    "isRecommended": false,
-    "departureTime": "10:00",
-    "arrivalTime": "13:45",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 35,
-    "confidenceScore": 74,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Air travel stable window",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 70,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 69,
-    "comfortScore": 75,
-    "seatLikelihood": 35
-  },
-  {
-    "id": "route-5",
-    "routeCombination": "Delhi (NDLS) -> Mumbai (BDTS)",
-    "duration": "15h 36m",
-    "estimatedPrice": "INR 3,338",
-    "travelModes": [
-      "Train - Sampoorna Kranti Express (12393)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Mumbai (BDTS)",
-        "mode": "Train - Sampoorna Kranti Express (12393)",
-        "duration": "15h 36m",
-        "departureTime": "22:00",
-        "arrivalTime": "13:36"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "22:00",
-    "arrivalTime": "13:36",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 48,
-    "confidenceScore": 87,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Comfortable satellite boarding",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 68,
-    "comfortScore": 50,
-    "seatLikelihood": 48,
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 48
-  },
-  {
-    "id": "route-6",
-    "routeCombination": "Delhi (NDLS) -> Mumbai (LTT)",
-    "duration": "21h 06m",
-    "estimatedPrice": "INR 1,798",
-    "travelModes": [
-      "Train - Duronto Express (12273)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Mumbai (LTT)",
-        "mode": "Train - Duronto Express (12273)",
-        "duration": "21h 06m",
-        "departureTime": "00:00",
-        "arrivalTime": "21:06"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "00:00",
-    "arrivalTime": "21:06",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 46,
-    "confidenceScore": 58,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Comfortable satellite boarding",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Rising",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 62,
-    "comfortScore": 50,
-    "seatLikelihood": 46,
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 46
-  },
-  {
-    "id": "route-12",
-    "routeCombination": "Delhi -> Mumbai",
-    "duration": "27h 39m",
-    "estimatedPrice": "INR 3,967",
-    "travelModes": [
-      "Sleeper Bus - VRL Travels AC Sleeper"
-    ],
-    "legs": [
-      {
-        "from": "Delhi",
-        "to": "Mumbai",
-        "mode": "Sleeper Bus - VRL Travels AC Sleeper",
-        "duration": "27h 39m",
-        "departureTime": "22:00",
-        "arrivalTime": "01:39"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "22:00",
-    "arrivalTime": "01:39",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 33,
-    "confidenceScore": 45,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Very High",
-      "bookingUrgency": "Most comfortable sleeper coach",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Rising",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 48,
-    "comfortScore": 57,
-    "seatLikelihood": 33
-  },
-  {
-    "id": "route-9",
-    "routeCombination": "Delhi (NDLS) -> Lucknow -> Mumbai (CSMT)",
-    "duration": "33h 44m",
-    "estimatedPrice": "INR 4,298",
-    "travelModes": [
-      "Train - Shiv Ganga Express (12560)",
-      "Intercity Bus - VRL Travels AC Sleeper"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Lucknow (LKO)",
-        "mode": "Train - Shiv Ganga Express (12560)",
-        "duration": "6h 10m",
-        "departureTime": "06:00",
-        "arrivalTime": "12:10"
-      },
-      {
-        "from": "Lucknow",
-        "to": "Mumbai (CSMT)",
-        "mode": "Intercity Bus - VRL Travels AC Sleeper",
-        "duration": "26h 19m",
-        "departureTime": "13:25",
-        "arrivalTime": "15:44"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "amber",
-    "isRecommended": false,
-    "departureTime": "06:00",
-    "arrivalTime": "15:44",
-    "layoverDuration": "1h 15m",
-    "estimatedAvailability": 39,
-    "confidenceScore": 52,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "Low",
-      "bookingUrgency": "Comfortable hybrid seats",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Rising",
-      "trendDescription": "Stable alternative fares."
-    },
-    "navixScore": 41,
-    "comfortScore": 57,
-    "seatLikelihood": 39,
-    "waitlistCode": "GNWL 67 / WL 40",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 27,
-    "peakDemandFactor": "Special Travel Season (RAC options available)",
-    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
-  },
-  {
-    "id": "route-8",
-    "routeCombination": "Delhi (NDLS) -> Lucknow -> Mumbai (CSMT)",
-    "duration": "25h 46m",
-    "estimatedPrice": "INR 4,277",
-    "travelModes": [
-      "Train - Deccan Queen (12123)",
-      "Train - Sampoorna Kranti Express (12393)"
-    ],
-    "legs": [
-      {
-        "from": "Delhi (NDLS)",
-        "to": "Lucknow (LKO)",
-        "mode": "Train - Deccan Queen (12123)",
-        "duration": "8h 13m",
-        "departureTime": "04:00",
-        "arrivalTime": "12:13"
-      },
-      {
-        "from": "Lucknow (LKO)",
-        "to": "Mumbai (CSMT)",
-        "mode": "Train - Sampoorna Kranti Express (12393)",
-        "duration": "16h 18m",
-        "departureTime": "13:28",
-        "arrivalTime": "05:46"
-      }
-    ],
-    "recommendationTag": "Smart Alternate Corridor",
-    "tagTone": "violet",
-    "isRecommended": false,
-    "departureTime": "04:00",
-    "arrivalTime": "05:46",
-    "layoverDuration": "1h 15m",
-    "estimatedAvailability": 42,
+    "departureTime": "07:30",
+    "arrivalTime": "12:18",
+    "layoverDuration": "0m",
+    "estimatedAvailability": 15,
     "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Very High",
-      "bookingUrgency": "Easier transfer routes open",
-      "seasonalTip": "Summer travel rush active.",
-      "crowdLevel": 100,
-      "priceTrend": "Dropping",
-      "trendDescription": "Stable alternative fares."
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 60,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 36,
-    "comfortScore": 50,
-    "seatLikelihood": 42,
-    "waitlistCode": "GNWL 64 / WL 38",
+    "navixScore": 40,
+    "comfortScore": 40,
+    "seatLikelihood": 15,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "GNWL 25 / WL 15",
     "confirmationLikelihood": "Low",
-    "confirmationProbability": 36,
-    "peakDemandFactor": "Summer Season (extra capacity services active)",
-    "rescueRecommendation": "Navix Comfort Tip: A smart alternate corridor or comfortable boarding via satellite terminal guarantees standard seating!"
+    "confirmationProbability": 15,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at LUCC Station!"
   }
 ]
