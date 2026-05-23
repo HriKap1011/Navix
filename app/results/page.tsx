@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { RouteCard } from "./_components/route-card";
 import { TripSelector } from "./_components/trip-selector";
-import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
+import { buildRouteOptions, formatTravelDate, RouteOption } from "./_data/mock-routes";
 import { ComparisonDrawer } from "./_components/comparison-drawer";
 import { calculateSmartScores } from "./_utils/scoring";
 import { analyzeTravelDemand } from "./_utils/demand-engine";
@@ -42,108 +42,16 @@ export default async function ResultsPage({
   const destination = params.destination?.trim() || "Bengaluru";
   const sort = params.sort || "score";
   const mode = params.mode || "all";
-  
+
   let date = "Flexible dates";
   if (params.date) {
     date = formatTravelDate(params.date);
   } else if (params.flexibleMonth) {
     date = formatFlexibleMonth(params.flexibleMonth);
   }
-  
+
   const demandProfile = analyzeTravelDemand(origin, destination, params.date || params.flexibleMonth || "");
-  const rawWithScores = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
-
-  // Store top 10 routes with highest Navix score to a JSON file
-  try {
-    const sortedByHighestScore = [...rawWithScores].sort((a, b) => b.navixScore - a.navixScore);
-    const top10Routes = sortedByHighestScore.slice(0, 10);
-    const top10Json = JSON.stringify(top10Routes, null, 2);
-    
-    // Save to workspace root for checking
-    fs.writeFileSync(path.join(process.cwd(), "top-10-routes.json"), top10Json, "utf8");
-    
-    // Save to public directory to view in browser at /top-10-routes.json
-    const publicDir = path.join(process.cwd(), "public");
-    if (!fs.existsSync(publicDir)) {
-      fs.mkdirSync(publicDir);
-    }
-    fs.writeFileSync(path.join(publicDir, "top-10-routes.json"), top10Json, "utf8");
-  } catch (error) {
-    console.error("Failed to write top 10 routes to JSON file:", error);
-  }
-
-  // Filter
-  let routeOptions = [...rawWithScores];
-  if (mode !== "all") {
-    routeOptions = routeOptions.filter(route => 
-      route.travelModes.some(m => m.toLowerCase().includes(mode.toLowerCase()))
-    );
-  }
-  
-  // Sort
-  if (sort === "price") {
-    routeOptions.sort((a, b) => {
-      const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
-      const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
-      return priceA - priceB;
-    });
-  } else if (sort === "duration") {
-    routeOptions.sort((a, b) => {
-      const getMin = (d: string) => {
-        const h = d.match(/(\d+)h/);
-        const m = d.match(/(\d+)m/);
-        return (h ? parseInt(h[1]) * 60 : 0) + (m ? parseInt(m[1]) : 0);
-      };
-      return getMin(a.duration) - getMin(b.duration);
-    });
-  } else {
-    // Default: score
-    routeOptions.sort((a, b) => b.navixScore - a.navixScore);
-  }
-
-
-
-  const priceValues = rawWithScores.map(r => parseFloat(r.estimatedPrice.replace(/[^0-9.]/g, ""))).sort((a, b) => a - b);
-  const maxPriceValue = Math.max(...priceValues);
-  
-  const getQuartile = (arr: number[], q: number) => {
-    if (arr.length === 0) return 0;
-    const pos = (arr.length - 1) * q;
-    const base = Math.floor(pos);
-    const rest = pos - base;
-    return arr[base + 1] !== undefined ? arr[base] + rest * (arr[base + 1] - arr[base]) : arr[base];
-  };
-
-  const q1 = getQuartile(priceValues, 0.25);
-  const q3 = getQuartile(priceValues, 0.75);
-  const iqr = q3 - q1;
-
-  const priceRankMap = new Map<string, number>();
-  rawWithScores.forEach((route) => {
-    const p = parseFloat(route.estimatedPrice.replace(/[^0-9.]/g, ""));
-    let rank = 1; // Default: Fair
-    
-    if (p <= q1) {
-      rank = 0; // Great Deal
-    } else if (p === maxPriceValue && (p > q3 * 1.3 || p > q3 + 1.5 * iqr)) {
-      rank = 3; // Extreme Outlier / Highest
-    } else if (p > q3) {
-      rank = 2; // Expensive
-    }
-    
-    priceRankMap.set(route.id, rank);
-  });
-
-  // Guarantee that at least 1 flight/air-hybrid option is shown in the top 6
-  let displayedRoutes = routeOptions.slice(0, 6);
-  const hasFlightOption = displayedRoutes.some(r => r.travelModes.includes("Flight"));
-  
-  if (!hasFlightOption && routeOptions.length > 6) {
-    const bestFlightRoute = routeOptions.find(r => r.travelModes.includes("Flight"));
-    if (bestFlightRoute) {
-      displayedRoutes[5] = bestFlightRoute;
-    }
-  }
+  const { routes: rawWithScores, error: apiError } = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
 
   const createHref = (newParams: Record<string, string>) => {
     const current = new URLSearchParams();
@@ -154,7 +62,7 @@ export default async function ResultsPage({
     if (sort !== "score") current.set("sort", sort);
     if (mode !== "all") current.set("mode", mode);
     if (params.compare) current.set("compare", params.compare);
-    
+
     for (const [key, value] of Object.entries(newParams)) {
       if (value === "") current.delete(key);
       else current.set(key, value);
@@ -172,7 +80,7 @@ export default async function ResultsPage({
     if (params.flexibleMonth) current.set("flexibleMonth", params.flexibleMonth);
     if (sort !== "score") current.set("sort", sort);
     if (mode !== "all") current.set("mode", mode);
-    
+
     let newCompare = [...compareIds];
     if (newCompare.includes(id)) {
       newCompare = newCompare.filter(i => i !== id);
@@ -183,11 +91,11 @@ export default async function ResultsPage({
         newCompare[2] = id; // Replace last if full
       }
     }
-    
+
     if (newCompare.length > 0) {
       current.set("compare", newCompare.join(","));
     }
-    
+
     return `/results?${current.toString()}`;
   };
 
@@ -202,8 +110,105 @@ export default async function ResultsPage({
     return `/results?${current.toString()}`;
   };
 
-  const selectedRoutes = rawWithScores.filter(r => compareIds.includes(r.id));
-  
+  let routeOptions: RouteOption[] = [];
+  let displayedRoutes: RouteOption[] = [];
+  const priceRankMap = new Map<string, number>();
+  let selectedRoutes: RouteOption[] = [];
+  let priceValues: number[] = [];
+
+  if (!apiError) {
+    // Store top 10 routes with highest Navix score to a JSON file
+    try {
+      const sortedByHighestScore = [...rawWithScores].sort((a, b) => b.navixScore - a.navixScore);
+      const top10Routes = sortedByHighestScore.slice(0, 10);
+      const top10Json = JSON.stringify(top10Routes, null, 2);
+
+      // Save to workspace root for checking
+      fs.writeFileSync(path.join(process.cwd(), "top-10-routes.json"), top10Json, "utf8");
+
+      // Save to public directory to view in browser at /top-10-routes.json
+      const publicDir = path.join(process.cwd(), "public");
+      if (!fs.existsSync(publicDir)) {
+        fs.mkdirSync(publicDir);
+      }
+      fs.writeFileSync(path.join(publicDir, "top-10-routes.json"), top10Json, "utf8");
+    } catch (error) {
+      console.error("Failed to write top 10 routes to JSON file:", error);
+    }
+
+    // Filter
+    routeOptions = [...rawWithScores];
+    if (mode !== "all") {
+      routeOptions = routeOptions.filter(route =>
+        route.travelModes.some((m: string) => m.toLowerCase().includes(mode.toLowerCase()))
+      );
+    }
+
+    // Sort
+    if (sort === "price") {
+      routeOptions.sort((a, b) => {
+        const priceA = parseFloat(a.estimatedPrice.replace(/[^0-9.]/g, ""));
+        const priceB = parseFloat(b.estimatedPrice.replace(/[^0-9.]/g, ""));
+        return priceA - priceB;
+      });
+    } else if (sort === "duration") {
+      routeOptions.sort((a, b) => {
+        const getMin = (d: string) => {
+          const h = d.match(/(\d+)h/);
+          const m = d.match(/(\d+)m/);
+          return (h ? parseInt(h[1]) * 60 : 0) + (m ? parseInt(m[1]) : 0);
+        };
+        return getMin(a.duration) - getMin(b.duration);
+      });
+    } else {
+      // Default: score
+      routeOptions.sort((a, b) => b.navixScore - a.navixScore);
+    }
+
+    priceValues = rawWithScores.map(r => parseFloat(r.estimatedPrice.replace(/[^0-9.]/g, ""))).sort((a, b) => a - b);
+    const maxPriceValue = priceValues.length > 0 ? Math.max(...priceValues) : 0;
+
+    const getQuartile = (arr: number[], q: number) => {
+      if (arr.length === 0) return 0;
+      const pos = (arr.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      return arr[base + 1] !== undefined ? arr[base] + rest * (arr[base + 1] - arr[base]) : arr[base];
+    };
+
+    const q1 = getQuartile(priceValues, 0.25);
+    const q3 = getQuartile(priceValues, 0.75);
+    const iqr = q3 - q1;
+
+    rawWithScores.forEach((route) => {
+      const p = parseFloat(route.estimatedPrice.replace(/[^0-9.]/g, ""));
+      let rank = 1; // Default: Fair
+
+      if (p <= q1) {
+        rank = 0; // Great Deal
+      } else if (p === maxPriceValue && (p > q3 * 1.3 || p > q3 + 1.5 * iqr)) {
+        rank = 3; // Extreme Outlier / Highest
+      } else if (p > q3) {
+        rank = 2; // Expensive
+      }
+
+      priceRankMap.set(route.id, rank);
+    });
+
+    // Guarantee that at least 1 flight/air-hybrid option is shown in the top 6
+    displayedRoutes = routeOptions.slice(0, 6);
+    const hasFlightOption = displayedRoutes.some(r => r.travelModes.includes("Flight"));
+
+    if (!hasFlightOption && routeOptions.length > 6) {
+      const bestFlightRoute = routeOptions.find(r => r.travelModes.includes("Flight"));
+      if (bestFlightRoute) {
+        displayedRoutes[5] = bestFlightRoute;
+      }
+    }
+
+    selectedRoutes = rawWithScores.filter(r => compareIds.includes(r.id));
+  }
+
   const comparePageHref = `/results/compare?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&ids=${compareIds.join(",")}${params.date ? `&date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `&flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : ""}`;
 
   const dateParam = params.date ? `date=${encodeURIComponent(params.date)}` : params.flexibleMonth ? `flexibleMonth=${encodeURIComponent(params.flexibleMonth)}` : "";
@@ -294,9 +299,9 @@ export default async function ResultsPage({
                 Compare multi-modal legs side by side. Ranked by Navix Score.
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
-                <TripSelector 
-                  origin={origin} 
-                  destination={destination} 
+                <TripSelector
+                  origin={origin}
+                  destination={destination}
                   date={date}
                   dateParam={params.date}
                   flexibleMonth={params.flexibleMonth}
@@ -327,11 +332,10 @@ export default async function ResultsPage({
                 <Link
                   key={opt.value}
                   href={createHref({ mode: opt.value === "all" ? "" : opt.value })}
-                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
-                    mode === opt.value
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${mode === opt.value
                       ? "bg-cyan-400/20 text-cyan-200 border border-cyan-400/30"
                       : "bg-white/[0.03] text-zinc-400 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white"
-                  }`}
+                    }`}
                 >
                   {opt.label}
                 </Link>
@@ -351,11 +355,10 @@ export default async function ResultsPage({
                 <Link
                   key={opt.value}
                   href={createHref({ sort: opt.value === "score" ? "" : opt.value })}
-                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
-                    sort === opt.value
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${sort === opt.value
                       ? "bg-violet-400/20 text-violet-200 border border-violet-400/30"
                       : "bg-white/[0.03] text-zinc-400 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white"
-                  }`}
+                    }`}
                 >
                   {opt.label}
                 </Link>
@@ -364,11 +367,39 @@ export default async function ResultsPage({
           </div>
         </div>
 
-        {routeOptions.length > 0 ? (
+        {apiError ? (
+          <section className="mt-8 relative overflow-hidden rounded-3xl border border-red-500/20 bg-gradient-to-br from-red-500/[0.07] via-white/[0.02] to-transparent backdrop-blur-xl shadow-[0_20px_50px_-20px_rgba(239,68,68,0.2)]">
+            <div className="relative z-10 flex flex-col items-center px-6 py-16 text-center sm:px-12 sm:py-20">
+              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-red-500/30 bg-red-500/10 shadow-[0_0_40px_-10px_rgba(239,68,68,0.3)]">
+                <span className="text-4xl animate-pulse">⚠️</span>
+              </div>
+              <h3 className="text-2xl font-bold tracking-tight text-red-200 sm:text-3xl">
+                Invalid Travel Corridor
+              </h3>
+              <p className="mt-4 max-w-lg text-sm leading-relaxed text-zinc-400 sm:text-base">
+                {apiError}
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href={editSearchHref}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-red-400 via-rose-300 to-amber-500 px-8 py-3.5 text-sm font-bold text-slate-950 shadow-[0_0_30px_-8px_rgba(239,68,68,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_-6px_rgba(244,63,94,0.5)]"
+                >
+                  Modify Search
+                </Link>
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-8 py-3.5 text-sm font-semibold text-zinc-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+                >
+                  Back to Home
+                </Link>
+              </div>
+            </div>
+          </section>
+        ) : routeOptions.length > 0 ? (
           <section className="mt-6 grid gap-5 lg:grid-cols-2">
             {displayedRoutes.map((route) => (
-              <RouteCard 
-                key={route.id} 
+              <RouteCard
+                key={route.id}
                 route={route}
                 priceRank={priceRankMap.get(route.id) || 0}
                 isTopPick={route.isRecommended}

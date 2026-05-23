@@ -42,3 +42,4 @@ class RouteResponseItem(BaseModel):
 class RouteSearchResponse(BaseModel):
     success: bool
     routes: List[RouteResponseItem]
+    error: Optional[str] = None
