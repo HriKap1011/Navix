@@ -39,7 +39,18 @@ class RouteResponseItem(BaseModel):
     recommendation_reasoning: Optional[List[str]] = []
     is_recommended: Optional[bool] = False
 
+class DemandProfileSchema(BaseModel):
+    is_weekend_rush: bool
+    is_summer_rush: bool
+    active_festival: Optional[str] = None
+    seat_modifier: float
+    comfort_modifier: int
+    price_multiplier: float
+    crowd_modifier: int
+    contextual_message: Optional[str] = None
+
 class RouteSearchResponse(BaseModel):
     success: bool
     routes: List[RouteResponseItem]
     error: Optional[str] = None
+    demand_profile: Optional[DemandProfileSchema] = None
