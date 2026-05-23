@@ -1,4 +1,3 @@
-import { buildRouteOptions } from "../_data/mock-routes";
 import { calculateSmartScores } from "./scoring";
 import { analyzeTravelDemand } from "./demand-engine";
 import type { RouteOption } from "../_data/mock-routes";
@@ -22,11 +21,9 @@ export interface BackendResponse {
 }
 
 function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
-  // Use backend timing if present, else fallback list
   const departureTimes = ["06:45", "10:30", "14:15", "18:00", "21:30"];
   const departureTime = r.departure_time || departureTimes[idx % departureTimes.length];
 
-  // Calculate arrival time based on duration
   const parseDurationToMin = (d: string) => {
     const h = d.match(/(\d+)h/);
     const m = d.match(/(\d+)m/);
@@ -39,7 +36,6 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
   const arrM = totalMin % 60;
   const arrivalTime = r.arrival_time || `${String(arrH).padStart(2, "0")}:${String(arrM).padStart(2, "0")}`;
 
-  // Build legs representing the travel modes
   const legs = r.legs && r.legs.length > 0
     ? r.legs.map((leg: any) => ({
       from: leg.from_city,
@@ -60,7 +56,6 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
       };
     });
 
-  // Pick tag tone based on keywords in the recommendation reason
   let tagTone: "cyan" | "emerald" | "violet" | "amber" = "cyan";
   const reason = (r.recommendation_reason || "").toLowerCase();
   if (reason.includes("seat") || reason.includes("boarding") || reason.includes("waitlist")) {
@@ -73,7 +68,6 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
     tagTone = "emerald";
   }
 
-  // Confirmation/waitlist details
   let waitlistCode: string | undefined = r.waitlist_code;
   let confirmationLikelihood: "High" | "Medium" | "Low" | "Very Low" | undefined = r.confirmation_likelihood;
   let confirmationProbability: number | undefined = r.confirmation_probability;
@@ -130,6 +124,16 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
 export interface FetchRoutesResult {
   routes: RouteOption[];
   error?: string | null;
+  demandProfile?: {
+    isWeekendRush: boolean;
+    isSummerRush: boolean;
+    activeFestival: string | null;
+    seatModifier: number;
+    comfortModifier: number;
+    priceMultiplier: number;
+    crowdModifier: number;
+    contextualMessage: string | null;
+  } | null;
 }
 
 export interface City {
@@ -147,21 +151,6 @@ export interface FetchCitiesResult {
   error?: string | null;
 }
 
-const FALLBACK_CITIES: City[] = [
-  { name: "Delhi", lat: 28.7041, lon: 77.1025, has_airport: true, has_train_station: true, code: "DEL", station: "NDLS" },
-  { name: "Mumbai", lat: 19.0760, lon: 72.8777, has_airport: true, has_train_station: true, code: "BOM", station: "CSMT" },
-  { name: "Bengaluru", lat: 12.9716, lon: 77.5946, has_airport: true, has_train_station: true, code: "BLR", station: "SBC" },
-  { name: "Hyderabad", lat: 17.3850, lon: 78.4867, has_airport: true, has_train_station: true, code: "HYD", station: "HYB" },
-  { name: "Pune", lat: 18.5204, lon: 73.8567, has_airport: true, has_train_station: true, code: "PNQ", station: "PUNE" },
-  { name: "Kolkata", lat: 22.5726, lon: 88.3639, has_airport: true, has_train_station: true, code: "CCU", station: "HWH" },
-  { name: "Chennai", lat: 13.0827, lon: 80.2707, has_airport: true, has_train_station: true, code: "MAA", station: "MAS" },
-  { name: "Jaipur", lat: 26.9124, lon: 75.7873, has_airport: true, has_train_station: true, code: "JAI", station: "JP" },
-  { name: "Patna", lat: 25.5941, lon: 85.1376, has_airport: true, has_train_station: true, code: "PAT", station: "PNBE" },
-  { name: "Varanasi", lat: 25.3176, lon: 82.9739, has_airport: true, has_train_station: true, code: "VNS", station: "BSB" },
-  { name: "Lucknow", lat: 26.8467, lon: 80.9462, has_airport: true, has_train_station: true, code: "LKO", station: "LKO" },
-  { name: "Ahmedabad", lat: 23.0225, lon: 72.5714, has_airport: true, has_train_station: true, code: "AMD", station: "ADI" }
-];
-
 export async function fetchRoutesFromApi(
   origin: string,
   destination: string,
@@ -171,7 +160,7 @@ export async function fetchRoutesFromApi(
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2-second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
 
     const response = await fetch(backendUrl, {
       method: "POST",
@@ -184,7 +173,7 @@ export async function fetchRoutesFromApi(
         date: date || "2026-06-15",
       }),
       signal: controller.signal,
-      next: { revalidate: 0 } // Disable caching to fetch live backend updates
+      next: { revalidate: 0 }
     });
 
     clearTimeout(timeoutId);
@@ -196,9 +185,25 @@ export async function fetchRoutesFromApi(
     const data = await response.json();
     if (data.success && Array.isArray(data.routes)) {
       console.log(`Successfully fetched ${data.routes.length} routes from FastAPI backend.`);
+      
+      let demandProfile = null;
+      if (data.demand_profile) {
+        demandProfile = {
+          isWeekendRush: data.demand_profile.is_weekend_rush,
+          isSummerRush: data.demand_profile.is_summer_rush,
+          activeFestival: data.demand_profile.active_festival,
+          seatModifier: data.demand_profile.seat_modifier,
+          comfortModifier: data.demand_profile.comfort_modifier,
+          priceMultiplier: data.demand_profile.price_multiplier,
+          crowdModifier: data.demand_profile.crowd_modifier,
+          contextualMessage: data.demand_profile.contextual_message
+        };
+      }
+
       return {
         routes: data.routes.map((route: any, idx: number) => mapBackendRouteToRouteOption(route, idx)),
-        error: data.error || null
+        error: data.error || null,
+        demandProfile: demandProfile
       };
     } else {
       console.warn("Backend validation failed:", data.error);
@@ -208,37 +213,10 @@ export async function fetchRoutesFromApi(
       };
     }
   } catch (error) {
-    console.warn("FastAPI backend is offline or returned an error. Falling back to local simulation data.", error);
-    
-    // Validate inputs locally for offline fallback mode
-    const sourceValid = FALLBACK_CITIES.some(
-      (c) => c.name.toLowerCase() === origin.trim().toLowerCase()
-    );
-    const destValid = FALLBACK_CITIES.some(
-      (c) => c.name.toLowerCase() === destination.trim().toLowerCase()
-    );
-
-    if (!origin.trim()) {
-      return { routes: [], error: "Source city cannot be empty" };
-    }
-    if (!destination.trim()) {
-      return { routes: [], error: "Destination city cannot be empty" };
-    }
-    if (!sourceValid) {
-      return { routes: [], error: `'${origin}' is not a supported source city` };
-    }
-    if (!destValid) {
-      return { routes: [], error: `'${destination}' is not a supported destination city` };
-    }
-    if (origin.trim().toLowerCase() === destination.trim().toLowerCase()) {
-      return { routes: [], error: "Source and destination cities cannot be the same" };
-    }
-
-    // Graceful fallback to frontend-only generator & scoring
-    const rawRouteOptions = buildRouteOptions(origin, destination, date);
+    console.warn("FastAPI backend is offline or returned an error.", error);
     return {
-      routes: calculateSmartScores(rawRouteOptions),
-      error: null
+      routes: [],
+      error: "Navix travel service is currently offline. Please ensure the backend server is running and try again."
     };
   }
 }
@@ -266,8 +244,8 @@ export async function fetchCitiesFromApi(): Promise<FetchCitiesResult> {
       return { cities: data.cities, error: null };
     }
   } catch (error) {
-    console.warn("FastAPI backend is offline or failed to fetch cities. Using local fallback list.", error);
+    console.warn("FastAPI backend is offline or failed to fetch cities.", error);
   }
 
-  return { cities: FALLBACK_CITIES, error: null };
+  return { cities: [], error: "Failed to connect to cities database" };
 }

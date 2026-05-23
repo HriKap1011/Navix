@@ -34,8 +34,20 @@ def search_routes(request: RouteSearchRequest):
         if source.lower() == destination.lower():
             return RouteSearchResponse(success=False, routes=[], error="Source and destination cities cannot be the same")
             
+        from app.demand import analyze_travel_demand
         routes = generate_routes(source, destination, request.date)
-        return RouteSearchResponse(success=True, routes=routes)
+        demand = analyze_travel_demand(source, destination, request.date)
+        demand_data = {
+            "is_weekend_rush": demand.is_weekend_rush,
+            "is_summer_rush": demand.is_summer_rush,
+            "active_festival": demand.active_festival,
+            "seat_modifier": demand.seat_modifier,
+            "comfort_modifier": demand.comfort_modifier,
+            "price_multiplier": demand.price_multiplier,
+            "crowd_modifier": demand.crowd_modifier,
+            "contextual_message": demand.contextual_message
+        }
+        return RouteSearchResponse(success=True, routes=routes, demand_profile=demand_data)
     except Exception as e:
         return RouteSearchResponse(success=False, routes=[], error=f"Search failed: {str(e)}")
 

@@ -1,0 +1,122 @@
+﻿ID,Station Code,Station Name,City ID,Station Type,Importance Score
+727,NDLS,New Delhi (NDLS),657,Rail,80
+728,ANVT,Anand Vihar Terminal (ANVT),,Rail,80
+729,NZM,Hazrat Nizamuddin (NZM),,Rail,80
+730,DLI,Old Delhi (DLI),,Rail,80
+731,GZB,Ghaziabad (GZB),625,Rail,80
+732,PNBE,Patna Jn (PNBE),609,Rail,80
+733,DNR,Danapur (DNR),,Rail,80
+734,PPTA,Patliputra (PPTA),,Rail,80
+735,RJPB,Rajendra Nagar (RJPB),,Rail,80
+736,ARA,Ara Jn (ARA),,Rail,80
+737,CSMT,Mumbai CSMT (CSMT),602,Rail,80
+738,BDTS,Bandra Terminus (BDTS),,Rail,80
+739,LTT,Lokmanya Tilak (LTT),,Rail,80
+740,TNA,Thane (TNA),,Rail,80
+741,KYN,Kalyan (KYN),,Rail,80
+742,SBC,KSR Bengaluru (SBC),603,Rail,80
+743,YPR,Yesvantpur (YPR),,Rail,80
+744,SMVB,SMVT Bengaluru (SMVB),,Rail,80
+745,KJM,Krishnarajapuram (KJM),,Rail,80
+746,HWH,Howrah Jn (HWH),606,Rail,80
+747,SDAH,Sealdah (SDAH),,Rail,80
+748,KOAA,Kolkata (KOAA),,Rail,80
+749,SHM,Shalimar (SHM),,Rail,80
+750,MAS,MGR Chennai Central (MAS),607,Rail,80
+751,MS,Chennai Egmore (MS),,Rail,80
+752,TBM,Tambaram (TBM),,Rail,80
+753,HYB,Hyderabad (HYB),604,Rail,80
+754,SC,Secunderabad (SC),,Rail,80
+755,KCG,Kacheguda (KCG),,Rail,80
+756,BSB,Varanasi Jn (BSB),610,Rail,80
+757,LJN,Lucknow Jn (LJN),,Rail,80
+758,LKO,Lucknow Charbagh (LKO),611,Rail,80
+759,ADI,Ahmedabad Jn (ADI),612,Rail,80
+760,PUNE,Pune Junction,605,Rail,90
+761,JP,Jaipur Junction,608,Rail,90
+762,CDG,Chandigarh Junction,613,Rail,90
+763,BBS,Bhubaneswar Junction,614,Rail,90
+764,MAO,Goa Junction,615,Rail,90
+765,ERS,Kochi Junction,616,Rail,90
+766,INDB,Indore Junction,617,Rail,90
+767,BPL,Bhopal Junction,618,Rail,90
+768,NGP,Nagpur Junction,619,Rail,90
+769,ST,Surat Junction,620,Rail,90
+770,CNB,Kanpur Junction,621,Rail,90
+771,VSKP,Visakhapatnam Junction,622,Rail,90
+772,AGC,Agra Junction,623,Rail,90
+773,BRC,Vadodara Junction,624,Rail,90
+774,LDH,Ludhiana Junction,626,Rail,90
+775,NK,Nashik Junction,627,Rail,90
+776,FDB,Faridabad Junction,628,Rail,90
+777,MTC,Meerut Junction,629,Rail,90
+778,RJT,Rajkot Junction,630,Rail,90
+779,SINA,Srinagar Junction,631,Rail,90
+780,AWB,Aurangabad Junction,632,Rail,90
+781,DHN,Dhanbad Junction,633,Rail,90
+782,ASR,Amritsar Junction,634,Rail,90
+783,RNC,Ranchi Junction,635,Rail,90
+784,CBE,Coimbatore Junction,636,Rail,90
+785,JBP,Jabalpur Junction,637,Rail,90
+786,GWL,Gwalior Junction,638,Rail,90
+787,BZA,Vijayawada Junction,639,Rail,90
+788,JU,Jodhpur Junction,640,Rail,90
+789,MDU,Madurai Junction,641,Rail,90
+790,R,Raipur Junction,642,Rail,90
+791,KOTA,Kota Junction,643,Rail,90
+792,GHY,Guwahati Junction,644,Rail,90
+793,SUR,Solapur Junction,645,Rail,90
+794,BE,Bareilly Junction,646,Rail,90
+795,MYS,Mysore Junction,647,Rail,90
+796,GGN,Gurgaon Junction,648,Rail,90
+797,ALJN,Aligarh Junction,649,Rail,90
+798,JUC,Jalandhar Junction,650,Rail,90
+799,TPJ,Tiruchirappalli Junction,651,Rail,90
+800,SA,Salem Junction,652,Rail,90
+801,WL,Warangal Junction,653,Rail,90
+802,GNT,Guntur Junction,654,Rail,90
+803,GKP,Gorakhpur Junction,655,Rail,90
+804,BKN,Bikaner Junction,656,Rail,90
+805,TATA,Jamshedpur Junction,658,Rail,90
+806,BPHB,Bhilai Junction,659,Rail,90
+807,CTC,Cuttack Junction,660,Rail,90
+808,DDN,Dehradun Junction,661,Rail,90
+809,KOP,Kolhapur Junction,662,Rail,90
+810,AII,Ajmer Junction,663,Rail,90
+811,UJN,Ujjain Junction,664,Rail,90
+812,VGLJ,Jhansi Junction,665,Rail,90
+813,PDY,Pondicherry Junction,666,Rail,90
+814,JAT,Jammu Junction,667,Rail,90
+815,MAQ,Mangalore Junction,668,Rail,90
+816,GAYA,Gaya Junction,669,Rail,90
+817,UDZ,Udaipur Junction,670,Rail,90
+818,CLT,Kozhikode Junction,671,Rail,90
+819,KRNT,Kurnool Junction,672,Rail,90
+820,KPD,Vellore Junction,673,Rail,90
+821,PRYJ,Prayagraj Junction,674,Rail,90
+822,MFP,Muzaffarpur Junction,675,Rail,90
+823,C01S,City1 Junction,676,Rail,90
+824,C02S,City2 Junction,677,Rail,90
+825,C03S,City3 Junction,678,Rail,90
+826,C04S,City4 Junction,679,Rail,90
+827,C05S,City5 Junction,680,Rail,90
+828,C06S,City6 Junction,681,Rail,90
+829,C07S,City7 Junction,682,Rail,90
+830,C08S,City8 Junction,683,Rail,90
+831,C09S,City9 Junction,684,Rail,90
+832,C10S,City10 Junction,685,Rail,90
+833,C11S,City11 Junction,686,Rail,90
+834,C12S,City12 Junction,687,Rail,90
+835,C13S,City13 Junction,688,Rail,90
+836,C14S,City14 Junction,689,Rail,90
+837,C15S,City15 Junction,690,Rail,90
+838,C16S,City16 Junction,691,Rail,90
+839,C17S,City17 Junction,692,Rail,90
+840,C18S,City18 Junction,693,Rail,90
+841,C19S,City19 Junction,694,Rail,90
+842,C20S,City20 Junction,695,Rail,90
+843,C21S,City21 Junction,696,Rail,90
+844,C22S,City22 Junction,697,Rail,90
+845,C23S,City23 Junction,698,Rail,90
+846,C24S,City24 Junction,699,Rail,90
+847,C25S,City25 Junction,700,Rail,90

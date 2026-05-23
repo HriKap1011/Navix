@@ -30,12 +30,56 @@ def get_hash_seed(origin: str, destination: str, date: str) -> int:
     key = f"{origin.lower()}-{destination.lower()}-{date}"
     return int(hashlib.md5(key.encode()).hexdigest(), 16)
 
+def find_intermediate_hub(src_city: Dict[str, Any], dest_city: Dict[str, Any], must_have_airport: bool = False) -> str:
+    candidate_cities = store.cities
+    if not candidate_cities:
+        if must_have_airport:
+            return "Varanasi"
+        if src_city["name"].lower() == "delhi" and dest_city["name"].lower() == "patna":
+            return "Lucknow"
+        elif src_city["name"].lower() == "mumbai" and dest_city["name"].lower() == "pune":
+            return "Thane"
+        return "Varanasi"
+
+    d_direct = calculate_distance(src_city["lat"], src_city["lon"], dest_city["lat"], dest_city["lon"])
+    best_hub = None
+    min_detour = float('inf')
+    
+    for c in candidate_cities:
+        if c["name"].lower() == src_city["name"].lower() or c["name"].lower() == dest_city["name"].lower():
+            continue
+            
+        if must_have_airport and not c["has_airport"]:
+            continue
+            
+        d1 = calculate_distance(src_city["lat"], src_city["lon"], c["lat"], c["lon"])
+        d2 = calculate_distance(c["lat"], c["lon"], dest_city["lat"], dest_city["lon"])
+        detour = (d1 + d2) - d_direct
+        
+        if d1 > 50 and d2 > 50 and detour < min_detour:
+            min_detour = detour
+            best_hub = c["name"]
+            
+    if best_hub:
+        return best_hub
+        
+    if must_have_airport:
+        return "Varanasi"
+    if src_city["name"].lower() == "delhi" and dest_city["name"].lower() == "patna":
+        return "Lucknow"
+    elif src_city["name"].lower() == "mumbai" and dest_city["name"].lower() == "pune":
+        return "Thane"
+    return "Varanasi"
+
 def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, Any]]:
     src_city = store.get_city(source)
     dest_city = store.get_city(destination)
     
     if src_city["name"].lower() == dest_city["name"].lower():
         return []
+        
+    corridor_key = f"{src_city['name'].lower()}-{dest_city['name'].lower()}"
+    corridor = store.corridors.get(corridor_key)
         
     distance = calculate_distance(src_city["lat"], src_city["lon"], dest_city["lat"], dest_city["lon"])
     demand = analyze_travel_demand(src_city["name"], dest_city["name"], date)
@@ -93,6 +137,16 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         direct_train["peak_demand_factor"] = f"{demand.active_festival or 'Peak'} Rush"
         direct_train["rescue_recommendation"] = f"Navix Comfort Tip: Secure better seat availability by boarding at {store.get_station_name(src_stations[1]) if len(src_stations) > 1 else 'nearby terminals'}!"
         direct_train["recommendation_reason"] = "Congested main express route"
+        
+        if corridor:
+            tier = corridor.get("tier", "High")
+            mig = corridor.get("migration_relevance", "Standard")
+            if tier == "Extreme":
+                direct_train["peak_demand_factor"] = "Extreme Corridor Demand"
+                direct_train["recommendation_reason"] = "Highly congested corridor"
+            elif "high" in mig.lower():
+                direct_train["peak_demand_factor"] = "High Migration Flow"
+                direct_train["recommendation_reason"] = "High migration corridor"
 
     routes.append(direct_train)
     
@@ -178,16 +232,7 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         routes.append(congestion_bypass)
 
     # 4. SMART SPLIT (Bus + Train via Intermediate Transit Hub)
-    # e.g., Delhi -> Lucknow (Bus), Lucknow -> Patna (Train)
-    transit_hub = "Lucknow"
-    if src_city["name"].lower() == "delhi" and dest_city["name"].lower() == "patna":
-        transit_hub = "Lucknow"
-    elif src_city["name"].lower() == "mumbai" and dest_city["name"].lower() == "pune":
-        transit_hub = "Thane"
-    else:
-        # Default fallback hub
-        transit_hub = "Varanasi"
-        
+    transit_hub = find_intermediate_hub(src_city, dest_city, must_have_airport=False)
     hub_city = store.get_city(transit_hub)
     if hub_city["name"].lower() != src_city["name"].lower() and hub_city["name"].lower() != dest_city["name"].lower():
         dist_leg_1 = calculate_distance(src_city["lat"], src_city["lon"], hub_city["lat"], hub_city["lon"])
@@ -319,8 +364,7 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         routes.append(premium_flight)
 
     # 7. FLIGHT + TRAIN HYBRID (if source has airport, and intermediate hub has airport)
-    # e.g., Delhi -> Varanasi (Flight), Varanasi -> Patna (Train)
-    air_hub = "Varanasi"
+    air_hub = find_intermediate_hub(src_city, dest_city, must_have_airport=True)
     air_hub_city = store.get_city(air_hub)
     if src_city["has_airport"] and air_hub_city["has_airport"] and air_hub_city["name"].lower() != dest_city["name"].lower():
         dist_h1 = calculate_distance(src_city["lat"], src_city["lon"], air_hub_city["lat"], air_hub_city["lon"])

@@ -1,138 +1,45 @@
 [
   {
-    "id": "NX-365-T3",
-    "routeCombination": "Lucknow -> Varanasi",
-    "duration": "4h 48m",
-    "estimatedPrice": "INR 628",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "LUC Station",
-        "to": "VARC Station",
-        "mode": "Train - Humsafar (22317)",
-        "duration": "4h 48m",
-        "departureTime": "12:00",
-        "arrivalTime": "16:48"
-      }
-    ],
-    "recommendationTag": "Easier boarding from nearby station",
-    "tagTone": "amber",
-    "isRecommended": true,
-    "departureTime": "12:00",
-    "arrivalTime": "16:48",
-    "layoverDuration": "0m",
-    "estimatedAvailability": 39,
-    "confidenceScore": 80,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Easier boarding from nearby station",
-      "crowdLevel": 41,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 93,
-    "comfortScore": 59,
-    "seatLikelihood": 39,
-    "recommendationReasoning": [
-      "Highly economical optimal route",
-      "Saves transfer stress",
-      "Daylight schedule with no waiting pain"
-    ],
-    "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 39,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
-  },
-  {
-    "id": "NX-365-T2",
-    "routeCombination": "Lucknow -> Varanasi",
-    "duration": "4h 48m",
-    "estimatedPrice": "INR 628",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "LUCC Station",
-        "to": "VAR Station",
-        "mode": "Train - SF Exp (12395)",
-        "duration": "4h 48m",
-        "departureTime": "08:15",
-        "arrivalTime": "13:03"
-      }
-    ],
-    "recommendationTag": "Best Value Comfort",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "08:15",
-    "arrivalTime": "13:03",
-    "layoverDuration": "0m",
-    "estimatedAvailability": 36,
-    "confidenceScore": 85,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 43,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 90,
-    "comfortScore": 57,
-    "seatLikelihood": 36,
-    "recommendationReasoning": [
-      "Best Value Comfort"
-    ],
-    "waitlistCode": "RLWL 10 / WL 4",
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 36,
-    "rescueRecommendation": null
-  },
-  {
-    "id": "NX-365-B1",
-    "routeCombination": "Lucknow -> Varanasi",
-    "duration": "6h 17m",
-    "estimatedPrice": "INR 1,241",
+    "id": "NX-096-B1",
+    "routeCombination": "Gaya -> Ranchi",
+    "duration": "3h 54m",
+    "estimatedPrice": "INR 989",
     "travelModes": [
       "Sleeper Bus"
     ],
     "legs": [
       {
-        "from": "Lucknow",
-        "to": "Varanasi",
+        "from": "Gaya",
+        "to": "Ranchi",
         "mode": "Sleeper Bus - Zingbus Premium",
-        "duration": "6h 17m",
+        "duration": "3h 54m",
         "departureTime": "20:00",
-        "arrivalTime": "02:17"
+        "arrivalTime": "23:54"
       }
     ],
-    "recommendationTag": "Easier Transfer",
+    "recommendationTag": "Smoother overnight connection",
     "tagTone": "cyan",
-    "isRecommended": false,
+    "isRecommended": true,
     "departureTime": "20:00",
-    "arrivalTime": "02:17",
+    "arrivalTime": "23:54",
     "layoverDuration": "0m",
-    "estimatedAvailability": 51,
-    "confidenceScore": 90,
+    "estimatedAvailability": 34,
+    "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 47,
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Smoother overnight connection",
+      "crowdLevel": 52,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 53,
-    "comfortScore": 53,
-    "seatLikelihood": 51,
+    "navixScore": 63,
+    "comfortScore": 48,
+    "seatLikelihood": 34,
     "recommendationReasoning": [
-      "Easier Transfer"
+      "Highly economical optimal route",
+      "Saves transfer stress"
     ],
     "waitlistCode": null,
     "confirmationLikelihood": null,
@@ -140,49 +47,159 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-365-T1",
-    "routeCombination": "Lucknow -> Varanasi",
-    "duration": "4h 48m",
-    "estimatedPrice": "INR 628",
+    "id": "NX-096-T1",
+    "routeCombination": "Gaya -> Ranchi",
+    "duration": "2h 59m",
+    "estimatedPrice": "INR 490",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
-        "from": "LUC Station",
-        "to": "VAR Station",
+        "from": "Gaya Junction",
+        "to": "Ranchi Junction",
         "mode": "Train - Exp (12393)",
-        "duration": "4h 48m",
+        "duration": "2h 59m",
         "departureTime": "07:30",
-        "arrivalTime": "12:18"
+        "arrivalTime": "10:29"
       }
     ],
     "recommendationTag": "Best Value Comfort",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "07:30",
-    "arrivalTime": "12:18",
+    "arrivalTime": "10:29",
     "layoverDuration": "0m",
-    "estimatedAvailability": 15,
-    "confidenceScore": 80,
+    "estimatedAvailability": 10,
+    "confidenceScore": 85,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "High",
       "bookingUrgency": "Book immediately",
       "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 60,
+      "crowdLevel": 65,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 60,
+    "comfortScore": 35,
+    "seatLikelihood": 10,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "GNWL 36 / WL 22",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 10,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at nearby terminals!"
+  },
+  {
+    "id": "NX-096-S1",
+    "routeCombination": "Gaya -> Ranchi",
+    "duration": "7h 43m",
+    "estimatedPrice": "INR 1,115",
+    "travelModes": [
+      "Bus",
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Gaya",
+        "to": "Dhanbad",
+        "mode": "Intercity Bus - IntrCity AC",
+        "duration": "3h 57m",
+        "departureTime": "06:00",
+        "arrivalTime": "09:57"
+      },
+      {
+        "from": "Dhanbad Junction",
+        "to": "Ranchi Junction",
+        "mode": "Train - SF Exp",
+        "duration": "2h 16m",
+        "departureTime": "11:27",
+        "arrivalTime": "13:43"
+      }
+    ],
+    "recommendationTag": "Lower crowding than main corridor",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "06:00",
+    "arrivalTime": "13:43",
+    "layoverDuration": "1h 30m",
+    "estimatedAvailability": 31,
+    "confidenceScore": 90,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Lower crowding than main corridor",
+      "crowdLevel": 50,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 41,
+    "comfortScore": 50,
+    "seatLikelihood": 31,
+    "recommendationReasoning": [
+      "Lower crowding than main corridor"
+    ],
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 31,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
+  },
+  {
+    "id": "NX-096-H1",
+    "routeCombination": "Gaya -> Ranchi",
+    "duration": "9h 12m",
+    "estimatedPrice": "INR 4,519",
+    "travelModes": [
+      "Flight",
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Gaya Airport (GAY)",
+        "to": "Patna Airport (PAT)",
+        "mode": "Flight - IndiGo",
+        "duration": "0h 08m",
+        "departureTime": "11:00",
+        "arrivalTime": "11:08"
+      },
+      {
+        "from": "Patna Jn (PNBE)",
+        "to": "Ranchi Junction",
+        "mode": "Train - SF Exp",
+        "duration": "4h 34m",
+        "departureTime": "13:38",
+        "arrivalTime": "18:12"
+      }
+    ],
+    "recommendationTag": "Air hybrid saves hours vs direct rail",
+    "tagTone": "violet",
+    "isRecommended": false,
+    "departureTime": "09:00",
+    "arrivalTime": "18:12",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 37,
+    "confidenceScore": 80,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Air hybrid saves hours vs direct rail",
+      "crowdLevel": 35,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
     "navixScore": 40,
-    "comfortScore": 40,
-    "seatLikelihood": 15,
+    "comfortScore": 65,
+    "seatLikelihood": 37,
     "recommendationReasoning": [
-      "Best Value Comfort"
+      "Air hybrid saves hours vs direct rail"
     ],
-    "waitlistCode": "GNWL 25 / WL 15",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 15,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at LUCC Station!"
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 37,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   }
 ]

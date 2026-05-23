@@ -50,8 +50,8 @@ export default async function ResultsPage({
     date = formatFlexibleMonth(params.flexibleMonth);
   }
 
-  const demandProfile = analyzeTravelDemand(origin, destination, params.date || params.flexibleMonth || "");
-  const { routes: rawWithScores, error: apiError } = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
+  const { routes: rawWithScores, error: apiError, demandProfile: apiDemandProfile } = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
+  const demandProfile = apiDemandProfile || analyzeTravelDemand(origin, destination, params.date || params.flexibleMonth || "");
 
   const createHref = (newParams: Record<string, string>) => {
     const current = new URLSearchParams();

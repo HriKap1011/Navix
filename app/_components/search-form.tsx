@@ -230,8 +230,8 @@ export function SearchForm() {
       newErrors.push("destination");
     }
 
-    // Check if source and destination are supported cities
-    if (originTrimmed) {
+    // Check if source and destination are supported cities (only if citiesList is loaded)
+    if (originTrimmed && citiesList.length > 0) {
       const isValidSrc = citiesList.some(
         (c) => c.name.toLowerCase() === originTrimmed.toLowerCase()
       );
@@ -241,7 +241,7 @@ export function SearchForm() {
       }
     }
 
-    if (destinationTrimmed) {
+    if (destinationTrimmed && citiesList.length > 0) {
       const isValidDest = citiesList.some(
         (c) => c.name.toLowerCase() === destinationTrimmed.toLowerCase()
       );

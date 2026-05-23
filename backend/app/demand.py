@@ -1,6 +1,6 @@
 from datetime import datetime
 import re
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 
 # Accurate 2026 Festival Travel Windows (1-based months: 1=Jan, 12=Dec)
 FESTIVALS = [
@@ -23,6 +23,57 @@ class DemandProfile:
         self.price_multiplier = 1.0
         self.crowd_modifier = 0
         self.contextual_message = None
+
+_festivals_cache = None
+
+def get_festivals_list() -> List[Dict[str, Any]]:
+    global _festivals_cache
+    if _festivals_cache is not None:
+        return _festivals_cache
+        
+    festivals_list = []
+    try:
+        from app.database import SessionLocal
+        from app.models import SeasonalDemand
+        db = SessionLocal()
+        try:
+            db_festivals = db.query(SeasonalDemand).all()
+            if db_festivals:
+                for f in db_festivals:
+                    festivals_list.append({
+                        "name": f.festival_name,
+                        "start_month": f.start_month,
+                        "start_day": f.start_day,
+                        "end_month": f.end_month,
+                        "end_day": f.end_day,
+                        "seat_modifier": f.seat_modifier,
+                        "comfort_modifier": f.comfort_modifier,
+                        "price_multiplier": f.price_multiplier,
+                        "crowd_modifier": f.crowd_modifier
+                    })
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"Database error in analyze_travel_demand load cache, falling back to memory: {e}")
+
+    if not festivals_list:
+        festivals_list = [
+            {
+                "name": fest["name"],
+                "start_month": fest["start_month"],
+                "start_day": fest["start_day"],
+                "end_month": fest["end_month"],
+                "end_day": fest["end_day"],
+                "seat_modifier": 0.7 if fest["name"] == "Summer Vacation" else 0.4,
+                "comfort_modifier": -10 if fest["name"] == "Summer Vacation" else -20,
+                "price_multiplier": 1.15 if fest["name"] == "Summer Vacation" else 1.3,
+                "crowd_modifier": 25 if fest["name"] == "Summer Vacation" else 40
+            }
+            for fest in FESTIVALS
+        ]
+        
+    _festivals_cache = festivals_list
+    return _festivals_cache
 
 def analyze_travel_demand(origin: str, destination: str, date_str: str) -> DemandProfile:
     profile = DemandProfile()
@@ -50,7 +101,8 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
     # Check high demand corridors
     from app.data_store import store
     corridor_key = f"{origin.lower()}-{destination.lower()}"
-    is_high_demand = corridor_key in store.corridors
+    corridor = store.corridors.get(corridor_key)
+    is_high_demand = corridor is not None
 
     # 1. Weekend Rush (Friday=4, Saturday=5, Sunday=6, Monday=0)
     if day_of_week in [4, 5, 6, 0]:
@@ -62,7 +114,9 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
         profile.contextual_message = "Weekend travel congestion expected."
 
     # 2. Festivals & Seasonal spikes
-    for fest in FESTIVALS:
+    festivals_list = get_festivals_list()
+
+    for fest in festivals_list:
         is_active = False
         sm = fest["start_month"]
         sd = fest["start_day"]
@@ -94,17 +148,17 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
         if is_active:
             if fest["name"] == "Summer Vacation":
                 profile.is_summer_rush = True
-                profile.seat_modifier *= 0.7
-                profile.price_multiplier *= 1.15
-                profile.crowd_modifier += 25
-                profile.comfort_modifier -= 10
+                profile.seat_modifier *= fest["seat_modifier"]
+                profile.price_multiplier *= fest["price_multiplier"]
+                profile.crowd_modifier += fest["crowd_modifier"]
+                profile.comfort_modifier += fest["comfort_modifier"]
                 profile.contextual_message = "Summer travel rush active."
             else:
                 profile.active_festival = fest["name"]
-                profile.seat_modifier *= 0.4
-                profile.price_multiplier *= 1.3
-                profile.crowd_modifier += 40
-                profile.comfort_modifier -= 20
+                profile.seat_modifier *= fest["seat_modifier"]
+                profile.price_multiplier *= fest["price_multiplier"]
+                profile.crowd_modifier += fest["crowd_modifier"]
+                profile.comfort_modifier += fest["comfort_modifier"]
                 
                 # High demand corridor scaling
                 if is_high_demand and fest["name"] in ["Diwali", "Chhath Puja", "Holi"]:
@@ -114,6 +168,45 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
                 else:
                     profile.contextual_message = f"{fest['name']} festival demand spike detected."
             break  # Apply the first matched festival only
+
+    # 3. Dynamic Corridor Intelligence from DB
+    if corridor:
+        demand_level = corridor.get("tier", "Standard").lower()
+        migration_relevance = corridor.get("migration_relevance", "Standard").lower()
+        seasonal_pressure = corridor.get("seasonal_pressure", "Standard").lower()
+        
+        # Apply demand level modifiers
+        if demand_level in ["extreme", "very high"]:
+            profile.seat_modifier *= 0.7
+            profile.crowd_modifier += 20
+            profile.price_multiplier *= 1.25
+            profile.comfort_modifier -= 10
+            if profile.active_festival:
+                profile.contextual_message = f"Extreme {profile.active_festival} rush on this corridor. Alternate routes highly recommended."
+            elif not profile.contextual_message:
+                profile.contextual_message = f"High demand travel corridor ({corridor.get('tier')} sector pressure)."
+        elif demand_level == "high":
+            profile.seat_modifier *= 0.85
+            profile.crowd_modifier += 10
+            profile.price_multiplier *= 1.15
+            profile.comfort_modifier -= 5
+            if not profile.contextual_message:
+                profile.contextual_message = "High congestion expected on this route."
+
+        # Apply migration flows (e.g. Delhi-Patna)
+        if "high" in migration_relevance:
+            profile.seat_modifier *= 0.85
+            profile.crowd_modifier += 10
+            
+        # Apply seasonal pressure
+        if "festival" in seasonal_pressure or "holiday" in seasonal_pressure:
+            if profile.active_festival:
+                profile.seat_modifier *= 0.8
+                profile.crowd_modifier += 15
+                profile.price_multiplier *= 1.15
+        elif "summer" in seasonal_pressure and month in [5, 6]:
+            profile.seat_modifier *= 0.85
+            profile.crowd_modifier += 10
 
     # Cap surges to keep figures realistic
     profile.crowd_modifier = min(profile.crowd_modifier, 65)
