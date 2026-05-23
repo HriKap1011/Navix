@@ -1,0 +1,8 @@
+[
+  { "from": "Delhi", "to": "Varanasi", "duration": "12h 00m", "price": 1200, "operator": "Zingbus Premium AC Sleeper" },
+  { "from": "Delhi", "to": "Lucknow", "duration": "8h 30m", "price": 800, "operator": "IntrCity SmartBus AC Sleeper" },
+  { "from": "Lucknow", "to": "Patna", "duration": "9h 00m", "price": 900, "operator": "UPSRTC Janrath AC Coach" },
+  { "from": "Varanasi", "to": "Patna", "duration": "5h 30m", "price": 500, "operator": "BSRTC AC Deluxe Coach" },
+  { "from": "Patna", "to": "Gaya", "duration": "3h 00m", "price": 250, "operator": "BSRTC Express" },
+  { "from": "Delhi", "to": "Patna", "duration": "18h 00m", "price": 1600, "operator": "IntrCity SmartBus AC Sleeper" }
+]

@@ -1,0 +1,9 @@
+{
+  "Delhi": ["NDLS", "ANVT", "NZM", "DLI", "GZB"],
+  "Patna": ["PNBE", "DNR", "PPTA", "RJPB", "ARA"],
+  "Mumbai": ["CSMT", "BDTS", "LTT", "TNA", "KYN"],
+  "Bengaluru": ["SBC", "YPR", "SMVB", "KJM"],
+  "Kolkata": ["HWH", "SDAH", "KOAA", "SHM"],
+  "Chennai": ["MAS", "MS", "TBM"],
+  "Hyderabad": ["HYB", "SC", "KCG"]
+}

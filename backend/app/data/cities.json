@@ -1,0 +1,14 @@
+[
+  { "name": "Delhi", "lat": 28.7041, "lon": 77.1025, "has_airport": true, "has_train_station": true, "code": "DEL", "station": "NDLS" },
+  { "name": "Mumbai", "lat": 19.0760, "lon": 72.8777, "has_airport": true, "has_train_station": true, "code": "BOM", "station": "CSMT" },
+  { "name": "Bengaluru", "lat": 12.9716, "lon": 77.5946, "has_airport": true, "has_train_station": true, "code": "BLR", "station": "SBC" },
+  { "name": "Hyderabad", "lat": 17.3850, "lon": 78.4867, "has_airport": true, "has_train_station": true, "code": "HYD", "station": "HYB" },
+  { "name": "Pune", "lat": 18.5204, "lon": 73.8567, "has_airport": true, "has_train_station": true, "code": "PNQ", "station": "PUNE" },
+  { "name": "Kolkata", "lat": 22.5726, "lon": 88.3639, "has_airport": true, "has_train_station": true, "code": "CCU", "station": "HWH" },
+  { "name": "Chennai", "lat": 13.0827, "lon": 80.2707, "has_airport": true, "has_train_station": true, "code": "MAA", "station": "MAS" },
+  { "name": "Jaipur", "lat": 26.9124, "lon": 75.7873, "has_airport": true, "has_train_station": true, "code": "JAI", "station": "JP" },
+  { "name": "Patna", "lat": 25.5941, "lon": 85.1376, "has_airport": true, "has_train_station": true, "code": "PAT", "station": "PNBE" },
+  { "name": "Varanasi", "lat": 25.3176, "lon": 82.9739, "has_airport": true, "has_train_station": true, "code": "VNS", "station": "BSB" },
+  { "name": "Lucknow", "lat": 26.8467, "lon": 80.9462, "has_airport": true, "has_train_station": true, "code": "LKO", "station": "LKO" },
+  { "name": "Ahmedabad", "lat": 23.0225, "lon": 72.5714, "has_airport": true, "has_train_station": true, "code": "AMD", "station": "ADI" }
+]

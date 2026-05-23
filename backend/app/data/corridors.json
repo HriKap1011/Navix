@@ -1,0 +1,39 @@
+{
+  "delhi-patna": {
+    "demand_level": "Very High",
+    "congestion_risk": "Severe",
+    "festival_heavy": true,
+    "tatkal_heavy": true,
+    "description": "High demand corridor, heavily waitlist-prone during festivals."
+  },
+  "mumbai-patna": {
+    "demand_level": "Very High",
+    "congestion_risk": "High",
+    "migration_heavy": true,
+    "description": "Migration-heavy corridor with consistent long-distance train demand."
+  },
+  "bengaluru-patna": {
+    "demand_level": "High",
+    "congestion_risk": "Moderate",
+    "summer_heavy": true,
+    "description": "IT worker and student transit corridor, summer demand heavy."
+  },
+  "kolkata-patna": {
+    "demand_level": "High",
+    "congestion_risk": "High",
+    "seasonal_heavy": true,
+    "description": "Frequent seasonal passenger rush corridor."
+  },
+  "delhi-varanasi": {
+    "demand_level": "High",
+    "congestion_risk": "High",
+    "festival_heavy": true,
+    "description": "Tourism and local transit hub corridor."
+  },
+  "delhi-lucknow": {
+    "demand_level": "High",
+    "congestion_risk": "Moderate",
+    "weekend_heavy": true,
+    "description": "High volume intercity commuter corridor."
+  }
+}

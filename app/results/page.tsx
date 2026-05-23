@@ -5,6 +5,7 @@ import { buildRouteOptions, formatTravelDate } from "./_data/mock-routes";
 import { ComparisonDrawer } from "./_components/comparison-drawer";
 import { calculateSmartScores } from "./_utils/scoring";
 import { analyzeTravelDemand } from "./_utils/demand-engine";
+import { fetchRoutesFromApi } from "./_utils/api";
 import fs from "fs";
 import path from "path";
 
@@ -50,8 +51,7 @@ export default async function ResultsPage({
   }
   
   const demandProfile = analyzeTravelDemand(origin, destination, params.date || params.flexibleMonth || "");
-  const rawRouteOptions = buildRouteOptions(origin, destination, params.date || params.flexibleMonth || "");
-  const rawWithScores = calculateSmartScores(rawRouteOptions);
+  const rawWithScores = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
 
   // Store top 10 routes with highest Navix score to a JSON file
   try {
