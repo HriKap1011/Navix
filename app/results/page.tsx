@@ -1,20 +1,14 @@
 import Link from "next/link";
 import { RouteCard } from "./_components/route-card";
 import { TripSelector } from "./_components/trip-selector";
-import { buildRouteOptions, formatTravelDate, RouteOption } from "./_data/mock-routes";
 import { ComparisonDrawer } from "./_components/comparison-drawer";
-import { calculateSmartScores } from "./_utils/scoring";
-import { analyzeTravelDemand } from "./_utils/demand-engine";
+import type { RouteOption } from "./_utils/types";
+import { capitalizeCity, formatTravelDate } from "./_utils/formatters";
 import { fetchRoutesFromApi } from "./_utils/api";
 import fs from "fs";
 import path from "path";
 
-const capitalizeCity = (city: string): string => {
-  return city
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
-};
+
 
 const formatFlexibleMonth = (monthStr: string): string => {
   const [year, month] = monthStr.split("-");
@@ -51,7 +45,16 @@ export default async function ResultsPage({
   }
 
   const { routes: rawWithScores, error: apiError, demandProfile: apiDemandProfile } = await fetchRoutesFromApi(origin, destination, params.date || params.flexibleMonth || "");
-  const demandProfile = apiDemandProfile || analyzeTravelDemand(origin, destination, params.date || params.flexibleMonth || "");
+  const demandProfile = apiDemandProfile || {
+    isWeekendRush: false,
+    isSummerRush: false,
+    activeFestival: null,
+    seatModifier: 1.0,
+    comfortModifier: 0,
+    priceMultiplier: 1.0,
+    crowdModifier: 0,
+    contextualMessage: null,
+  };
 
   const createHref = (newParams: Record<string, string>) => {
     const current = new URLSearchParams();

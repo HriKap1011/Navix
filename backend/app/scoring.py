@@ -1,5 +1,14 @@
 import re
 from typing import List, Dict, Any
+from app.config import (
+    WEIGHT_COMFORT,
+    WEIGHT_FRICTION,
+    WEIGHT_SEAT,
+    WEIGHT_TRANSFERS,
+    WEIGHT_PRICE,
+    WEIGHT_DURATION,
+    WEIGHT_AVAILABILITY,
+)
 
 def get_minutes(d: str) -> int:
     h = re.search(r"(\d+)h", d)
@@ -94,8 +103,7 @@ def calculate_smart_scores(routes: List[Dict[str, Any]]) -> List[Dict[str, Any]]
         norm = (val - min_val) / (max_val - min_val)
         return 1.0 - norm if invert else norm
 
-    # Apply Weights:
-    # Comfort: 20%, Friction: 20%, Seat Likelihood: 15%, Transfers: 15%, Price: 15%, Duration: 10%, Availability: 5%
+    # Apply Weights from Config
     scored_routes = []
     for rwf in routes_with_friction:
         r = rwf["route"]
@@ -103,13 +111,13 @@ def calculate_smart_scores(routes: List[Dict[str, Any]]) -> List[Dict[str, Any]]
         duration = get_minutes(r["duration"])
         transfers_count = len(r.get("legs", [])) - 1
 
-        comfort_score = normalize(r["comfort_score"], min_comfort, max_comfort) * 0.20
-        friction_score = normalize(rwf["friction_score"], min_friction, max_friction) * 0.20
-        seat_score = normalize(r["seat_likelihood"], min_seat, max_seat) * 0.15
-        transfer_score = normalize(transfers_count, min_transfers, max_transfers, invert=True) * 0.15
-        price_score = normalize(price, min_price, max_price, invert=True) * 0.15
-        duration_score = normalize(duration, min_duration, max_duration, invert=True) * 0.10
-        avail_score = normalize(r["seat_likelihood"], min_seat, max_seat) * 0.05
+        comfort_score = normalize(r["comfort_score"], min_comfort, max_comfort) * WEIGHT_COMFORT
+        friction_score = normalize(rwf["friction_score"], min_friction, max_friction) * WEIGHT_FRICTION
+        seat_score = normalize(r["seat_likelihood"], min_seat, max_seat) * WEIGHT_SEAT
+        transfer_score = normalize(transfers_count, min_transfers, max_transfers, invert=True) * WEIGHT_TRANSFERS
+        price_score = normalize(price, min_price, max_price, invert=True) * WEIGHT_PRICE
+        duration_score = normalize(duration, min_duration, max_duration, invert=True) * WEIGHT_DURATION
+        avail_score = normalize(r["seat_likelihood"], min_seat, max_seat) * WEIGHT_AVAILABILITY
 
         total_score = (comfort_score + friction_score + seat_score + transfer_score + price_score + duration_score + avail_score) * 100
         r["nx_score"] = int(round(total_score))

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { RouteOption } from "../_data/mock-routes";
+import type { RouteOption } from "../_utils/types";
 
 type ComparisonDrawerProps = {
   routes: RouteOption[];

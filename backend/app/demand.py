@@ -1,17 +1,7 @@
 from datetime import datetime
 import re
 from typing import Dict, Any, List, Optional
-
-# Accurate 2026 Festival Travel Windows (1-based months: 1=Jan, 12=Dec)
-FESTIVALS = [
-    { "name": "Holi", "start_month": 3, "start_day": 1, "end_month": 3, "end_day": 6 },
-    { "name": "Summer Vacation", "start_month": 5, "start_day": 10, "end_month": 6, "end_day": 15 },
-    { "name": "Raksha Bandhan", "start_month": 8, "start_day": 26, "end_month": 8, "end_day": 30 },
-    { "name": "Durga Puja", "start_month": 10, "start_day": 14, "end_month": 10, "end_day": 22 },
-    { "name": "Diwali", "start_month": 11, "start_day": 4, "end_month": 11, "end_day": 11 },
-    { "name": "Chhath Puja", "start_month": 11, "start_day": 12, "end_month": 11, "end_day": 17 },
-    { "name": "New Year", "start_month": 12, "start_day": 25, "end_month": 1, "end_day": 5 }
-]
+from app.config import FALLBACK_FESTIVALS
 
 class DemandProfile:
     def __init__(self):
@@ -33,10 +23,9 @@ def get_festivals_list() -> List[Dict[str, Any]]:
         
     festivals_list = []
     try:
-        from app.database import SessionLocal
+        from app.database import db_session
         from app.models import SeasonalDemand
-        db = SessionLocal()
-        try:
+        with db_session() as db:
             db_festivals = db.query(SeasonalDemand).all()
             if db_festivals:
                 for f in db_festivals:
@@ -51,8 +40,6 @@ def get_festivals_list() -> List[Dict[str, Any]]:
                         "price_multiplier": f.price_multiplier,
                         "crowd_modifier": f.crowd_modifier
                     })
-        finally:
-            db.close()
     except Exception as e:
         print(f"Database error in analyze_travel_demand load cache, falling back to memory: {e}")
 
@@ -69,7 +56,7 @@ def get_festivals_list() -> List[Dict[str, Any]]:
                 "price_multiplier": 1.15 if fest["name"] == "Summer Vacation" else 1.3,
                 "crowd_modifier": 25 if fest["name"] == "Summer Vacation" else 40
             }
-            for fest in FESTIVALS
+            for fest in FALLBACK_FESTIVALS
         ]
         
     _festivals_cache = festivals_list

@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { buildRouteOptions } from "../_data/mock-routes";
-import { calculateSmartScores } from "../_utils/scoring";
 import { fetchRoutesFromApi } from "../_utils/api";
+import { parseDurationToMinutes, parsePriceToNumber } from "../_utils/formatters";
 
 type SearchParams = {
   origin?: string;
@@ -59,20 +58,11 @@ export default async function ComparePage({
     );
   }
 
-  // Helper to parse duration string to minutes for comparison
-  const getMinutes = (d: string) => {
-    const h = d.match(/(\d+)h/);
-    const m = d.match(/(\d+)m/);
-    return (h ? parseInt(h[1]) * 60 : 0) + (m ? parseInt(m[1]) : 0);
-  };
-
-  const getPriceNum = (p: string) => parseFloat(p.replace(/[^0-9.]/g, ""));
-
   // Calculate best values for highlighting
-  const bestPrice = Math.min(...selectedRoutes.map(r => getPriceNum(r.estimatedPrice)));
-  const bestDuration = Math.min(...selectedRoutes.map(r => getMinutes(r.duration)));
+  const bestPrice = Math.min(...selectedRoutes.map(r => parsePriceToNumber(r.estimatedPrice)));
+  const bestDuration = Math.min(...selectedRoutes.map(r => parseDurationToMinutes(r.duration)));
   const bestTransfers = Math.min(...selectedRoutes.map(r => r.legs.length - 1));
-  const bestLayover = Math.min(...selectedRoutes.map(r => getMinutes(r.layoverDuration)));
+  const bestLayover = Math.min(...selectedRoutes.map(r => parseDurationToMinutes(r.layoverDuration)));
 
   const bestNavix = Math.max(...selectedRoutes.map(r => r.navixScore));
   const bestComfort = Math.max(...selectedRoutes.map(r => r.comfortScore));
@@ -216,7 +206,7 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Price</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-bold tabular-nums ${getPriceNum(route.estimatedPrice) === bestPrice ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                    <td key={route.id} className={`p-4 text-sm font-bold tabular-nums ${parsePriceToNumber(route.estimatedPrice) === bestPrice ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
                       }`}>
                       {route.estimatedPrice}
                     </td>
@@ -227,7 +217,7 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Duration</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${getMinutes(route.duration) === bestDuration ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${parseDurationToMinutes(route.duration) === bestDuration ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
                       }`}>
                       {route.duration}
                     </td>
@@ -249,7 +239,7 @@ export default async function ComparePage({
                 <tr className="border-b border-white/[0.05] hover:bg-white/[0.01] transition-colors">
                   <td className="sticky left-0 z-20 bg-[#0c0c12] p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Total Layover</td>
                   {selectedRoutes.map((route) => (
-                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${getMinutes(route.layoverDuration) === bestLayover ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
+                    <td key={route.id} className={`p-4 text-sm font-semibold tabular-nums ${parseDurationToMinutes(route.layoverDuration) === bestLayover ? "text-emerald-400 bg-emerald-400/[0.05]" : "text-zinc-300"
                       }`}>
                       {route.layoverDuration}
                     </td>

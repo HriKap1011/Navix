@@ -2,18 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import type { RouteOption, TravelDifficulty } from "../_data/mock-routes";
+import type { RouteOption, TravelDifficulty } from "../_utils/types";
+import { capitalizeCity } from "../_utils/formatters";
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
-
-const capitalizeCity = (city: string): string =>
-  city
-    .split(" ")
-    .map((w) => {
-      if (w.startsWith("(") && w.endsWith(")")) return w.toUpperCase();
-      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
-    })
-    .join(" ");
 
 const cityAbbreviationsForTruncation: Record<string, string> = {
   hyderabad: "Hyd",
