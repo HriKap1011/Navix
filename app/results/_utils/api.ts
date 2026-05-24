@@ -1,6 +1,6 @@
-import { calculateSmartScores } from "./scoring";
-import { analyzeTravelDemand } from "./demand-engine";
-import type { RouteOption } from "../_data/mock-routes";
+import type { RouteOption, FetchRoutesResult, City, FetchCitiesResult } from "./types";
+export type { RouteOption, FetchRoutesResult, City, FetchCitiesResult };
+import { parseDurationToMinutes } from "./formatters";
 
 export interface BackendRoute {
   route_id: string;
@@ -24,12 +24,7 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
   const departureTimes = ["06:45", "10:30", "14:15", "18:00", "21:30"];
   const departureTime = r.departure_time || departureTimes[idx % departureTimes.length];
 
-  const parseDurationToMin = (d: string) => {
-    const h = d.match(/(\d+)h/);
-    const m = d.match(/(\d+)m/);
-    return (h ? parseInt(h[1]) * 60 : 0) + (m ? parseInt(m[1]) : 0);
-  };
-  const durationMin = parseDurationToMin(r.duration);
+  const durationMin = parseDurationToMinutes(r.duration);
   const [depH, depM] = departureTime.split(":").map(Number);
   const totalMin = depH * 60 + depM + durationMin;
   const arrH = Math.floor(totalMin / 60) % 24;
@@ -119,36 +114,6 @@ function mapBackendRouteToRouteOption(r: any, idx: number): RouteOption {
     confirmationProbability,
     rescueRecommendation
   };
-}
-
-export interface FetchRoutesResult {
-  routes: RouteOption[];
-  error?: string | null;
-  demandProfile?: {
-    isWeekendRush: boolean;
-    isSummerRush: boolean;
-    activeFestival: string | null;
-    seatModifier: number;
-    comfortModifier: number;
-    priceMultiplier: number;
-    crowdModifier: number;
-    contextualMessage: string | null;
-  } | null;
-}
-
-export interface City {
-  name: string;
-  lat: number;
-  lon: number;
-  has_airport: boolean;
-  has_train_station: boolean;
-  code: string;
-  station: string;
-}
-
-export interface FetchCitiesResult {
-  cities: City[];
-  error?: string | null;
 }
 
 export async function fetchRoutesFromApi(

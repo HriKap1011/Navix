@@ -4,6 +4,16 @@ from typing import List, Dict, Any
 from app.data_store import store
 from app.demand import analyze_travel_demand
 from app.scoring import calculate_smart_scores
+from app.config import (
+    SPEED_TRAIN,
+    SPEED_BUS,
+    SPEED_BUS_INTERCITY,
+    SPEED_FLIGHT,
+    COST_BASE_TRAIN,
+    COST_BASE_BUS,
+    COST_BASE_BUS_INTERCITY,
+    COST_BASE_FLIGHT
+)
 
 def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> int:
     R = 6371.0  # Earth's radius in km
@@ -92,13 +102,11 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
     routes = []
     
     # 1. DIRECT TRAIN (Main terminals)
-    # NDLS -> PNBE (Delhi -> Patna) CSMT -> SBC (Mumbai -> Bangalore)
     dep_time_1 = "07:30"
-    train_speed = 55.0  # km/h
-    duration_min_1 = round((distance / train_speed) * 60)
+    duration_min_1 = round((distance / SPEED_TRAIN) * 60)
     arr_time_1 = add_minutes_to_time(dep_time_1, duration_min_1)
     
-    price_1 = round((distance * 1.2 + 180) * demand.price_multiplier)
+    price_1 = round((distance * 1.2 + COST_BASE_TRAIN) * demand.price_multiplier)
     seat_1 = max(5, round(25 * demand.seat_modifier))
     comfort_1 = max(10, min(100, 55 + demand.comfort_modifier))
     
@@ -154,9 +162,9 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
     if len(src_stations) > 1:
         alt_origin = src_stations[1]
         dep_time_2 = "08:15"
-        duration_min_2 = round((distance / train_speed) * 60)
+        duration_min_2 = round((distance / SPEED_TRAIN) * 60)
         arr_time_2 = add_minutes_to_time(dep_time_2, duration_min_2)
-        price_2 = round((distance * 1.2 + 180) * demand.price_multiplier)
+        price_2 = round((distance * 1.2 + COST_BASE_TRAIN) * demand.price_multiplier)
         seat_2 = max(5, round(60 * demand.seat_modifier))
         comfort_2 = max(10, min(100, 72 + demand.comfort_modifier))
         
@@ -197,9 +205,9 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
     if len(dest_stations) > 1:
         alt_dest = dest_stations[1]
         dep_time_3 = "12:00"
-        duration_min_3 = round((distance / train_speed) * 60)
+        duration_min_3 = round((distance / SPEED_TRAIN) * 60)
         arr_time_3 = add_minutes_to_time(dep_time_3, duration_min_3)
-        price_3 = round((distance * 1.2 + 180) * demand.price_multiplier)
+        price_3 = round((distance * 1.2 + COST_BASE_TRAIN) * demand.price_multiplier)
         seat_3 = max(5, round(65 * demand.seat_modifier))
         comfort_3 = max(10, min(100, 74 + demand.comfort_modifier))
         
@@ -239,15 +247,15 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         dist_leg_2 = calculate_distance(hub_city["lat"], hub_city["lon"], dest_city["lat"], dest_city["lon"])
         
         dep_time_s = "06:00"
-        dur_leg_1 = round((dist_leg_1 / 46.0) * 60) # Bus speed 46
+        dur_leg_1 = round((dist_leg_1 / SPEED_BUS_INTERCITY) * 60)
         arr_time_s1 = add_minutes_to_time(dep_time_s, dur_leg_1)
         
         layover = 90  # 1.5h layover
         dep_time_s2 = add_minutes_to_time(arr_time_s1, layover)
-        dur_leg_2 = round((dist_leg_2 / train_speed) * 60) # Train speed 55
+        dur_leg_2 = round((dist_leg_2 / SPEED_TRAIN) * 60)
         arr_time_s2 = add_minutes_to_time(dep_time_s2, dur_leg_2)
         
-        price_s = round((dist_leg_1 * 1.8 + 200 + dist_leg_2 * 1.2 + 180) * demand.price_multiplier)
+        price_s = round((dist_leg_1 * 1.8 + COST_BASE_BUS_INTERCITY + dist_leg_2 * 1.2 + COST_BASE_TRAIN) * demand.price_multiplier)
         seat_s = max(10, round(78 * demand.seat_modifier))
         comfort_s = max(10, min(100, 70 + demand.comfort_modifier))
         
@@ -287,11 +295,10 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         routes.append(smart_split)
 
     # 5. OVERNIGHT SLEEPER BUS
-    bus_speed = 42.0
-    duration_min_4 = round((distance / bus_speed) * 60)
+    duration_min_4 = round((distance / SPEED_BUS) * 60)
     dep_time_4 = "20:00"
     arr_time_4 = add_minutes_to_time(dep_time_4, duration_min_4)
-    price_4 = round((distance * 2.2 + 400) * demand.price_multiplier)
+    price_4 = round((distance * 2.2 + COST_BASE_BUS) * demand.price_multiplier)
     seat_4 = max(10, round(85 * demand.seat_modifier))
     comfort_4 = max(10, min(100, 68 + demand.comfort_modifier))
     
@@ -324,15 +331,13 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
 
     # 6. PREMIUM FLIGHT (if airports exist)
     if src_city["has_airport"] and dest_city["has_airport"] and distance > 300:
-        flight_speed = 650.0
-        flight_time_min = round((distance / flight_speed) * 60)
-        # Adding airport overheads (2h security + 30m exit)
+        flight_time_min = round((distance / SPEED_FLIGHT) * 60)
         overhead = 150 
         duration_min_5 = flight_time_min + overhead
         dep_time_5 = "11:30"
         arr_time_5 = add_minutes_to_time(dep_time_5, duration_min_5)
         
-        price_5 = round((distance * 5.5 + 2500) * demand.price_multiplier)
+        price_5 = round((distance * 5.5 + COST_BASE_FLIGHT) * demand.price_multiplier)
         seat_5 = 98
         comfort_5 = max(10, min(100, 90 + demand.comfort_modifier))
         
@@ -371,16 +376,16 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         dist_h2 = calculate_distance(air_hub_city["lat"], air_hub_city["lon"], dest_city["lat"], dest_city["lon"])
         
         dep_time_h = "09:00"
-        flight_t_min = round((dist_h1 / 650.0) * 60)
+        flight_t_min = round((dist_h1 / SPEED_FLIGHT) * 60)
         dur_h1 = flight_t_min + 150 # flight leg with overhead
         arr_time_h1 = add_minutes_to_time(dep_time_h, dur_h1)
         
         layover_h = 120 # 2h layover
         dep_time_h2 = add_minutes_to_time(arr_time_h1, layover_h)
-        dur_h2 = round((dist_h2 / train_speed) * 60)
+        dur_h2 = round((dist_h2 / SPEED_TRAIN) * 60)
         arr_time_h2 = add_minutes_to_time(dep_time_h2, dur_h2)
         
-        price_h = round((dist_h1 * 5.5 + 2500 + dist_h2 * 1.2 + 180) * demand.price_multiplier)
+        price_h = round((dist_h1 * 5.5 + COST_BASE_FLIGHT + dist_h2 * 1.2 + COST_BASE_TRAIN) * demand.price_multiplier)
         seat_h = max(10, round(92 * demand.seat_modifier))
         comfort_h = max(10, min(100, 85 + demand.comfort_modifier))
         

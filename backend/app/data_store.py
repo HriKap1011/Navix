@@ -37,10 +37,9 @@ class DataStore:
         if self._cities_cache is not None:
             return
         try:
-            from app.database import SessionLocal
+            from app.database import db_session
             from app.models import City
-            db = SessionLocal()
-            try:
+            with db_session() as db:
                 db_cities = db.query(City).order_by(City.city_name).all()
                 if db_cities:
                     self._cities_cache = [
@@ -55,8 +54,6 @@ class DataStore:
                         }
                         for city in db_cities
                     ]
-            finally:
-                db.close()
         except Exception as e:
             print(f"Database error loading cities cache: {e}")
         
@@ -67,15 +64,12 @@ class DataStore:
         if self._stations_cache is not None:
             return
         try:
-            from app.database import SessionLocal
+            from app.database import db_session
             from app.models import Station
-            db = SessionLocal()
-            try:
+            with db_session() as db:
                 db_stations = db.query(Station).all()
                 if db_stations:
                     self._stations_cache = {s.station_code: s.station_name for s in db_stations}
-            finally:
-                db.close()
         except Exception as e:
             print(f"Database error loading stations cache: {e}")
             
@@ -86,10 +80,9 @@ class DataStore:
         if self._nearby_cache is not None:
             return
         try:
-            from app.database import SessionLocal
+            from app.database import db_session
             from app.models import City, Station, NearbyStationMapping
-            db = SessionLocal()
-            try:
+            with db_session() as db:
                 db_mappings = db.query(
                     City.city_name, Station.station_code
                 ).join(
@@ -102,24 +95,20 @@ class DataStore:
                     for city_name, station_code in db_mappings:
                         m_dict.setdefault(city_name.lower(), []).append(station_code)
                     self._nearby_cache = m_dict
-            finally:
-                db.close()
         except Exception as e:
             print(f"Database error loading nearby cache: {e}")
             
         if not self._nearby_cache:
-            # Normalize fallback keys to lowercase for uniform lookup
             self._nearby_cache = {k.lower(): v for k, v in self._nearby_fallback.items()}
 
     def load_corridors_cache(self):
         if self._corridors_cache is not None:
             return
         try:
-            from app.database import SessionLocal
+            from app.database import db_session
             from app.models import Corridor, City
             from sqlalchemy.orm import aliased
-            db = SessionLocal()
-            try:
+            with db_session() as db:
                 src_alias = aliased(City)
                 dest_alias = aliased(City)
                 results = db.query(
@@ -148,8 +137,6 @@ class DataStore:
                             "avg_duration": r.avg_duration
                         }
                     self._corridors_cache = corridors_dict
-            finally:
-                db.close()
         except Exception as e:
             print(f"Database error loading corridors cache: {e}")
             
