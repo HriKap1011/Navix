@@ -121,22 +121,24 @@ export default async function ResultsPage({
 
   if (!apiError) {
     // Store top 10 routes with highest Navix score to a JSON file
-    try {
-      const sortedByHighestScore = [...rawWithScores].sort((a, b) => b.navixScore - a.navixScore);
-      const top10Routes = sortedByHighestScore.slice(0, 10);
-      const top10Json = JSON.stringify(top10Routes, null, 2);
+    if (process.env.NODE_ENV === "development") {
+      try {
+        const sortedByHighestScore = [...rawWithScores].sort((a, b) => b.navixScore - a.navixScore);
+        const top10Routes = sortedByHighestScore.slice(0, 10);
+        const top10Json = JSON.stringify(top10Routes, null, 2);
 
-      // Save to workspace root for checking
-      fs.writeFileSync(path.join(process.cwd(), "top-10-routes.json"), top10Json, "utf8");
+        // Save to workspace root for checking
+        fs.writeFileSync(path.join(process.cwd(), "top-10-routes.json"), top10Json, "utf8");
 
-      // Save to public directory to view in browser at /top-10-routes.json
-      const publicDir = path.join(process.cwd(), "public");
-      if (!fs.existsSync(publicDir)) {
-        fs.mkdirSync(publicDir);
+        // Save to public directory to view in browser at /top-10-routes.json
+        const publicDir = path.join(process.cwd(), "public");
+        if (!fs.existsSync(publicDir)) {
+          fs.mkdirSync(publicDir);
+        }
+        fs.writeFileSync(path.join(publicDir, "top-10-routes.json"), top10Json, "utf8");
+      } catch (error) {
+        console.error("Failed to write top 10 routes to JSON file:", error);
       }
-      fs.writeFileSync(path.join(publicDir, "top-10-routes.json"), top10Json, "utf8");
-    } catch (error) {
-      console.error("Failed to write top 10 routes to JSON file:", error);
     }
 
     // Filter

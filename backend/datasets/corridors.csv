@@ -1,0 +1,19 @@
+﻿ID,Source City ID,Destination City ID,Demand Level,Migration Relevance,Seasonal Pressure,Avg Duration
+76,701,709,Very High,Standard,Festival Rush,12h
+77,702,709,Very High,High,Standard,12h
+78,703,709,High,Standard,Standard,12h
+79,706,709,High,Standard,Standard,12h
+80,701,710,High,Standard,Festival Rush,12h
+81,701,711,High,Standard,Standard,12h
+82,702,703,High,High,Weekend/Summer,18h
+83,704,707,Moderate,Moderate,Weekend,9h
+84,705,703,High,High,Corporate Rush,14h
+85,711,701,High,High,Daily Migration,8h
+86,712,702,Extreme,High,Daily Business,6h
+87,701,774,High,High,Weekend/Festivals,7h
+88,701,775,Extreme,High,Festivals (Chhath),16h
+89,709,775,Moderate,Standard,Daily commute,2h
+90,706,735,High,Standard,Weekend,7h
+91,702,719,High,High,Weekend/Holiday,11h
+92,701,769,Extreme,High,Festivals (Pitrapaksha/Chhath),14h
+93,706,769,High,Standard,Weekend/Festivals,6h

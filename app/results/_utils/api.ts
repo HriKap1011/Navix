@@ -135,7 +135,7 @@ export async function fetchRoutesFromApi(
       body: JSON.stringify({
         source: origin,
         destination: destination,
-        date: date || "2026-06-15",
+        date: date || new Date().toISOString().split("T")[0],
       }),
       signal: controller.signal,
       next: { revalidate: 0 }

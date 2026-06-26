@@ -1,0 +1,101 @@
+ID,City Name,State,Tier,Importance Score,Demand Category,Latitude,Longitude,Has Airport,Has Train Station,Code,Station
+701,Delhi,State,Tier 1,90,Metropolitan,28.7041,77.1025,True,True,DEL,NDLS
+702,Mumbai,State,Tier 1,90,Metropolitan,19.076,72.8777,True,True,BOM,CSMT
+703,Bengaluru,State,Tier 1,90,Metropolitan,12.9716,77.5946,True,True,BLR,SBC
+704,Hyderabad,State,Tier 1,90,Metropolitan,17.385,78.4867,True,True,HYD,HYB
+705,Pune,State,Tier 1,90,Metropolitan,18.5204,73.8567,True,True,PNQ,PUNE
+706,Kolkata,State,Tier 1,90,Metropolitan,22.5726,88.3639,True,True,CCU,HWH
+707,Chennai,State,Tier 1,90,Metropolitan,13.0827,80.2707,True,True,MAA,MAS
+708,Jaipur,State,Tier 1,90,Metropolitan,26.9124,75.7873,True,True,JAI,JP
+709,Patna,State,Tier 1,90,Metropolitan,25.5941,85.1376,True,True,PAT,PNBE
+710,Varanasi,State,Tier 1,90,Metropolitan,25.3176,82.9739,True,True,VNS,BSB
+711,Lucknow,State,Tier 1,90,Metropolitan,26.8467,80.9462,True,True,LKO,LKO
+712,Ahmedabad,State,Tier 1,90,Metropolitan,23.0225,72.5714,True,True,AMD,ADI
+713,Chandigarh,Union Territory of Chandigarh,Tier 2,75,Standard,30.7333,76.7794,True,True,IXC,CDG
+714,Bhubaneswar,Odisha,Tier 2,70,Standard,20.2961,85.8245,True,True,BBI,BBS
+715,Goa,Goa,Tier 2,85,Standard,15.2993,74.124,True,True,GOI,MAO
+716,Kochi,Kerala,Tier 2,80,Standard,9.9312,76.2673,True,True,COK,ERS
+717,Indore,Madhya Pradesh,Tier 2,78,Standard,22.7196,75.8577,True,True,IDR,INDB
+718,Bhopal,Madhya Pradesh,Tier 2,75,Standard,23.2599,77.4126,True,True,BHO,BPL
+719,Nagpur,Maharashtra,Tier 2,76,Standard,21.1458,79.0882,True,True,NAG,NGP
+720,Surat,Gujarat,Tier 2,80,Standard,21.1702,72.8311,True,True,STV,ST
+721,Kanpur,Uttar Pradesh,Tier 2,74,Standard,26.4499,80.3319,False,True,KNU,CNB
+722,Visakhapatnam,Andhra Pradesh,Tier 2,77,Standard,17.6868,83.2185,True,True,VTZ,VSKP
+723,Agra,Uttar Pradesh,Tier 2,82,Standard,27.1767,78.0081,False,True,AGR,AGC
+724,Vadodara,Gujarat,Tier 2,72,Standard,22.3072,73.1812,True,True,BDQ,BRC
+725,Ghaziabad,Uttar Pradesh,Tier 2,68,Standard,28.6692,77.4538,False,True,GZB,GZB
+726,Ludhiana,Punjab,Tier 2,73,Standard,30.901,75.8573,False,True,LDH,LDH
+727,Nashik,Maharashtra,Tier 2,72,Standard,19.9975,73.7898,False,True,ISK,NK
+728,Faridabad,Haryana,Tier 2,66,Standard,28.4089,77.3178,False,True,FDB,FDB
+729,Meerut,Uttar Pradesh,Tier 2,67,Standard,28.9845,77.7064,False,True,MTC,MTC
+730,Rajkot,Gujarat,Tier 2,70,Standard,22.3039,70.8022,True,True,RAJ,RJT
+731,Srinagar,Jammu and Kashmir,Tier 2,85,Standard,34.0837,74.7973,True,True,SXR,SINA
+732,Aurangabad,Maharashtra,Tier 2,74,Standard,19.8762,75.3433,True,True,IXU,AWB
+733,Dhanbad,Jharkhand,Tier 2,65,Standard,23.7957,86.4304,False,True,DHN,DHN
+734,Amritsar,Punjab,Tier 2,84,Standard,31.634,74.8723,True,True,ATQ,ASR
+735,Ranchi,Jharkhand,Tier 2,72,Standard,23.3441,85.3096,True,True,IXR,RNC
+736,Coimbatore,Tamil Nadu,Tier 2,76,Standard,11.0168,76.9558,True,True,CJB,CBE
+737,Jabalpur,Madhya Pradesh,Tier 2,68,Standard,23.1815,79.9864,True,True,JLR,JBP
+738,Gwalior,Madhya Pradesh,Tier 2,71,Standard,26.2124,78.1772,True,True,GWL,GWL
+739,Vijayawada,Andhra Pradesh,Tier 2,73,Standard,16.5062,80.648,True,True,VGA,BZA
+740,Jodhpur,Rajasthan,Tier 2,80,Standard,26.2389,73.0243,True,True,JDH,JU
+741,Madurai,Tamil Nadu,Tier 2,78,Standard,9.9252,78.1198,True,True,IXM,MDU
+742,Raipur,Chhattisgarh,Tier 2,72,Standard,21.2514,81.6296,True,True,RPR,R
+743,Kota,Rajasthan,Tier 2,70,Standard,25.2138,75.8648,False,True,KOT,KOTA
+744,Guwahati,Assam,Tier 2,82,Standard,26.1445,91.7362,True,True,GAU,GHY
+745,Solapur,Maharashtra,Tier 2,67,Standard,17.6599,75.9064,False,True,SSL,SUR
+746,Bareilly,Uttar Pradesh,Tier 2,66,Standard,28.364,79.415,False,True,BE,BE
+747,Mysore,Karnataka,Tier 2,83,Standard,12.2958,76.6394,True,True,MYQ,MYS
+748,Gurgaon,Haryana,Tier 2,88,Standard,28.4595,77.0266,False,True,GUR,GGN
+749,Aligarh,Uttar Pradesh,Tier 2,65,Standard,27.8974,78.088,False,True,ALJN,ALJN
+750,Jalandhar,Punjab,Tier 2,69,Standard,31.326,75.5762,False,True,JUC,JUC
+751,Tiruchirappalli,Tamil Nadu,Tier 2,74,Standard,10.7905,78.7047,True,True,TRZ,TPJ
+752,Salem,Tamil Nadu,Tier 2,68,Standard,11.6643,78.146,False,True,SXM,SA
+753,Warangal,Telangana,Tier 2,67,Standard,17.9784,79.5941,False,True,WL,WL
+754,Guntur,Andhra Pradesh,Tier 2,68,Standard,16.3067,80.4365,False,True,GNT,GNT
+755,Gorakhpur,Uttar Pradesh,Tier 2,75,Standard,26.7606,83.3731,True,True,GOP,GKP
+756,Bikaner,Rajasthan,Tier 2,72,Standard,28.0166,73.3122,False,True,BKN,BKN
+757,Noida,Uttar Pradesh,Tier 2,85,Standard,28.5355,77.391,False,False,NOD,NDLS
+758,Jamshedpur,Jharkhand,Tier 2,77,Standard,22.8046,86.2029,False,True,IXW,TATA
+759,Bhilai,Chhattisgarh,Tier 2,69,Standard,21.1938,81.3509,False,True,BHI,BPHB
+760,Cuttack,Odisha,Tier 2,68,Standard,20.4625,85.883,False,True,CTC,CTC
+761,Dehradun,Uttarakhand,Tier 2,82,Standard,30.3165,78.0322,True,True,DED,DDN
+762,Kolhapur,Maharashtra,Tier 2,73,Standard,16.705,74.2433,True,True,KLH,KOP
+763,Ajmer,Rajasthan,Tier 2,76,Standard,26.4498,74.6399,False,True,AII,AII
+764,Ujjain,Madhya Pradesh,Tier 2,79,Standard,23.176,75.7885,False,True,UJN,UJN
+765,Jhansi,Uttar Pradesh,Tier 2,72,Standard,25.4484,78.5685,False,True,JHS,VGLJ
+766,Pondicherry,Puducherry,Tier 2,81,Standard,11.9416,79.8083,True,True,PNY,PDY
+767,Jammu,Jammu and Kashmir,Tier 2,77,Standard,32.7266,74.857,True,True,IXJ,JAT
+768,Mangalore,Karnataka,Tier 2,76,Standard,12.9141,74.856,True,True,IXE,MAQ
+769,Gaya,Bihar,Tier 2,78,Standard,24.7914,85.0002,True,True,GAY,GAYA
+770,Udaipur,Rajasthan,Tier 2,84,Standard,24.5854,73.7125,True,True,UDR,UDZ
+771,Kozhikode,Kerala,Tier 2,74,Standard,11.2588,75.7804,True,True,CCJ,CLT
+772,Kurnool,Andhra Pradesh,Tier 2,67,Standard,15.8281,78.0373,True,True,KJB,KRNT
+773,Vellore,Tamil Nadu,Tier 2,72,Standard,12.9165,79.1325,False,True,VLR,KPD
+774,Prayagraj,Uttar Pradesh,Tier 2,78,Standard,25.4358,81.8463,True,True,IXD,PRYJ
+775,Muzaffarpur,Bihar,Tier 2,72,Standard,26.1197,85.391,False,True,MJP,MFP
+776,City1,Uttar Pradesh,Tier 3,40,Standard,10.25,70.18,False,True,C01,C01S
+777,City2,Bihar,Tier 3,40,Standard,10.5,70.36,False,True,C02,C02S
+778,City3,West Bengal,Tier 3,40,Standard,10.75,70.54,False,True,C03,C03S
+779,City4,Madhya Pradesh,Tier 3,40,Standard,11.0,70.72,False,True,C04,C04S
+780,City5,Tamil Nadu,Tier 3,40,Standard,11.25,70.9,False,True,C05,C05S
+781,City6,Rajasthan,Tier 3,40,Standard,11.5,71.08,False,True,C06,C06S
+782,City7,Karnataka,Tier 3,40,Standard,11.75,71.26,False,True,C07,C07S
+783,City8,Gujarat,Tier 3,40,Standard,12.0,71.44,False,True,C08,C08S
+784,City9,Andhra Pradesh,Tier 3,40,Standard,12.25,71.62,False,True,C09,C09S
+785,City10,Maharashtra,Tier 3,40,Standard,12.5,71.8,False,True,C10,C10S
+786,City11,Uttar Pradesh,Tier 3,40,Standard,12.75,71.98,False,True,C11,C11S
+787,City12,Bihar,Tier 3,40,Standard,13.0,72.16,False,True,C12,C12S
+788,City13,West Bengal,Tier 3,40,Standard,13.25,72.34,False,True,C13,C13S
+789,City14,Madhya Pradesh,Tier 3,40,Standard,13.5,72.52,False,True,C14,C14S
+790,City15,Tamil Nadu,Tier 3,40,Standard,13.75,72.7,False,True,C15,C15S
+791,City16,Rajasthan,Tier 3,40,Standard,14.0,72.88,False,True,C16,C16S
+792,City17,Karnataka,Tier 3,40,Standard,14.25,73.06,False,True,C17,C17S
+793,City18,Gujarat,Tier 3,40,Standard,14.5,73.24,False,True,C18,C18S
+794,City19,Andhra Pradesh,Tier 3,40,Standard,14.75,73.42,False,True,C19,C19S
+795,City20,Maharashtra,Tier 3,40,Standard,15.0,73.6,False,True,C20,C20S
+796,City21,Uttar Pradesh,Tier 3,40,Standard,15.25,73.78,False,True,C21,C21S
+797,City22,Bihar,Tier 3,40,Standard,15.5,73.96,False,True,C22,C22S
+798,City23,West Bengal,Tier 3,40,Standard,15.75,74.14,False,True,C23,C23S
+799,City24,Madhya Pradesh,Tier 3,40,Standard,16.0,74.32,False,True,C24,C24S
+800,City25,Tamil Nadu,Tier 3,40,Standard,16.25,74.5,False,True,C25,C25S

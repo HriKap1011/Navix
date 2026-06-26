@@ -85,3 +85,17 @@ class SeasonalDemand(Base):
     price_multiplier = Column(Float, default=1.0)
     crowd_modifier = Column(Integer, default=0)
     description = Column(String(500), nullable=True)
+
+from sqlalchemy import DateTime
+import datetime
+
+class AuditLog(Base):
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    operation = Column(String(50), nullable=False)  # CREATED, UPDATED, DELETED, IMPORTED
+    entity = Column(String(100), nullable=False)    # City, Station, Corridor, etc.
+    record_id = Column(String(50), nullable=True)
+    details = Column(String(1000), nullable=True)
+
