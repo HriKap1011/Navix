@@ -1,90 +1,90 @@
 [
   {
-    "id": "NX-635-T3",
-    "routeCombination": "Kanpur -> Kolkata",
-    "duration": "16h 44m",
-    "estimatedPrice": "INR 1,836",
+    "id": "NX-948-F1",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "3h 50m",
+    "estimatedPrice": "INR 9,994",
     "travelModes": [
-      "Train"
+      "Flight"
     ],
     "legs": [
       {
-        "from": "Kanpur Junction",
-        "to": "Sealdah (SDAH)",
-        "mode": "Train - Humsafar (22317)",
-        "duration": "16h 44m",
-        "departureTime": "12:00",
-        "arrivalTime": "04:44"
+        "from": "Delhi Airport (DEL)",
+        "to": "Patna Airport (PAT)",
+        "mode": "Flight - IndiGo",
+        "duration": "1h 20m",
+        "departureTime": "13:30",
+        "arrivalTime": "14:50"
       }
     ],
-    "recommendationTag": "Easier boarding from nearby station",
+    "recommendationTag": "Direct air route secures high seat confidence",
     "tagTone": "amber",
     "isRecommended": true,
-    "departureTime": "12:00",
-    "arrivalTime": "04:44",
+    "departureTime": "11:30",
+    "arrivalTime": "15:20",
     "layoverDuration": "0m",
-    "estimatedAvailability": 22,
+    "estimatedAvailability": 98,
     "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Easier boarding from nearby station",
-      "crowdLevel": 51,
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Direct air route secures high seat confidence",
+      "crowdLevel": 25,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 93,
-    "comfortScore": 49,
-    "seatLikelihood": 22,
+    "navixScore": 85,
+    "comfortScore": 75,
+    "seatLikelihood": 98,
     "recommendationReasoning": [
-      "Highly economical optimal route",
       "Saves transfer stress",
-      "Bypasses overnight transfer stress"
+      "Highly confident seat availability",
+      "Daylight schedule with no waiting pain"
     ],
-    "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 22,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
+    "waitlistCode": null,
+    "confirmationLikelihood": null,
+    "confirmationProbability": null,
+    "rescueRecommendation": null
   },
   {
-    "id": "NX-635-B1",
-    "routeCombination": "Kanpur -> Kolkata",
-    "duration": "21h 54m",
-    "estimatedPrice": "INR 3,466",
+    "id": "NX-948-B1",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "20h 39m",
+    "estimatedPrice": "INR 3,173",
     "travelModes": [
       "Sleeper Bus"
     ],
     "legs": [
       {
-        "from": "Kanpur",
-        "to": "Kolkata",
+        "from": "Delhi",
+        "to": "Patna",
         "mode": "Sleeper Bus - Zingbus Premium",
-        "duration": "21h 54m",
+        "duration": "20h 39m",
         "departureTime": "20:00",
-        "arrivalTime": "17:54"
+        "arrivalTime": "16:39"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "20:00",
-    "arrivalTime": "17:54",
+    "arrivalTime": "16:39",
     "layoverDuration": "0m",
-    "estimatedAvailability": 29,
+    "estimatedAvailability": 51,
     "confidenceScore": 85,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
       "seasonalTip": "Easier Transfer",
-      "crowdLevel": 57,
+      "crowdLevel": 47,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 69,
-    "comfortScore": 43,
-    "seatLikelihood": 29,
+    "navixScore": 63,
+    "comfortScore": 53,
+    "seatLikelihood": 51,
     "recommendationReasoning": [
       "Easier Transfer"
     ],
@@ -94,104 +94,251 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-635-T1",
-    "routeCombination": "Kanpur -> Kolkata",
-    "duration": "16h 44m",
-    "estimatedPrice": "INR 1,836",
+    "id": "NX-948-T3",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "15h 46m",
+    "estimatedPrice": "INR 1,678",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
-        "from": "Kanpur Junction",
-        "to": "Howrah Jn (HWH)",
-        "mode": "Train - Exp (12393)",
-        "duration": "16h 44m",
-        "departureTime": "07:30",
-        "arrivalTime": "00:14"
+        "from": "New Delhi (NDLS)",
+        "to": "Danapur (DNR)",
+        "mode": "Train - Humsafar (22317)",
+        "duration": "15h 46m",
+        "departureTime": "12:00",
+        "arrivalTime": "03:46"
       }
     ],
     "recommendationTag": "Best Value Comfort",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "07:30",
-    "arrivalTime": "00:14",
+    "departureTime": "12:00",
+    "arrivalTime": "03:46",
     "layoverDuration": "0m",
-    "estimatedAvailability": 8,
+    "estimatedAvailability": 39,
     "confidenceScore": 90,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "High",
       "bookingUrgency": "Book immediately",
       "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 70,
+      "crowdLevel": 41,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 50,
-    "comfortScore": 30,
-    "seatLikelihood": 8,
+    "navixScore": 61,
+    "comfortScore": 59,
+    "seatLikelihood": 39,
     "recommendationReasoning": [
       "Best Value Comfort"
     ],
-    "waitlistCode": "GNWL 55 / WL 33",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 8,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at nearby terminals!"
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 39,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   },
   {
-    "id": "NX-635-S1",
-    "routeCombination": "Kanpur -> Kolkata",
-    "duration": "19h 16m",
-    "estimatedPrice": "INR 2,374",
+    "id": "NX-948-T2",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "15h 46m",
+    "estimatedPrice": "INR 1,678",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Anand Vihar Terminal (ANVT)",
+        "to": "Patna Jn (PNBE)",
+        "mode": "Train - SF Exp (12395)",
+        "duration": "15h 46m",
+        "departureTime": "08:15",
+        "arrivalTime": "00:01"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "08:15",
+    "arrivalTime": "00:01",
+    "layoverDuration": "0m",
+    "estimatedAvailability": 36,
+    "confidenceScore": 80,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 43,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 59,
+    "comfortScore": 57,
+    "seatLikelihood": 36,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "RLWL 10 / WL 4",
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 36,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "NX-948-H1",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "13h 11m",
+    "estimatedPrice": "INR 7,672",
+    "travelModes": [
+      "Flight",
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Delhi Airport (DEL)",
+        "to": "Lucknow Airport (LKO)",
+        "mode": "Flight - IndiGo",
+        "duration": "0h 40m",
+        "departureTime": "11:00",
+        "arrivalTime": "11:40"
+      },
+      {
+        "from": "Lucknow Charbagh (LKO)",
+        "to": "Patna Jn (PNBE)",
+        "mode": "Train - SF Exp",
+        "duration": "8h 01m",
+        "departureTime": "14:10",
+        "arrivalTime": "22:11"
+      }
+    ],
+    "recommendationTag": "Air hybrid saves hours vs direct rail",
+    "tagTone": "violet",
+    "isRecommended": false,
+    "departureTime": "09:00",
+    "arrivalTime": "22:11",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 55,
+    "confidenceScore": 85,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Air hybrid saves hours vs direct rail",
+      "crowdLevel": 30,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 35,
+    "comfortScore": 70,
+    "seatLikelihood": 55,
+    "recommendationReasoning": [
+      "Air hybrid saves hours vs direct rail"
+    ],
+    "waitlistCode": null,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 55,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "NX-948-T1",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "15h 46m",
+    "estimatedPrice": "INR 1,678",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi (NDLS)",
+        "to": "Patna Jn (PNBE)",
+        "mode": "Train - Exp (12393)",
+        "duration": "15h 46m",
+        "departureTime": "07:30",
+        "arrivalTime": "23:16"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "07:30",
+    "arrivalTime": "23:16",
+    "layoverDuration": "0m",
+    "estimatedAvailability": 15,
+    "confidenceScore": 90,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 60,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 33,
+    "comfortScore": 40,
+    "seatLikelihood": 15,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "GNWL 48 / WL 29",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 15,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar Terminal (ANVT)!"
+  },
+  {
+    "id": "NX-948-S1",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "18h 53m",
+    "estimatedPrice": "INR 2,317",
     "travelModes": [
       "Bus",
       "Train"
     ],
     "legs": [
       {
-        "from": "Kanpur",
-        "to": "Varanasi",
+        "from": "Delhi",
+        "to": "Lucknow",
         "mode": "Intercity Bus - IntrCity AC",
-        "duration": "6h 22m",
+        "duration": "9h 22m",
         "departureTime": "06:00",
-        "arrivalTime": "12:22"
+        "arrivalTime": "15:22"
       },
       {
-        "from": "Varanasi Jn (BSB)",
-        "to": "Howrah Jn (HWH)",
+        "from": "Lucknow Charbagh (LKO)",
+        "to": "Patna Jn (PNBE)",
         "mode": "Train - SF Exp",
-        "duration": "11h 24m",
-        "departureTime": "13:52",
-        "arrivalTime": "01:16"
+        "duration": "8h 01m",
+        "departureTime": "16:52",
+        "arrivalTime": "00:53"
       }
     ],
     "recommendationTag": "Lower crowding than main corridor",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "06:00",
-    "arrivalTime": "01:16",
+    "arrivalTime": "00:53",
     "layoverDuration": "1h 30m",
-    "estimatedAvailability": 27,
+    "estimatedAvailability": 46,
     "confidenceScore": 80,
     "difficulty": "Moderate",
     "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
       "seasonalTip": "Lower crowding than main corridor",
-      "crowdLevel": 55,
+      "crowdLevel": 45,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 49,
-    "comfortScore": 45,
-    "seatLikelihood": 27,
+    "navixScore": 33,
+    "comfortScore": 55,
+    "seatLikelihood": 46,
     "recommendationReasoning": [
       "Lower crowding than main corridor"
     ],
     "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 27,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 46,
     "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   }
 ]

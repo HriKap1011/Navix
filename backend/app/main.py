@@ -3,8 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import RouteSearchRequest, RouteSearchResponse
 from app.generator import generate_routes
 from app.data_store import store
+from app.database import Base, engine
+from app.admin_api import router as admin_router
+
+# Automatically create missing database tables (like audit_logs) on startup
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Navix Backend API")
+app.include_router(admin_router)
+
 
 # Configure CORS so local Next.js frontend can communicate with the backend
 app.add_middleware(
