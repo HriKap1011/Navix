@@ -191,5 +191,32 @@ class DataStore:
         city_code = cleaned[:3].upper()
         return [city_code, f"{city_code}C", f"{city_code}N"]
 
+class ProviderProxy:
+    @property
+    def _active_provider(self):
+        from app.providers.registry import get_active_provider
+        return get_active_provider()
+
+    @property
+    def cities(self) -> List[Dict[str, Any]]:
+        return self._active_provider.get_all_cities()
+
+    @property
+    def corridors(self) -> Dict[str, Dict[str, Any]]:
+        return self._active_provider.get_all_corridors()
+
+    def is_valid_city(self, name: str) -> bool:
+        return self._active_provider.is_valid_city(name)
+
+    def get_city(self, name: str) -> Dict[str, Any]:
+        return self._active_provider.search_city(name)
+
+    def get_station_name(self, code: str) -> str:
+        stations = self._active_provider.search_stations()
+        return stations.get(code.upper().strip(), f"{code} Station")
+
+    def get_nearby_stations(self, city_name: str) -> List[str]:
+        return self._active_provider.get_nearby_stations(city_name)
+
 # Shared instance across the app
-store = DataStore()
+store = ProviderProxy()

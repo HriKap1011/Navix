@@ -40,8 +40,16 @@ def get_hash_seed(origin: str, destination: str, date: str) -> int:
     key = f"{origin.lower()}-{destination.lower()}-{date}"
     return int(hashlib.md5(key.encode()).hexdigest(), 16)
 
-def find_intermediate_hub(src_city: Dict[str, Any], dest_city: Dict[str, Any], must_have_airport: bool = False) -> str:
-    candidate_cities = store.cities
+def find_intermediate_hub(src_city: Dict[str, Any], dest_city: Dict[str, Any], must_have_airport: bool = False, provider: Any = None) -> str:
+    if provider is None:
+        from app.data_store import store
+        provider = store
+        
+    if hasattr(provider, "get_all_cities"):
+        candidate_cities = provider.get_all_cities()
+    else:
+        candidate_cities = provider.cities
+
     if not candidate_cities:
         if must_have_airport:
             return "Varanasi"
@@ -81,23 +89,73 @@ def find_intermediate_hub(src_city: Dict[str, Any], dest_city: Dict[str, Any], m
         return "Thane"
     return "Varanasi"
 
+import time
+import logging
+
+logger = logging.getLogger("navix.providers")
+
 def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, Any]]:
-    src_city = store.get_city(source)
-    dest_city = store.get_city(destination)
+    """
+    Core entrypoint for searching routes. Retrieves the active provider and executes search_routes
+    with runtime error handling and fallbacks.
+    """
+    from app.providers.registry import get_active_provider, _registry
+    
+    provider = get_active_provider()
+    provider_name = provider.__class__.__name__
+    
+    start_time = time.perf_counter()
+    logger.info(f"Provider selected: {provider_name} for {source} -> {destination} on {date}")
+    
+    try:
+        routes = provider.search_routes(source, destination, date)
+        query_time_ms = (time.perf_counter() - start_time) * 1000
+        logger.info(f"Provider {provider_name} successfully returned {len(routes)} records in {query_time_ms:.2f}ms")
+        return routes
+    except Exception as e:
+        query_time_ms = (time.perf_counter() - start_time) * 1000
+        logger.error(f"Provider failure: {provider_name} failed in {query_time_ms:.2f}ms: {e}. Attempting fallbacks...")
+        
+        # Runtime Fallback loop: DATABASE -> CSV -> MOCK
+        fallbacks = ["DATABASE", "CSV", "MOCK"]
+        primary_provider_key = provider_name.replace("Provider", "").upper()
+        
+        for fb in fallbacks:
+            if fb == primary_provider_key:
+                continue
+            if fb not in _registry:
+                continue
+                
+            fb_start_time = time.perf_counter()
+            logger.warning(f"Runtime fallback: attempting provider {fb}")
+            try:
+                fb_provider_cls = _registry[fb]
+                fb_provider = fb_provider_cls()
+                routes = fb_provider.search_routes(source, destination, date)
+                fb_time_ms = (time.perf_counter() - fb_start_time) * 1000
+                logger.info(f"Runtime fallback to {fb} succeeded in {fb_time_ms:.2f}ms. Returned {len(routes)} records.")
+                return routes
+            except Exception as fe:
+                fb_time_ms = (time.perf_counter() - fb_start_time) * 1000
+                logger.error(f"Runtime fallback to {fb} failed in {fb_time_ms:.2f}ms: {fe}")
+                
+        raise RuntimeError(f"All travel providers failed to process search. Primary error: {e}")
+
+def generate_routes_for_provider(source: str, destination: str, date: str, provider: Any) -> List[Dict[str, Any]]:
+    src_city = provider.get_city(source)
+    dest_city = provider.get_city(destination)
     
     if src_city["name"].lower() == dest_city["name"].lower():
         return []
         
-    corridor_key = f"{src_city['name'].lower()}-{dest_city['name'].lower()}"
-    corridor = store.corridors.get(corridor_key)
-        
+    corridor = provider.get_corridor(src_city["name"], dest_city["name"])
     distance = calculate_distance(src_city["lat"], src_city["lon"], dest_city["lat"], dest_city["lon"])
     demand = analyze_travel_demand(src_city["name"], dest_city["name"], date)
     seed = get_hash_seed(src_city["name"], dest_city["name"], date)
     
     # Predefined stations
-    src_stations = store.get_nearby_stations(src_city["name"])
-    dest_stations = store.get_nearby_stations(dest_city["name"])
+    src_stations = provider.get_nearby_stations(src_city["name"])
+    dest_stations = provider.get_nearby_stations(dest_city["name"])
     
     routes = []
     
@@ -111,8 +169,8 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
     comfort_1 = max(10, min(100, 55 + demand.comfort_modifier))
     
     leg_1 = {
-        "from_city": store.get_station_name(src_stations[0]),
-        "to_city": store.get_station_name(dest_stations[0]),
+        "from_city": provider.get_station_name(src_stations[0]),
+        "to_city": provider.get_station_name(dest_stations[0]),
         "mode": "Train - Exp (12393)",
         "duration": format_duration(duration_min_1),
         "departure_time": dep_time_1,
@@ -143,7 +201,7 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         direct_train["confirmation_probability"] = seat_1
         direct_train["confirmation_likelihood"] = "Low" if seat_1 < 25 else "Medium"
         direct_train["peak_demand_factor"] = f"{demand.active_festival or 'Peak'} Rush"
-        direct_train["rescue_recommendation"] = f"Navix Comfort Tip: Secure better seat availability by boarding at {store.get_station_name(src_stations[1]) if len(src_stations) > 1 else 'nearby terminals'}!"
+        direct_train["rescue_recommendation"] = f"Navix Comfort Tip: Secure better seat availability by boarding at {provider.get_station_name(src_stations[1]) if len(src_stations) > 1 else 'nearby terminals'}!"
         direct_train["recommendation_reason"] = "Congested main express route"
         
         if corridor:
@@ -155,7 +213,7 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
             elif "high" in mig.lower():
                 direct_train["peak_demand_factor"] = "High Migration Flow"
                 direct_train["recommendation_reason"] = "High migration corridor"
-
+ 
     routes.append(direct_train)
     
     # 2. SMART BOARDING (Alternate Origin)
@@ -169,8 +227,8 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         comfort_2 = max(10, min(100, 72 + demand.comfort_modifier))
         
         leg_2 = {
-            "from_city": store.get_station_name(alt_origin),
-            "to_city": store.get_station_name(dest_stations[0]),
+            "from_city": provider.get_station_name(alt_origin),
+            "to_city": provider.get_station_name(dest_stations[0]),
             "mode": "Train - SF Exp (12395)",
             "duration": format_duration(duration_min_2),
             "departure_time": dep_time_2,
@@ -212,8 +270,8 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         comfort_3 = max(10, min(100, 74 + demand.comfort_modifier))
         
         leg_3 = {
-            "from_city": store.get_station_name(src_stations[0]),
-            "to_city": store.get_station_name(alt_dest),
+            "from_city": provider.get_station_name(src_stations[0]),
+            "to_city": provider.get_station_name(alt_dest),
             "mode": "Train - Humsafar (22317)",
             "duration": format_duration(duration_min_3),
             "departure_time": dep_time_3,
@@ -238,10 +296,10 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         }
         
         routes.append(congestion_bypass)
-
+ 
     # 4. SMART SPLIT (Bus + Train via Intermediate Transit Hub)
-    transit_hub = find_intermediate_hub(src_city, dest_city, must_have_airport=False)
-    hub_city = store.get_city(transit_hub)
+    transit_hub = find_intermediate_hub(src_city, dest_city, must_have_airport=False, provider=provider)
+    hub_city = provider.get_city(transit_hub)
     if hub_city["name"].lower() != src_city["name"].lower() and hub_city["name"].lower() != dest_city["name"].lower():
         dist_leg_1 = calculate_distance(src_city["lat"], src_city["lon"], hub_city["lat"], hub_city["lon"])
         dist_leg_2 = calculate_distance(hub_city["lat"], hub_city["lon"], dest_city["lat"], dest_city["lon"])
@@ -268,8 +326,8 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
             "arrival_time": arr_time_s1
         }
         leg_s2 = {
-            "from_city": store.get_station_name(hub_city["station"]),
-            "to_city": store.get_station_name(dest_stations[0]),
+            "from_city": provider.get_station_name(hub_city["station"]),
+            "to_city": provider.get_station_name(dest_stations[0]),
             "mode": "Train - SF Exp",
             "duration": format_duration(dur_leg_2),
             "departure_time": dep_time_s2,
@@ -293,7 +351,7 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
             "layover_duration": format_duration(layover)
         }
         routes.append(smart_split)
-
+ 
     # 5. OVERNIGHT SLEEPER BUS
     duration_min_4 = round((distance / SPEED_BUS) * 60)
     dep_time_4 = "20:00"
@@ -328,7 +386,7 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
         "layover_duration": "0m"
     }
     routes.append(overnight_bus)
-
+ 
     # 6. PREMIUM FLIGHT (if airports exist)
     if src_city["has_airport"] and dest_city["has_airport"] and distance > 300:
         flight_time_min = round((distance / SPEED_FLIGHT) * 60)
@@ -367,10 +425,10 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
             "layover_duration": "0m"
         }
         routes.append(premium_flight)
-
+ 
     # 7. FLIGHT + TRAIN HYBRID (if source has airport, and intermediate hub has airport)
-    air_hub = find_intermediate_hub(src_city, dest_city, must_have_airport=True)
-    air_hub_city = store.get_city(air_hub)
+    air_hub = find_intermediate_hub(src_city, dest_city, must_have_airport=True, provider=provider)
+    air_hub_city = provider.get_city(air_hub)
     if src_city["has_airport"] and air_hub_city["has_airport"] and air_hub_city["name"].lower() != dest_city["name"].lower():
         dist_h1 = calculate_distance(src_city["lat"], src_city["lon"], air_hub_city["lat"], air_hub_city["lon"])
         dist_h2 = calculate_distance(air_hub_city["lat"], air_hub_city["lon"], dest_city["lat"], dest_city["lon"])
@@ -398,8 +456,8 @@ def generate_routes(source: str, destination: str, date: str) -> List[Dict[str, 
             "arrival_time": add_minutes_to_time(dep_time_h, 120 + flight_t_min)
         }
         leg_h2 = {
-            "from_city": store.get_station_name(air_hub_city["station"]),
-            "to_city": store.get_station_name(dest_stations[0]),
+            "from_city": provider.get_station_name(air_hub_city["station"]),
+            "to_city": provider.get_station_name(dest_stations[0]),
             "mode": "Train - SF Exp",
             "duration": format_duration(dur_h2),
             "departure_time": dep_time_h2,

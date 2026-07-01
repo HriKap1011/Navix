@@ -99,3 +99,56 @@ class AuditLog(Base):
     record_id = Column(String(50), nullable=True)
     details = Column(String(1000), nullable=True)
 
+
+class SystemSetting(Base):
+    __tablename__ = "system_settings"
+
+    key = Column(String(100), primary_key=True)
+    value = Column(String(500), nullable=False)
+    description = Column(String(500), nullable=True)
+    category = Column(String(50), default="General")
+
+
+class SearchLog(Base):
+    __tablename__ = "search_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    source = Column(String(100), nullable=False)
+    destination = Column(String(100), nullable=False)
+    date = Column(String(20), nullable=True)
+    success = Column(Boolean, default=True)
+    results_count = Column(Integer, default=0)
+    response_time_ms = Column(Float, default=0.0)
+    error_message = Column(String(500), nullable=True)
+
+
+class APIMetric(Base):
+    __tablename__ = "api_metrics"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    path = Column(String(200), nullable=False)
+    method = Column(String(10), nullable=False)
+    status_code = Column(Integer, nullable=False)
+    response_time_ms = Column(Float, default=0.0)
+
+
+class SyncHistory(Base):
+    __tablename__ = "sync_history"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    provider = Column(String(100), nullable=False)
+    target = Column(String(100), nullable=False)
+    start_time = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    end_time = Column(DateTime, nullable=True)
+    duration = Column(Float, nullable=True)
+    new_records = Column(Integer, default=0)
+    updated_records = Column(Integer, default=0)
+    removed_records = Column(Integer, default=0)
+    validation_errors = Column(Integer, default=0)
+    status = Column(String(50), default="RUNNING")  # SUCCESS, FAILED, RUNNING
+    logs = Column(String(4000), nullable=True)
+
+
+

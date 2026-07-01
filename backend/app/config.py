@@ -1,28 +1,60 @@
 import os
+from typing import Any
 
 # Database configuration
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:1357@localhost:5432/navix")
 
-# Transport speeds (km/h)
-SPEED_TRAIN = 55.0
-SPEED_BUS = 42.0
-SPEED_BUS_INTERCITY = 46.0
-SPEED_FLIGHT = 650.0
+# Default values for dynamic settings
+_DEFAULTS = {
+    "SPEED_TRAIN": 55.0,
+    "SPEED_BUS": 42.0,
+    "SPEED_BUS_INTERCITY": 46.0,
+    "SPEED_FLIGHT": 650.0,
+    "COST_BASE_TRAIN": 180.0,
+    "COST_BASE_BUS": 400.0,
+    "COST_BASE_BUS_INTERCITY": 200.0,
+    "COST_BASE_FLIGHT": 2500.0,
+    "WEIGHT_COMFORT": 0.20,
+    "WEIGHT_FRICTION": 0.20,
+    "WEIGHT_SEAT": 0.15,
+    "WEIGHT_TRANSFERS": 0.15,
+    "WEIGHT_PRICE": 0.15,
+    "WEIGHT_DURATION": 0.10,
+    "WEIGHT_AVAILABILITY": 0.05,
+    "COMFORT_THRESHOLD": 70.0,
+    "RECOMMENDATION_THRESHOLD": 60.0,
+    "IMPORT_LOCATION": "database_export",
+    "FEATURE_FLAG_AIR_HYBRID": True,
+    "ACTIVE_PROVIDER": "DATABASE",
+}
 
-# Transport pricing/cost constants
-COST_BASE_TRAIN = 180
-COST_BASE_BUS = 400
-COST_BASE_BUS_INTERCITY = 200
-COST_BASE_FLIGHT = 2500
+def get_setting(key: str, default: Any) -> Any:
+    """
+    Retrieve setting value from database system_settings table if available.
+    Falls back to default value.
+    """
+    try:
+        from app.database import SessionLocal
+        from app.models import SystemSetting
+        with SessionLocal() as db:
+            setting = db.query(SystemSetting).filter(SystemSetting.key == key).first()
+            if setting is not None:
+                val = setting.value
+                if isinstance(default, bool):
+                    return val.lower() in ("true", "1", "yes", "on")
+                elif isinstance(default, int):
+                    return int(val)
+                elif isinstance(default, float):
+                    return float(val)
+                return val
+    except Exception:
+        pass
+    return default
 
-# Scoring weights (must sum to 1.0)
-WEIGHT_COMFORT = 0.20
-WEIGHT_FRICTION = 0.20
-WEIGHT_SEAT = 0.15
-WEIGHT_TRANSFERS = 0.15
-WEIGHT_PRICE = 0.15
-WEIGHT_DURATION = 0.10
-WEIGHT_AVAILABILITY = 0.05
+def __getattr__(name: str) -> Any:
+    if name in _DEFAULTS:
+        return get_setting(name, _DEFAULTS[name])
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 # Supported modes
 TRANSPORT_MODES = ["Train", "Sleeper Bus", "Bus", "Flight"]
@@ -37,3 +69,4 @@ FALLBACK_FESTIVALS = [
     { "name": "Chhath Puja", "start_month": 11, "start_day": 12, "end_month": 11, "end_day": 17 },
     { "name": "New Year", "start_month": 12, "start_day": 25, "end_month": 1, "end_day": 5 }
 ]
+
