@@ -23,25 +23,11 @@ def get_festivals_list() -> List[Dict[str, Any]]:
         
     festivals_list = []
     try:
-        from app.database import db_session
-        from app.models import SeasonalDemand
-        with db_session() as db:
-            db_festivals = db.query(SeasonalDemand).all()
-            if db_festivals:
-                for f in db_festivals:
-                    festivals_list.append({
-                        "name": f.festival_name,
-                        "start_month": f.start_month,
-                        "start_day": f.start_day,
-                        "end_month": f.end_month,
-                        "end_day": f.end_day,
-                        "seat_modifier": f.seat_modifier,
-                        "comfort_modifier": f.comfort_modifier,
-                        "price_multiplier": f.price_multiplier,
-                        "crowd_modifier": f.crowd_modifier
-                    })
+        from app.providers.registry import get_active_provider
+        provider = get_active_provider()
+        festivals_list = provider.get_seasonal_demands()
     except Exception as e:
-        print(f"Database error in analyze_travel_demand load cache, falling back to memory: {e}")
+        print(f"Error in analyze_travel_demand load cache via provider, falling back to memory: {e}")
 
     if not festivals_list:
         festivals_list = [
