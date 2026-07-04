@@ -1,0 +1,14 @@
+{
+    "DATABASE": {
+        "status": "Active",
+        "priority": 1
+    },
+    "CSV": {
+        "status": "Active",
+        "priority": 2
+    },
+    "MOCK": {
+        "status": "Active",
+        "priority": 3
+    }
+}

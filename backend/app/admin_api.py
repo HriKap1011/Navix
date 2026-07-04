@@ -755,3 +755,103 @@ def list_audit_logs(
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load audit logs: {str(e)}")
+
+
+# 9. Data Sources
+def serialize_metadata(meta):
+    return {
+        "source_id": meta.source_id,
+        "name": meta.name,
+        "type": meta.type,
+        "status": meta.status,
+        "priority": meta.priority,
+        "last_sync": meta.last_sync.isoformat() if meta.last_sync else None,
+        "refresh_frequency_sec": meta.refresh_frequency_sec,
+        "supported_transport_modes": meta.supported_transport_modes,
+        "version": meta.version,
+        "health_status": meta.health_status,
+        "consecutive_failures": meta.consecutive_failures,
+        "average_response_time_ms": meta.average_response_time_ms,
+        "total_records_count": meta.total_records_count,
+        "validation_issues_count": meta.validation_issues_count
+    }
+
+@router.get("/data-sources")
+def list_data_sources():
+    from app.data_sources.registry import registry
+    connectors = registry.get_all_connectors()
+    return {
+        "success": True,
+        "data": [serialize_metadata(c.metadata()) for c in connectors]
+    }
+
+@router.post("/data-sources/{source_id}/toggle")
+def toggle_data_source(source_id: str, db: Session = Depends(get_db)):
+    from app.data_sources.registry import registry
+    conn = registry.get_connector(source_id)
+    if not conn:
+        raise HTTPException(status_code=404, detail=f"Data source '{source_id}' not found")
+        
+    meta = conn.metadata()
+    new_status = "Inactive" if meta.status == "Active" else "Active"
+    registry.update_source_status(source_id, new_status)
+    
+    log_audit(db, "TOGGLED_SOURCE", "DataSource", None, f"Toggled Data Source '{source_id}' to status '{new_status}'")
+    return {"success": True, "data": serialize_metadata(meta)}
+
+@router.post("/data-sources/{source_id}/sync")
+def sync_data_source(source_id: str, db: Session = Depends(get_db)):
+    from app.data_sources.registry import registry
+    from app.data_sources.health import health_monitor
+    conn = registry.get_connector(source_id)
+    if not conn:
+        raise HTTPException(status_code=404, detail=f"Data source '{source_id}' not found")
+        
+    start_time = time.perf_counter()
+    try:
+        conn.connect()
+        valid = conn.validate()
+        healthy = conn.health_check()
+        duration = (time.perf_counter() - start_time) * 1000
+        
+        # Pull count
+        routes = conn.fetch("Delhi", "Patna", "2026-11-05")
+        health_monitor.log_success(conn.metadata(), duration, len(routes))
+        
+        log_audit(db, "SYNC_SOURCE", "DataSource", None, f"Manually synced and validated Data Source '{source_id}' in {duration:.2f}ms")
+        return {"success": True, "data": serialize_metadata(conn.metadata())}
+    except Exception as ex:
+        duration = (time.perf_counter() - start_time) * 1000
+        health_monitor.log_failure(conn.metadata(), duration)
+        raise HTTPException(status_code=500, detail=f"Sync failed for source '{source_id}': {ex}")
+
+@router.get("/data-sources/{source_id}/connector")
+def get_connector_details(source_id: str):
+    from app.data_sources.registry import registry
+    conn = registry.get_connector(source_id)
+    if not conn:
+        raise HTTPException(status_code=404, detail=f"Data source '{source_id}' not found")
+    meta = conn.metadata()
+    return {
+        "success": True,
+        "connector_class": conn.__class__.__name__,
+        "supported_transport_modes": meta.supported_transport_modes,
+        "validation_issues_count": meta.validation_issues_count,
+        "version": meta.version
+    }
+
+@router.post("/data-sources/{source_id}/priority")
+def set_data_source_priority(source_id: str, payload: dict, db: Session = Depends(get_db)):
+    from app.data_sources.registry import registry
+    conn = registry.get_connector(source_id)
+    if not conn:
+        raise HTTPException(status_code=404, detail=f"Data source '{source_id}' not found")
+    
+    priority = payload.get("priority")
+    if priority is None or not isinstance(priority, int):
+        raise HTTPException(status_code=400, detail="Invalid priority value (must be integer)")
+        
+    registry.update_source_priority(source_id, priority)
+    log_audit(db, "SET_PRIORITY", "DataSource", None, f"Set Data Source '{source_id}' priority to {priority}")
+    return {"success": True, "data": serialize_metadata(conn.metadata())}
+
