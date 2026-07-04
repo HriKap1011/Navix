@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+import time
 from typing import Optional, List
 import logging
 
@@ -693,7 +694,6 @@ def run_import(
         elif target == "seasonal":
             report = import_seasonal_demands(db, temp_path)
             
-        if report:
             log_audit(
                 db, 
                 "IMPORTED", 
@@ -701,6 +701,13 @@ def run_import(
                 None, 
                 f"File: {filename}. New: {report.imported}, Updated: {report.updated}, Skipped: {report.skipped}, Errors: {report.validation_errors}"
             )
+            # Rebuild Travel Knowledge Graph to reflect imports
+            try:
+                from app.graph.graph_builder import rebuild_graph
+                rebuild_graph()
+            except Exception as ge:
+                logger.error(f"Failed to auto-rebuild TKG: {ge}")
+                
             return {
                 "success": True,
                 "name": report.name,
@@ -854,4 +861,87 @@ def set_data_source_priority(source_id: str, payload: dict, db: Session = Depend
     registry.update_source_priority(source_id, priority)
     log_audit(db, "SET_PRIORITY", "DataSource", None, f"Set Data Source '{source_id}' priority to {priority}")
     return {"success": True, "data": serialize_metadata(conn.metadata())}
+
+
+# 10. Travel Network Graph
+@router.get("/graph/stats")
+def get_graph_stats():
+    from app.graph.graph_service import TravelGraphService
+    return TravelGraphService.get_stats()
+
+@router.post("/graph/rebuild")
+def rebuild_graph_manually(db: Session = Depends(get_db)):
+    from app.graph.graph_service import TravelGraphService
+    success = TravelGraphService.rebuild()
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to rebuild Travel Knowledge Graph")
+    log_audit(db, "REBUILT_GRAPH", "TravelKnowledgeGraph", None, "Manually rebuilt Travel Knowledge Graph from database")
+    return TravelGraphService.get_stats()
+
+@router.get("/graph/node")
+def get_graph_node(id: str):
+    from app.graph.graph_builder import tkg
+    if id not in tkg.nodes:
+        raise HTTPException(status_code=404, detail=f"Node '{id}' not found")
+        
+    node = tkg.nodes[id]
+    edges = []
+    
+    # Outgoing edges
+    connections = tkg.edges.get(id, [])
+    for target_id, edge_type, props in connections:
+        edges.append({
+            "source_id": id,
+            "target_id": target_id,
+            "target_name": tkg.nodes.get(target_id, {}).get("properties", {}).get("name", target_id),
+            "target_type": tkg.nodes.get(target_id, {}).get("type", "Unknown"),
+            "edge_type": edge_type,
+            "properties": props,
+            "direction": "outgoing"
+        })
+        
+    # Incoming edges
+    for source_id, conns in tkg.edges.items():
+        if source_id == id:
+            continue
+        for target_id, edge_type, props in conns:
+            if target_id == id:
+                if edge_type in ["CONNECTED_TO", "NEARBY"]:
+                    continue
+                edges.append({
+                    "source_id": source_id,
+                    "source_name": tkg.nodes.get(source_id, {}).get("properties", {}).get("name", source_id),
+                    "source_type": tkg.nodes.get(source_id, {}).get("type", "Unknown"),
+                    "target_id": id,
+                    "edge_type": edge_type,
+                    "properties": props,
+                    "direction": "incoming"
+                })
+                
+    return {
+        "success": True,
+        "id": id,
+        "type": node["type"],
+        "properties": node["properties"],
+        "edges": edges
+    }
+
+@router.get("/graph/search")
+def search_graph_nodes(query: str = ""):
+    from app.graph.graph_builder import tkg
+    results = []
+    q = query.lower().strip()
+    for node_id, data in tkg.nodes.items():
+        name = data["properties"].get("name", "").lower()
+        code = data["properties"].get("code", "").lower()
+        if not q or q in name or q in code or q in node_id.lower():
+            results.append({
+                "id": node_id,
+                "name": data["properties"].get("name", node_id),
+                "type": data["type"],
+                "properties": data["properties"]
+            })
+    return {"success": True, "results": results[:20]}
+
+
 

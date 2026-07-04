@@ -8,6 +8,8 @@ import { fetchRoutesFromApi } from "./_utils/api";
 import fs from "fs";
 import path from "path";
 
+export const dynamic = "force-dynamic";
+
 
 
 const formatFlexibleMonth = (monthStr: string): string => {
@@ -334,7 +336,7 @@ export default async function ResultsPage({
                 { label: "Train", value: "train" },
                 { label: "Bus", value: "bus" },
               ].map((opt) => (
-                <Link
+                <a
                   key={opt.value}
                   href={createHref({ mode: opt.value === "all" ? "" : opt.value })}
                   className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${mode === opt.value
@@ -343,7 +345,7 @@ export default async function ResultsPage({
                     }`}
                 >
                   {opt.label}
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -357,7 +359,7 @@ export default async function ResultsPage({
                 { label: "Price", value: "price" },
                 { label: "Duration", value: "duration" },
               ].map((opt) => (
-                <Link
+                <a
                   key={opt.value}
                   href={createHref({ sort: opt.value === "score" ? "" : opt.value })}
                   className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${sort === opt.value
@@ -366,7 +368,7 @@ export default async function ResultsPage({
                     }`}
                 >
                   {opt.label}
-                </Link>
+                </a>
               ))}
             </div>
           </div>

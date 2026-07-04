@@ -12,6 +12,12 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Navix Backend API")
 app.include_router(admin_router)
 
+@app.on_event("startup")
+def startup_event():
+    from app.graph.graph_builder import rebuild_graph
+    rebuild_graph()
+
+
 
 # Configure CORS so local Next.js frontend can communicate with the backend
 app.add_middleware(

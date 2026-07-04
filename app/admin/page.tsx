@@ -77,6 +77,11 @@ const Icons = {
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
     </svg>
+  ),
+  Network: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+    </svg>
   )
 };
 
@@ -90,6 +95,13 @@ export default function AdminDashboard() {
     total_seasonal: 0,
     last_import_time: null
   });
+  const [graphStats, setGraphStats] = useState<any>(null);
+  const [graphSearch, setGraphSearch] = useState<string>("");
+  const [graphSearchResults, setGraphSearchResults] = useState<any[]>([]);
+  const [activeNode, setActiveNode] = useState<any>(null);
+  const [graphLoading, setGraphLoading] = useState<boolean>(false);
+  const [graphPanel, setGraphPanel] = useState<string | null>(null); // 'health' | 'disconnected' | null
+  const [graphToast, setGraphToast] = useState<{msg: string; ok: boolean} | null>(null);
   
   // States for CRUD listings
   const [loading, setLoading] = useState<boolean>(false);
@@ -212,6 +224,18 @@ export default function AdminDashboard() {
       params.set("limit", "5");
     } else if (activeTab === "data-sources") {
       url = `${BACKEND_BASE_URL}/data-sources`;
+    } else if (activeTab === "travel-network") {
+      try {
+        const res = await fetch(`${BACKEND_BASE_URL}/graph/stats`);
+        const payload = await res.json();
+        if (payload.success) {
+          setGraphStats(payload);
+        }
+      } catch (e) {
+        console.error("Failed to load graph stats", e);
+      }
+      setLoading(false);
+      return;
     }
 
     try {
@@ -459,6 +483,7 @@ export default function AdminDashboard() {
               { id: "nearby", label: "Nearby Mappings", icon: Icons.Nearby },
               { id: "seasonal", label: "Seasonal Demands", icon: Icons.Seasonal },
               { id: "data-sources", label: "Data Sources", icon: Icons.DataSource },
+              { id: "travel-network", label: "Travel Network", icon: Icons.Network },
               { id: "import", label: "Import Center", icon: Icons.Import },
               { id: "audit", label: "Audit Trail", icon: Icons.Audit }
             ].map((tab) => {
@@ -1407,6 +1432,446 @@ export default function AdminDashboard() {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* TAB 10: TRAVEL KNOWLEDGE GRAPH VIEW */}
+          {activeTab === "travel-network" && graphStats && (
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Nodes card */}
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex flex-col justify-between shadow-lg">
+                  <div>
+                    <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider block">Graph Nodes</span>
+                    <span className="text-[10px] text-slate-500 mt-1 block">Cities &amp; transport hubs mapped</span>
+                  </div>
+                  <span className="text-3xl font-extrabold mt-4 font-mono text-cyan-400">{graphStats.nodes_count}</span>
+                </div>
+
+                {/* Edges card */}
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex flex-col justify-between shadow-lg">
+                  <div>
+                    <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider block">Graph Edges</span>
+                    <span className="text-[10px] text-slate-500 mt-1 block">Inter-city routes &amp; station links</span>
+                  </div>
+                  <span className="text-3xl font-extrabold mt-4 font-mono text-violet-400">{graphStats.edges_count}</span>
+                </div>
+
+                {/* Graph Health — clickable */}
+                <button
+                  onClick={() => setGraphPanel(graphPanel === 'health' ? null : 'health')}
+                  className={`p-6 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border flex flex-col justify-between shadow-lg text-left transition hover:scale-[1.02] active:scale-100 ${
+                    graphPanel === 'health' ? 'border-emerald-400/60 ring-1 ring-emerald-400/30' : 'border-emerald-500/30'
+                  }`}
+                >
+                  <div>
+                    <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider block">Graph Health</span>
+                    <span className="text-[10px] text-slate-500 mt-1 block">Click to view validation report →</span>
+                  </div>
+                  <span className="text-3xl font-extrabold mt-4 font-mono text-emerald-400">{graphStats.health_status}</span>
+                </button>
+
+                {/* Disconnected Nodes — clickable */}
+                <button
+                  onClick={() => setGraphPanel(graphPanel === 'disconnected' ? null : 'disconnected')}
+                  className={`p-6 rounded-2xl bg-gradient-to-br from-rose-500/20 to-pink-500/20 border flex flex-col justify-between shadow-lg text-left transition hover:scale-[1.02] active:scale-100 ${
+                    graphPanel === 'disconnected' ? 'border-rose-400/60 ring-1 ring-rose-400/30' : 'border-rose-500/30'
+                  }`}
+                >
+                  <div>
+                    <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider block">Disconnected Nodes</span>
+                    <span className="text-[10px] text-slate-500 mt-1 block">Click to see orphaned nodes →</span>
+                  </div>
+                  <span className="text-3xl font-extrabold mt-4 font-mono text-rose-400">{graphStats.disconnected_nodes?.length || 0}</span>
+                </button>
+              </div>
+
+              {/* Card Detail Panel — Graph Health */}
+              {graphPanel === 'health' && (
+                <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 space-y-4 animate-fadeIn">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-emerald-300">Graph Validation Report</h3>
+                    <button onClick={() => setGraphPanel(null)} className="text-[10px] uppercase font-mono text-slate-500 hover:text-slate-300 transition">✕ Close</button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {[
+                      { label: 'Total Nodes', value: graphStats.validation_report?.nodes_count },
+                      { label: 'Total Edges', value: graphStats.validation_report?.edges_count },
+                      { label: 'Dangling Edges', value: graphStats.validation_report?.dangling_edges_count },
+                      { label: 'Total Issues', value: graphStats.validation_report?.total_issues_count },
+                    ].map((m, i) => (
+                      <div key={i} className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-center">
+                        <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{m.label}</div>
+                        <div className="text-2xl font-extrabold font-mono mt-1 text-emerald-400">{m.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {graphStats.validation_report?.issues?.length > 0 ? (
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold text-rose-400">Issues detected:</p>
+                      {graphStats.validation_report.issues.map((issue: string, idx: number) => (
+                        <div key={idx} className="text-xs text-slate-300 bg-rose-500/5 border border-rose-500/20 rounded-lg px-4 py-2">{issue}</div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3">
+                      <span>✓</span> <span>Graph topology is fully valid — no dangling edges or broken relationships detected.</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Card Detail Panel — Disconnected Nodes */}
+              {graphPanel === 'disconnected' && (
+                <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-6 space-y-4 animate-fadeIn">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-rose-300">Orphaned / Disconnected Nodes</h3>
+                    <button onClick={() => setGraphPanel(null)} className="text-[10px] uppercase font-mono text-slate-500 hover:text-slate-300 transition">✕ Close</button>
+                  </div>
+                  {graphStats.disconnected_nodes?.length > 0 ? (
+                    <div className="space-y-2">
+                      <p className="text-[10px] text-slate-500">These nodes exist in the graph registry but have zero edges — they are not reachable from any other node.</p>
+                      {graphStats.disconnected_nodes.map((n: any, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
+                          <div>
+                            <span className="text-sm font-semibold text-slate-200">{n.name}</span>
+                            <span className="ml-2 text-[10px] font-mono text-slate-500">{n.id}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-400">{n.type}</span>
+                            <button
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(`${BACKEND_BASE_URL}/graph/node?id=${encodeURIComponent(n.id)}`);
+                                  const body = await res.json();
+                                  if (body.success) { setActiveNode(body); setGraphPanel(null); }
+                                } catch {}
+                              }}
+                              className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 hover:underline transition"
+                            >
+                              Inspect
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3">
+                      <span>✓</span> <span>No disconnected nodes — all entities are reachable within the travel network.</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Travel Graph Node Explorer */}
+              <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                  <div>
+                    <h3 className="text-base font-bold text-white">Travel Graph Node Explorer</h3>
+                    <p className="text-xs text-slate-500">Search and traverse transport nodes (cities, junctions, airports) to inspect connection topology.</p>
+                  </div>
+                  
+                  {/* Search Bar */}
+                  <div className="relative w-full md:w-80">
+                    <input
+                      type="text"
+                      placeholder="Search node (e.g. Delhi, NDLS)..."
+                      value={graphSearch}
+                      onChange={async (e) => {
+                        const val = e.target.value;
+                        setGraphSearch(val);
+                        if (val.trim().length >= 1) {
+                          try {
+                            const res = await fetch(`${BACKEND_BASE_URL}/graph/search?query=${encodeURIComponent(val)}`);
+                            const body = await res.json();
+                            if (body.success) {
+                              setGraphSearchResults(body.results);
+                            }
+                          } catch (err) {
+                            console.error("Search failed", err);
+                          }
+                        } else {
+                          setGraphSearchResults([]);
+                        }
+                      }}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                    />
+                    
+                    {/* Search Autocomplete dropdown */}
+                    {graphSearchResults.length > 0 && (
+                      <div className="absolute left-0 right-0 mt-2 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-30 max-h-60 overflow-y-auto divide-y divide-slate-800/80">
+                        {graphSearchResults.map((item: any) => (
+                          <button
+                            key={item.id}
+                            onClick={async () => {
+                              setGraphSearch("");
+                              setGraphSearchResults([]);
+                              try {
+                                const res = await fetch(`${BACKEND_BASE_URL}/graph/node?id=${encodeURIComponent(item.id)}`);
+                                const body = await res.json();
+                                if (body.success) {
+                                  setActiveNode(body);
+                                }
+                              } catch (err) {
+                                console.error("Node inspect failed", err);
+                              }
+                            }}
+                            className="w-full text-left px-4 py-2.5 hover:bg-slate-800/50 transition flex items-center justify-between text-xs text-slate-300"
+                          >
+                            <span className="font-semibold text-slate-200">{item.name}</span>
+                            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+                              {item.type}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Explorer Split Pane */}
+                {activeNode ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Selected Node details */}
+                    <div className="lg:col-span-1 bg-slate-900/40 border border-slate-800/80 rounded-xl p-5 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono">
+                          {activeNode.type} Node
+                        </span>
+                        <button
+                          onClick={() => setActiveNode(null)}
+                          className="text-[10px] text-slate-500 hover:text-slate-300 transition uppercase font-mono font-bold"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                      
+                      <h4 className="text-lg font-bold text-white tracking-tight">{activeNode.properties?.name || activeNode.id}</h4>
+                      
+                      <div className="divide-y divide-slate-800 text-xs space-y-2.5">
+                        {activeNode.properties?.code && (
+                          <div className="flex justify-between pt-2.5">
+                            <span className="text-slate-500 font-semibold">Station Code</span>
+                            <span className="text-slate-300 font-mono font-bold">{activeNode.properties.code}</span>
+                          </div>
+                        )}
+                        {activeNode.properties?.station_type && (
+                          <div className="flex justify-between pt-2.5">
+                            <span className="text-slate-500 font-semibold">Terminal Type</span>
+                            <span className="text-slate-300">{activeNode.properties.station_type}</span>
+                          </div>
+                        )}
+                        {activeNode.properties?.state && (
+                          <div className="flex justify-between pt-2.5">
+                            <span className="text-slate-500 font-semibold">State</span>
+                            <span className="text-slate-300">{activeNode.properties.state}</span>
+                          </div>
+                        )}
+                        {activeNode.properties?.importance_score !== undefined && (
+                          <div className="flex justify-between pt-2.5">
+                            <span className="text-slate-500 font-semibold">Importance Score</span>
+                            <span className="text-slate-300 font-mono font-bold text-indigo-400">{activeNode.properties.importance_score}</span>
+                          </div>
+                        )}
+                        {activeNode.properties?.latitude !== undefined && (
+                          <div className="flex justify-between pt-2.5">
+                            <span className="text-slate-500 font-semibold">Coordinates</span>
+                            <span className="text-slate-400 font-mono text-[10px]">
+                              {activeNode.properties.latitude.toFixed(4)}°, {activeNode.properties.longitude.toFixed(4)}°
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Node Connections/Edges */}
+                    <div className="lg:col-span-2 space-y-3">
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Connected Edges ({activeNode.edges?.length || 0})</h4>
+                      
+                      <div className="max-h-[320px] overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                        {activeNode.edges && activeNode.edges.length > 0 ? (
+                          activeNode.edges.map((edge: any, idx: number) => {
+                            const isOutgoing = edge.direction === "outgoing";
+                            const neighborId = isOutgoing ? edge.target_id : edge.source_id;
+                            const neighborName = isOutgoing ? edge.target_name : edge.source_name;
+                            const neighborType = isOutgoing ? edge.target_type : edge.source_type;
+                            
+                            return (
+                              <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-slate-900/30 hover:bg-slate-900/60 border border-slate-800/80 rounded-xl transition">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded ${
+                                    isOutgoing ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20" : "bg-teal-500/10 text-teal-400 border border-teal-500/20"
+                                  }`}>
+                                    {isOutgoing ? "Outgoing ➜" : "Incoming ⬅"}
+                                  </span>
+                                  
+                                  <span className="text-xs text-slate-400 font-semibold">{edge.edge_type}</span>
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const res = await fetch(`${BACKEND_BASE_URL}/graph/node?id=${encodeURIComponent(neighborId)}`);
+                                        const body = await res.json();
+                                        if (body.success) {
+                                          setActiveNode(body);
+                                        }
+                                      } catch (err) {
+                                        console.error("Inspect failed", err);
+                                      }
+                                    }}
+                                    className="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline transition"
+                                  >
+                                    {neighborName}
+                                  </button>
+                                  <span className="text-[10px] font-mono text-slate-500 uppercase">({neighborType})</span>
+                                </div>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <div className="text-center py-8 text-xs text-slate-500">No active relationships found for this node.</div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 bg-slate-900/20 border border-dashed border-slate-800 rounded-xl">
+                    <span className="text-xl block mb-2">🔍</span>
+                    <p className="text-xs text-slate-500">Search for cities (e.g. *Delhi*) or stations (e.g. *NDLS*) and click neighbors to navigate relationships.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Hub Cities & connected stations split */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                {/* Column 1: Hub Cities */}
+                <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
+                  <h3 className="text-base font-bold text-white">Central Hub Cities</h3>
+                  <p className="text-xs text-slate-500">Top cities ordered by incoming/outgoing route centrality links in the knowledge graph.</p>
+                  
+                  <div className="space-y-3">
+                    {graphStats.hub_cities?.map((city: any, idx: number) => (
+                      <div key={idx} className="flex items-center justify-between p-3.5 bg-slate-900/50 border border-slate-800/80 rounded-xl">
+                        <button
+                          onClick={async () => {
+                            try {
+                              const res = await fetch(`${BACKEND_BASE_URL}/graph/node?id=${encodeURIComponent("City:" + city.name)}`);
+                              const body = await res.json();
+                              if (body.success) {
+                                setActiveNode(body);
+                              }
+                            } catch (err) {
+                              console.error("Inspect failed", err);
+                            }
+                          }}
+                          className="text-sm font-semibold text-indigo-400 hover:text-indigo-300 hover:underline transition text-left"
+                        >
+                          {city.name}
+                        </button>
+                        <span className="text-xs font-mono bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded-lg border border-indigo-500/20 font-bold">
+                          {city.connections_count} edges
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Column 2: Most Connected Stations */}
+                <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
+                  <h3 className="text-base font-bold text-white">Most Connected Stations</h3>
+                  <p className="text-xs text-slate-500">Major transport terminals (rail junctions/bus terminals) acting as transfer centers.</p>
+                  
+                  <div className="space-y-3">
+                    {graphStats.most_connected_stations?.map((st: any, idx: number) => {
+                      const codeMatch = st.name.match(/\(([^)]+)\)/);
+                      const code = codeMatch ? codeMatch[1] : "";
+                      return (
+                        <div key={idx} className="flex items-center justify-between p-3.5 bg-slate-900/50 border border-slate-800/80 rounded-xl">
+                          <button
+                            onClick={async () => {
+                              if (code) {
+                                try {
+                                  const res = await fetch(`${BACKEND_BASE_URL}/graph/node?id=${encodeURIComponent("Station:" + code)}`);
+                                  const body = await res.json();
+                                  if (body.success) {
+                                    setActiveNode(body);
+                                  }
+                                } catch (err) {
+                                  console.error("Inspect failed", err);
+                                }
+                              }
+                            }}
+                            className="text-sm font-semibold text-indigo-400 hover:text-indigo-300 hover:underline transition text-left"
+                          >
+                            {st.name}
+                          </button>
+                          <span className="text-xs font-mono bg-cyan-500/10 text-cyan-400 px-2.5 py-1 rounded-lg border border-cyan-500/20 font-bold">
+                            {st.connections_count} connections
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Rebuild bar */}
+              <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <h4 className="text-sm font-bold text-white">Manual Graph Administration</h4>
+                  <p className="text-xs text-slate-500 mt-1">If you have recently added or edited travel corridors or mappings, you can rebuild the network to recalculate pathing metrics.</p>
+                  {graphToast && (
+                    <div className={`mt-3 flex items-center gap-2 text-xs px-4 py-2 rounded-xl border ${
+                      graphToast.ok
+                        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                        : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                    }`}>
+                      <span>{graphToast.ok ? '✓' : '✕'}</span>
+                      <span>{graphToast.msg}</span>
+                      <button onClick={() => setGraphToast(null)} className="ml-auto text-slate-500 hover:text-slate-300">✕</button>
+                    </div>
+                  )}
+                </div>
+                <button
+                  disabled={graphLoading}
+                  onClick={async () => {
+                    setGraphLoading(true);
+                    setGraphToast(null);
+                    try {
+                      const res = await fetch(`${BACKEND_BASE_URL}/graph/rebuild`, { method: "POST" });
+                      const payload = await res.json();
+                      if (payload.success) {
+                        setGraphStats(payload);
+                        setGraphToast({ msg: `Travel Knowledge Graph rebuilt — ${payload.nodes_count} nodes, ${payload.edges_count} edges.`, ok: true });
+                      } else {
+                        setGraphToast({ msg: "Rebuild failed: " + (payload.detail || "Unknown error"), ok: false });
+                      }
+                    } catch (err) {
+                      setGraphToast({ msg: "Could not reach backend. Is the server running?", ok: false });
+                    } finally {
+                      setGraphLoading(false);
+                    }
+                  }}
+                  className="shrink-0 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl transition shadow shadow-indigo-900/40"
+                >
+                  {graphLoading ? (
+                    <span className="flex items-center gap-2">
+                      <svg className="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                      </svg>
+                      Rebuilding...
+                    </span>
+                  ) : "Rebuild Travel Graph"}
+                </button>
+              </div>
+
             </div>
           )}
 

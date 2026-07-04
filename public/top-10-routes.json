@@ -1,27 +1,27 @@
 [
   {
-    "id": "NX-526-F1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "3h 50m",
-    "estimatedPrice": "INR 9,994",
+    "id": "NX-778-F1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "3h 38m",
+    "estimatedPrice": "INR 9,781",
     "travelModes": [
       "Flight"
     ],
     "legs": [
       {
-        "from": "Delhi Airport (DEL)",
-        "to": "Patna Airport (PAT)",
+        "from": "Pune Airport (PNQ)",
+        "to": "Bengaluru Airport (BLR)",
         "mode": "Flight - IndiGo",
-        "duration": "1h 20m",
+        "duration": "1h 08m",
         "departureTime": "13:30",
-        "arrivalTime": "14:50"
+        "arrivalTime": "14:38"
       }
     ],
     "recommendationTag": "Direct air route secures high seat confidence",
     "tagTone": "amber",
     "isRecommended": true,
     "departureTime": "11:30",
-    "arrivalTime": "15:20",
+    "arrivalTime": "15:08",
     "layoverDuration": "0h 00m",
     "estimatedAvailability": 98,
     "confidenceScore": 80,
@@ -30,12 +30,12 @@
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
       "seasonalTip": "Direct air route secures high seat confidence",
-      "crowdLevel": 25,
+      "crowdLevel": 35,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
     "navixScore": 85,
-    "comfortScore": 75,
+    "comfortScore": 65,
     "seatLikelihood": 98,
     "recommendationReasoning": [
       "Saves transfer stress",
@@ -48,43 +48,181 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-526-B1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "20h 39m",
-    "estimatedPrice": "INR 3,173",
+    "id": "NX-778-T2",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "13h 22m",
+    "estimatedPrice": "INR 1,588",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "PUNC Station",
+        "to": "KSR Bengaluru (SBC)",
+        "mode": "Train - SF Exp (12395)",
+        "duration": "13h 22m",
+        "departureTime": "08:15",
+        "arrivalTime": "21:37"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "08:15",
+    "arrivalTime": "21:37",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 17,
+    "confidenceScore": 85,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 53,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 60,
+    "comfortScore": 47,
+    "seatLikelihood": 17,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "RLWL 10 / WL 4",
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 17,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "NX-778-T3",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "13h 22m",
+    "estimatedPrice": "INR 1,588",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Pune Junction",
+        "to": "Yesvantpur (YPR)",
+        "mode": "Train - Humsafar (22317)",
+        "duration": "13h 22m",
+        "departureTime": "12:00",
+        "arrivalTime": "01:22"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "12:00",
+    "arrivalTime": "01:22",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 19,
+    "confidenceScore": 90,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 51,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 58,
+    "comfortScore": 49,
+    "seatLikelihood": 19,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 19,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
+  },
+  {
+    "id": "NX-778-T3",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "13h 22m",
+    "estimatedPrice": "INR 1,588",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "PUN Station",
+        "to": "Yesvantpur (YPR)",
+        "mode": "Train - Humsafar (22317)",
+        "duration": "13h 22m",
+        "departureTime": "12:00",
+        "arrivalTime": "01:22"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "12:00",
+    "arrivalTime": "01:22",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 19,
+    "confidenceScore": 80,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 51,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 58,
+    "comfortScore": 49,
+    "seatLikelihood": 19,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 19,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
+  },
+  {
+    "id": "NX-778-B1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "17h 30m",
+    "estimatedPrice": "INR 3,015",
     "travelModes": [
       "Sleeper Bus"
     ],
     "legs": [
       {
-        "from": "Delhi",
-        "to": "Patna",
+        "from": "Pune",
+        "to": "Bengaluru",
         "mode": "Sleeper Bus - Zingbus Premium",
-        "duration": "20h 39m",
+        "duration": "17h 30m",
         "departureTime": "20:00",
-        "arrivalTime": "16:39"
+        "arrivalTime": "13:30"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "20:00",
-    "arrivalTime": "16:39",
+    "arrivalTime": "13:30",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 51,
+    "estimatedAvailability": 25,
     "confidenceScore": 85,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Standard booking window",
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
       "seasonalTip": "Easier Transfer",
-      "crowdLevel": 47,
+      "crowdLevel": 57,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 63,
-    "comfortScore": 53,
-    "seatLikelihood": 51,
+    "navixScore": 55,
+    "comfortScore": 43,
+    "seatLikelihood": 25,
     "recommendationReasoning": [
       "Easier Transfer"
     ],
@@ -94,251 +232,260 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-526-T3",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "15h 46m",
-    "estimatedPrice": "INR 1,678",
+    "id": "NX-778-T1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "13h 22m",
+    "estimatedPrice": "INR 1,588",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
-        "from": "New Delhi (NDLS)",
-        "to": "Danapur (DNR)",
-        "mode": "Train - Humsafar (22317)",
-        "duration": "15h 46m",
-        "departureTime": "12:00",
-        "arrivalTime": "03:46"
-      }
-    ],
-    "recommendationTag": "Best Value Comfort",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "12:00",
-    "arrivalTime": "03:46",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 39,
-    "confidenceScore": 90,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 41,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 61,
-    "comfortScore": 59,
-    "seatLikelihood": 39,
-    "recommendationReasoning": [
-      "Best Value Comfort"
-    ],
-    "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 39,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
-  },
-  {
-    "id": "NX-526-T2",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "15h 46m",
-    "estimatedPrice": "INR 1,678",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Anand Vihar Terminal (ANVT)",
-        "to": "Patna Jn (PNBE)",
-        "mode": "Train - SF Exp (12395)",
-        "duration": "15h 46m",
-        "departureTime": "08:15",
-        "arrivalTime": "00:01"
-      }
-    ],
-    "recommendationTag": "Best Value Comfort",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "08:15",
-    "arrivalTime": "00:01",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 36,
-    "confidenceScore": 80,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 43,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 59,
-    "comfortScore": 57,
-    "seatLikelihood": 36,
-    "recommendationReasoning": [
-      "Best Value Comfort"
-    ],
-    "waitlistCode": "RLWL 10 / WL 4",
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 36,
-    "rescueRecommendation": null
-  },
-  {
-    "id": "NX-526-H1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "13h 11m",
-    "estimatedPrice": "INR 7,672",
-    "travelModes": [
-      "Flight",
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Delhi Airport (DEL)",
-        "to": "Lucknow Airport (LKO)",
-        "mode": "Flight - IndiGo",
-        "duration": "0h 40m",
-        "departureTime": "11:00",
-        "arrivalTime": "11:40"
-      },
-      {
-        "from": "Lucknow Charbagh (LKO)",
-        "to": "Patna Jn (PNBE)",
-        "mode": "Train - SF Exp",
-        "duration": "8h 01m",
-        "departureTime": "14:10",
-        "arrivalTime": "22:11"
-      }
-    ],
-    "recommendationTag": "Air hybrid saves hours vs direct rail",
-    "tagTone": "violet",
-    "isRecommended": false,
-    "departureTime": "09:00",
-    "arrivalTime": "22:11",
-    "layoverDuration": "2h 00m",
-    "estimatedAvailability": 55,
-    "confidenceScore": 85,
-    "difficulty": "Moderate",
-    "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Air hybrid saves hours vs direct rail",
-      "crowdLevel": 30,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 35,
-    "comfortScore": 70,
-    "seatLikelihood": 55,
-    "recommendationReasoning": [
-      "Air hybrid saves hours vs direct rail"
-    ],
-    "waitlistCode": null,
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 55,
-    "rescueRecommendation": null
-  },
-  {
-    "id": "NX-526-T1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "15h 46m",
-    "estimatedPrice": "INR 1,678",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "New Delhi (NDLS)",
-        "to": "Patna Jn (PNBE)",
+        "from": "Pune Junction",
+        "to": "KSR Bengaluru (SBC)",
         "mode": "Train - Exp (12393)",
-        "duration": "15h 46m",
+        "duration": "13h 22m",
         "departureTime": "07:30",
-        "arrivalTime": "23:16"
+        "arrivalTime": "20:52"
       }
     ],
     "recommendationTag": "Best Value Comfort",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "07:30",
-    "arrivalTime": "23:16",
+    "arrivalTime": "20:52",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 15,
+    "estimatedAvailability": 7,
     "confidenceScore": 90,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "High",
       "bookingUrgency": "Book immediately",
       "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 60,
+      "crowdLevel": 70,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 33,
-    "comfortScore": 40,
-    "seatLikelihood": 15,
+    "navixScore": 49,
+    "comfortScore": 30,
+    "seatLikelihood": 7,
     "recommendationReasoning": [
       "Best Value Comfort"
     ],
-    "waitlistCode": "GNWL 26 / WL 16",
+    "waitlistCode": "GNWL 38 / WL 23",
     "confirmationLikelihood": "Low",
-    "confirmationProbability": 15,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar Terminal (ANVT)!"
+    "confirmationProbability": 7,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at nearby terminals!"
   },
   {
-    "id": "NX-526-S1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "18h 53m",
-    "estimatedPrice": "INR 2,317",
+    "id": "NX-778-T1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "13h 22m",
+    "estimatedPrice": "INR 1,588",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "PUN Station",
+        "to": "KSR Bengaluru (SBC)",
+        "mode": "Train - Exp (12393)",
+        "duration": "13h 22m",
+        "departureTime": "07:30",
+        "arrivalTime": "20:52"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "07:30",
+    "arrivalTime": "20:52",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 7,
+    "confidenceScore": 80,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 70,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 49,
+    "comfortScore": 30,
+    "seatLikelihood": 7,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "GNWL 38 / WL 23",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 7,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at PUNC Station!"
+  },
+  {
+    "id": "NX-778-S1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "15h 59m",
+    "estimatedPrice": "INR 2,109",
     "travelModes": [
       "Bus",
       "Train"
     ],
     "legs": [
       {
-        "from": "Delhi",
-        "to": "Lucknow",
+        "from": "Pune",
+        "to": "Kolhapur",
         "mode": "Intercity Bus - IntrCity AC",
-        "duration": "9h 22m",
+        "duration": "4h 29m",
         "departureTime": "06:00",
-        "arrivalTime": "15:22"
+        "arrivalTime": "10:29"
       },
       {
-        "from": "Lucknow Charbagh (LKO)",
-        "to": "Patna Jn (PNBE)",
+        "from": "Kolhapur Junction",
+        "to": "KSR Bengaluru (SBC)",
         "mode": "Train - SF Exp",
-        "duration": "8h 01m",
-        "departureTime": "16:52",
-        "arrivalTime": "00:53"
+        "duration": "10h 00m",
+        "departureTime": "11:59",
+        "arrivalTime": "21:59"
       }
     ],
     "recommendationTag": "Lower crowding than main corridor",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "06:00",
-    "arrivalTime": "00:53",
+    "arrivalTime": "21:59",
     "layoverDuration": "1h 30m",
-    "estimatedAvailability": 46,
-    "confidenceScore": 80,
+    "estimatedAvailability": 23,
+    "confidenceScore": 85,
     "difficulty": "Moderate",
     "travelInsights": {
-      "demandLevel": "Moderate",
-      "bookingUrgency": "Standard booking window",
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
       "seasonalTip": "Lower crowding than main corridor",
-      "crowdLevel": 45,
+      "crowdLevel": 55,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 33,
-    "comfortScore": 55,
-    "seatLikelihood": 46,
+    "navixScore": 39,
+    "comfortScore": 45,
+    "seatLikelihood": 23,
     "recommendationReasoning": [
       "Lower crowding than main corridor"
     ],
     "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 46,
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 23,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
+  },
+  {
+    "id": "NX-778-S1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "16h 11m",
+    "estimatedPrice": "INR 2,159",
+    "travelModes": [
+      "Bus",
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Pune",
+        "to": "City25",
+        "mode": "Intercity Bus - IntrCity AC",
+        "duration": "5h 42m",
+        "departureTime": "06:00",
+        "arrivalTime": "11:42"
+      },
+      {
+        "from": "City25 Junction",
+        "to": "KSR Bengaluru (SBC)",
+        "mode": "Train - SF Exp",
+        "duration": "8h 59m",
+        "departureTime": "13:12",
+        "arrivalTime": "22:11"
+      }
+    ],
+    "recommendationTag": "Lower crowding than main corridor",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "06:00",
+    "arrivalTime": "22:11",
+    "layoverDuration": "1h 30m",
+    "estimatedAvailability": 23,
+    "confidenceScore": 90,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Lower crowding than main corridor",
+      "crowdLevel": 55,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 38,
+    "comfortScore": 45,
+    "seatLikelihood": 23,
+    "recommendationReasoning": [
+      "Lower crowding than main corridor"
+    ],
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 23,
+    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
+  },
+  {
+    "id": "NX-778-H1",
+    "routeCombination": "Pune -> Bengaluru",
+    "duration": "20h 03m",
+    "estimatedPrice": "INR 6,509",
+    "travelModes": [
+      "Flight",
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "Pune Airport (PNQ)",
+        "to": "Mumbai Airport (BOM)",
+        "mode": "Flight - IndiGo",
+        "duration": "0h 11m",
+        "departureTime": "11:00",
+        "arrivalTime": "11:11"
+      },
+      {
+        "from": "Mumbai CSMT (CSMT)",
+        "to": "KSR Bengaluru (SBC)",
+        "mode": "Train - SF Exp",
+        "duration": "15h 22m",
+        "departureTime": "13:41",
+        "arrivalTime": "05:03"
+      }
+    ],
+    "recommendationTag": "Air hybrid saves hours vs direct rail",
+    "tagTone": "violet",
+    "isRecommended": false,
+    "departureTime": "09:00",
+    "arrivalTime": "05:03",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 27,
+    "confidenceScore": 80,
+    "difficulty": "Moderate",
+    "travelInsights": {
+      "demandLevel": "High",
+      "bookingUrgency": "Book immediately",
+      "seasonalTip": "Air hybrid saves hours vs direct rail",
+      "crowdLevel": 40,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 32,
+    "comfortScore": 60,
+    "seatLikelihood": 27,
+    "recommendationReasoning": [
+      "Air hybrid saves hours vs direct rail"
+    ],
+    "waitlistCode": "GNWL 25 / WL 12",
+    "confirmationLikelihood": "Low",
+    "confirmationProbability": 27,
     "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   }
 ]
