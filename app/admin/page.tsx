@@ -72,6 +72,11 @@ const Icons = {
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
+  ),
+  DataSource: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    </svg>
   )
 };
 
@@ -205,6 +210,8 @@ export default function AdminDashboard() {
       // Home tab also fetches recent audit log entries
       url = `${BACKEND_BASE_URL}/audit-logs`;
       params.set("limit", "5");
+    } else if (activeTab === "data-sources") {
+      url = `${BACKEND_BASE_URL}/data-sources`;
     }
 
     try {
@@ -451,6 +458,7 @@ export default function AdminDashboard() {
               { id: "corridors", label: "Corridors", icon: Icons.Corridor },
               { id: "nearby", label: "Nearby Mappings", icon: Icons.Nearby },
               { id: "seasonal", label: "Seasonal Demands", icon: Icons.Seasonal },
+              { id: "data-sources", label: "Data Sources", icon: Icons.DataSource },
               { id: "import", label: "Import Center", icon: Icons.Import },
               { id: "audit", label: "Audit Trail", icon: Icons.Audit }
             ].map((tab) => {
@@ -1260,6 +1268,143 @@ export default function AdminDashboard() {
                   >
                     Next
                   </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 9: DATA SOURCES VIEW */}
+          {activeTab === "data-sources" && (
+            <div className="space-y-8 animate-fadeIn">
+              <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6">
+                <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+                  <div>
+                    <h3 className="text-xl font-extrabold text-white">Centralized Travel Data Connectors</h3>
+                    <p className="text-sm text-slate-400 mt-1">Manage active travel information channels, toggle providers, set priority routing and trigger manual syncing.</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6">
+                  {loading ? (
+                    <div className="flex items-center justify-center py-12"><Icons.Spinner /></div>
+                  ) : data.length === 0 ? (
+                    <div className="text-center py-12 text-slate-500">No registered data sources found.</div>
+                  ) : (
+                    data.map((src: any) => (
+                      <div key={src.source_id} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-slate-700 transition">
+                        <div className="flex items-start space-x-4">
+                          <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
+                            <Icons.DataSource />
+                          </div>
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <h4 className="text-lg font-bold text-white">{src.name}</h4>
+                              <span className="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded uppercase tracking-wider">
+                                {src.type}
+                              </span>
+                              <span className="text-[10px] bg-indigo-900/30 text-indigo-300 font-mono px-2 py-0.5 rounded">
+                                Priority: {src.priority}
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-500 mt-1">Source ID: {src.source_id} | Connector Version: {src.version}</p>
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2 mt-4 text-xs">
+                              <div>
+                                <span className="text-slate-500 block">Health Status</span>
+                                <span className={`font-semibold flex items-center mt-0.5 ${src.health_status === "Healthy" ? "text-emerald-400" : "text-rose-400"}`}>
+                                  <span className={`w-1.5 h-1.5 rounded-full inline-block mr-1.5 ${src.health_status === "Healthy" ? "bg-emerald-500 animate-ping" : "bg-rose-500"}`}></span>
+                                  {src.health_status}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 block">Last Sync Time</span>
+                                <span className="text-slate-300 font-semibold mt-0.5 block">
+                                  {src.last_sync ? new Date(src.last_sync).toLocaleString() : "Never"}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 block">Average Response Time</span>
+                                <span className="text-slate-300 font-semibold font-mono mt-0.5 block">
+                                  {src.average_response_time_ms ? `${src.average_response_time_ms.toFixed(2)}ms` : "N/A"}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 block">Total Records Sync</span>
+                                <span className="text-slate-300 font-semibold font-mono mt-0.5 block">
+                                  {src.total_records_count || 0} routes
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-3 self-end md:self-center">
+                          {/* Priority setter */}
+                          <div className="flex items-center space-x-1 bg-slate-950 border border-slate-800 rounded-xl px-2 py-1">
+                            <span className="text-[10px] text-slate-500 uppercase tracking-wider px-1">Pri</span>
+                            <input
+                              type="number"
+                              min="1"
+                              max="10"
+                              value={src.priority}
+                              onChange={async (e) => {
+                                const newPri = parseInt(e.target.value) || 1;
+                                try {
+                                  await fetch(`${BACKEND_BASE_URL}/data-sources/${src.source_id}/priority`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ priority: newPri })
+                                  });
+                                  fetchData();
+                                } catch (err) {
+                                  console.error("Failed to update priority", err);
+                                }
+                              }}
+                              className="w-10 bg-transparent text-center font-mono text-xs text-white focus:outline-none"
+                            />
+                          </div>
+
+                          {/* Manual sync */}
+                          <button
+                            disabled={loading || src.status !== "Active"}
+                            onClick={async () => {
+                              setLoading(true);
+                              try {
+                                const res = await fetch(`${BACKEND_BASE_URL}/data-sources/${src.source_id}/sync`, { method: "POST" });
+                                if (res.ok) alert(`Manual synchronization succeeded for ${src.source_id}!`);
+                                fetchData();
+                              } catch (err) {
+                                alert(`Manual sync failed: ${err}`);
+                                setLoading(false);
+                              }
+                            }}
+                            className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 active:bg-slate-650 disabled:opacity-50 text-slate-200 hover:text-white text-xs font-semibold rounded-xl transition"
+                          >
+                            Manual Sync
+                          </button>
+
+                          {/* Toggle Active status */}
+                          <button
+                            onClick={async () => {
+                              try {
+                                await fetch(`${BACKEND_BASE_URL}/data-sources/${src.source_id}/toggle`, { method: "POST" });
+                                fetchData();
+                              } catch (err) {
+                                console.error("Toggle source status failed", err);
+                              }
+                            }}
+                            className={`px-4 py-2 text-xs font-semibold rounded-xl transition shadow-lg ${
+                              src.status === "Active"
+                                ? "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-emerald-950/20"
+                                : "bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-slate-300"
+                            }`}
+                          >
+                            {src.status === "Active" ? "Active" : "Inactive"}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

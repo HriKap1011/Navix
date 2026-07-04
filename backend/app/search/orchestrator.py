@@ -16,54 +16,66 @@ logger = logging.getLogger("navix.search")
 
 class SearchOrchestrator:
     def __init__(self, provider_names: List[str] = None):
-        from app.providers.registry import _registry
-        if provider_names is None:
-            # Query all registered active providers by default
-            self.provider_names = list(_registry.keys())
-        else:
-            self.provider_names = [p.upper() for p in provider_names]
+        self.provider_names = provider_names
 
     def search(self, source: str, destination: str, date: str, filters: Dict[str, Any] = None) -> Dict[str, Any]:
-        from app.providers.registry import _registry
+        from app.data_sources.registry import registry
+        from app.data_sources.health import health_monitor
         
         context = PipelineContext(source, destination, date, filters)
         start_time = time.perf_counter()
         
+        # 1. Retrieve targeted connectors
+        if self.provider_names is not None:
+            connectors = []
+            for name in self.provider_names:
+                conn = registry.get_connector(name)
+                if conn:
+                    connectors.append(conn)
+                else:
+                    context.warnings.append(f"Connector {name} not registered in registry")
+        else:
+            connectors = registry.get_active_connectors()
+            
         provider_results = []
         provider_latencies = {}
         
-        # 1. Concurrent Execution of providers
-        with ThreadPoolExecutor(max_workers=max(1, len(self.provider_names))) as executor:
-            future_to_provider = {}
-            for name in self.provider_names:
-                prov_cls = _registry.get(name)
-                if not prov_cls:
-                    continue
+        # 2. Concurrent execution of connectors
+        with ThreadPoolExecutor(max_workers=max(1, len(connectors))) as executor:
+            future_to_connector = {}
+            for conn in connectors:
+                meta = conn.metadata()
                 try:
-                    # Instantiate provider
-                    prov_instance = prov_cls()
-                    future = executor.submit(prov_instance.search_routes, source, destination, date)
-                    future_to_provider[future] = name
+                    conn.connect()
+                    future = executor.submit(conn.fetch, source, destination, date)
+                    future_to_connector[future] = conn
                 except Exception as ex:
-                    logger.warning(f"Failed to initialize provider {name}: {ex}")
-                    context.warnings.append(f"Provider {name} init failed: {ex}")
+                    logger.warning(f"Failed to initialize connector {meta.source_id}: {ex}")
+                    context.warnings.append(f"Connector {meta.source_id} init failed: {ex}")
                     
-            for future in as_completed(future_to_provider):
-                name = future_to_provider[future]
+            for future in as_completed(future_to_connector):
+                conn = future_to_connector[future]
+                meta = conn.metadata()
                 p_start = time.perf_counter()
                 try:
                     routes = future.result()
                     latency = (time.perf_counter() - p_start) * 1000
-                    provider_latencies[name] = latency
+                    provider_latencies[meta.source_id] = latency
                     provider_results.append(routes)
-                    logger.info(f"Provider {name} returned {len(routes)} routes in {latency:.2f}ms")
+                    
+                    # Track metrics on success
+                    health_monitor.log_success(meta, latency, len(routes))
+                    logger.info(f"Connector {meta.source_id} successfully returned {len(routes)} routes in {latency:.2f}ms")
                 except Exception as ex:
                     latency = (time.perf_counter() - p_start) * 1000
-                    provider_latencies[name] = latency
-                    logger.warning(f"Provider {name} failed: {ex}")
-                    context.warnings.append(f"Provider {name} failed: {ex}")
+                    provider_latencies[meta.source_id] = latency
                     
-        # 2. Run Pipeline Stages
+                    # Track metrics on failure
+                    health_monitor.log_failure(meta, latency)
+                    logger.warning(f"Connector {meta.source_id} failed: {ex}")
+                    context.warnings.append(f"Connector {meta.source_id} failed: {ex}")
+                    
+        # 3. Execute pipeline stages
         pipeline = SearchPipeline([
             AggregationStage(),
             DeduplicationStage(),
@@ -74,10 +86,10 @@ class SearchOrchestrator:
         
         final_dtos = pipeline.execute(context, provider_results)
         
-        # 3. Analyze travel demand
+        # 4. Analyze travel demand
         demand = analyze_travel_demand(source, destination, date)
         
-        # 4. Telemetry & logging to database SearchLog
+        # 5. Telemetry & database logging
         total_time_ms = (time.perf_counter() - start_time) * 1000
         
         try:
