@@ -196,6 +196,18 @@ def calculate_smart_scores(journeys: List[Journey]) -> List[Journey]:
 
         j.recommendation_reason = tag
         
+        # Check TKG for alternate boarding suggestions on train journeys with low seat likelihood
+        if j.seat_likelihood < 50 and "Train" in j.transport_modes:
+            try:
+                from app.graph.graph_queries import find_alternate_boarding_stations
+                alt_stations = find_alternate_boarding_stations(j.source)
+                current_stations = {leg.from_city.upper() for leg in j.legs if leg.mode == "Train"}
+                valid_alts = [s for s in alt_stations if s.upper() not in current_stations]
+                if valid_alts:
+                    j.rescue_recommendation = f"Navix TKG Hint: Secure better seat availability by boarding at nearby station {valid_alts[0]} instead!"
+            except Exception:
+                pass
+        
         # Cleanup temporary friction attribute
         if hasattr(j, "_friction_score"):
             delattr(j, "_friction_score")
