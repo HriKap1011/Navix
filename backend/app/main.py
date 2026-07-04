@@ -41,9 +41,10 @@ def search_routes(request: RouteSearchRequest):
         if source.lower() == destination.lower():
             return RouteSearchResponse(success=False, routes=[], error="Source and destination cities cannot be the same")
             
-        from app.demand import analyze_travel_demand
-        routes = generate_routes(source, destination, request.date)
-        demand = analyze_travel_demand(source, destination, request.date)
+        from app.search.orchestrator import SearchOrchestrator
+        orchestrator = SearchOrchestrator(provider_names=["DATABASE", "CSV", "MOCK"])
+        result = orchestrator.search(source, destination, request.date)
+        demand = result["demand_profile"]
         demand_data = {
             "is_weekend_rush": demand.is_weekend_rush,
             "is_summer_rush": demand.is_summer_rush,
@@ -54,14 +55,16 @@ def search_routes(request: RouteSearchRequest):
             "crowd_modifier": demand.crowd_modifier,
             "contextual_message": demand.contextual_message
         }
-        return RouteSearchResponse(success=True, routes=routes, demand_profile=demand_data)
+        return RouteSearchResponse(success=True, routes=result["routes"], demand_profile=demand_data)
     except Exception as e:
         return RouteSearchResponse(success=False, routes=[], error=f"Search failed: {str(e)}")
 
 @app.get("/cities")
 def get_cities():
     try:
-        return {"success": True, "cities": store.cities}
+        from app.domain.mappers import map_city_to_dto
+        cities_dtos = [map_city_to_dto(c) for c in store.cities]
+        return {"success": True, "cities": cities_dtos}
     except Exception as e:
         return {"success": False, "error": f"Failed to load cities: {str(e)}", "cities": []}
 

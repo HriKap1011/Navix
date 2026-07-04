@@ -2,21 +2,12 @@ from datetime import datetime
 import re
 from typing import Dict, Any, List, Optional
 from app.config import FALLBACK_FESTIVALS
+from app.domain.recommendation import TravelDemand, SeasonalDemand
+from app.domain.mappers import map_seasonal_demand_to_domain
 
-class DemandProfile:
-    def __init__(self):
-        self.is_weekend_rush = False
-        self.is_summer_rush = False
-        self.active_festival = None
-        self.seat_modifier = 1.0
-        self.comfort_modifier = 0
-        self.price_multiplier = 1.0
-        self.crowd_modifier = 0
-        self.contextual_message = None
+_festivals_cache: Optional[List[SeasonalDemand]] = None
 
-_festivals_cache = None
-
-def get_festivals_list() -> List[Dict[str, Any]]:
+def get_festivals_list() -> List[SeasonalDemand]:
     global _festivals_cache
     if _festivals_cache is not None:
         return _festivals_cache
@@ -30,7 +21,7 @@ def get_festivals_list() -> List[Dict[str, Any]]:
         print(f"Error in analyze_travel_demand load cache via provider, falling back to memory: {e}")
 
     if not festivals_list:
-        festivals_list = [
+        raw_list = [
             {
                 "name": fest["name"],
                 "start_month": fest["start_month"],
@@ -44,12 +35,13 @@ def get_festivals_list() -> List[Dict[str, Any]]:
             }
             for fest in FALLBACK_FESTIVALS
         ]
+        festivals_list = [map_seasonal_demand_to_domain(r) for r in raw_list]
         
     _festivals_cache = festivals_list
     return _festivals_cache
 
-def analyze_travel_demand(origin: str, destination: str, date_str: str) -> DemandProfile:
-    profile = DemandProfile()
+def analyze_travel_demand(origin: str, destination: str, date_str: str) -> TravelDemand:
+    profile = TravelDemand()
     
     if not date_str:
         return profile
@@ -91,10 +83,10 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
 
     for fest in festivals_list:
         is_active = False
-        sm = fest["start_month"]
-        sd = fest["start_day"]
-        em = fest["end_month"]
-        ed = fest["end_day"]
+        sm = fest.start_month
+        sd = fest.start_day
+        em = fest.end_month
+        ed = fest.end_day
 
         # Wrapping month logic for New Year (Dec 25 - Jan 5)
         if sm > em:
@@ -119,34 +111,34 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
                     is_active = True
 
         if is_active:
-            if fest["name"] == "Summer Vacation":
+            if fest.name == "Summer Vacation":
                 profile.is_summer_rush = True
-                profile.seat_modifier *= fest["seat_modifier"]
-                profile.price_multiplier *= fest["price_multiplier"]
-                profile.crowd_modifier += fest["crowd_modifier"]
-                profile.comfort_modifier += fest["comfort_modifier"]
+                profile.seat_modifier *= fest.seat_modifier
+                profile.price_multiplier *= fest.price_multiplier
+                profile.crowd_modifier += fest.crowd_modifier
+                profile.comfort_modifier += fest.comfort_modifier
                 profile.contextual_message = "Summer travel rush active."
             else:
-                profile.active_festival = fest["name"]
-                profile.seat_modifier *= fest["seat_modifier"]
-                profile.price_multiplier *= fest["price_multiplier"]
-                profile.crowd_modifier += fest["crowd_modifier"]
-                profile.comfort_modifier += fest["comfort_modifier"]
+                profile.active_festival = fest.name
+                profile.seat_modifier *= fest.seat_modifier
+                profile.price_multiplier *= fest.price_multiplier
+                profile.crowd_modifier += fest.crowd_modifier
+                profile.comfort_modifier += fest.comfort_modifier
                 
                 # High demand corridor scaling
-                if is_high_demand and fest["name"] in ["Diwali", "Chhath Puja", "Holi"]:
+                if is_high_demand and fest.name in ["Diwali", "Chhath Puja", "Holi"]:
                     profile.seat_modifier *= 0.6
                     profile.crowd_modifier += 15
-                    profile.contextual_message = f"Extreme {fest['name']} rush on this corridor. Alternate routes highly recommended."
+                    profile.contextual_message = f"Extreme {fest.name} rush on this corridor. Alternate routes highly recommended."
                 else:
-                    profile.contextual_message = f"{fest['name']} festival demand spike detected."
+                    profile.contextual_message = f"{fest.name} festival demand spike detected."
             break  # Apply the first matched festival only
 
     # 3. Dynamic Corridor Intelligence from DB
     if corridor:
-        demand_level = corridor.get("tier", "Standard").lower()
-        migration_relevance = corridor.get("migration_relevance", "Standard").lower()
-        seasonal_pressure = corridor.get("seasonal_pressure", "Standard").lower()
+        demand_level = corridor.demand_level.value.lower() if hasattr(corridor.demand_level, "value") else str(corridor.demand_level).lower()
+        migration_relevance = corridor.migration_relevance.lower()
+        seasonal_pressure = corridor.seasonal_pressure.lower()
         
         # Apply demand level modifiers
         if demand_level in ["extreme", "very high"]:
@@ -157,7 +149,8 @@ def analyze_travel_demand(origin: str, destination: str, date_str: str) -> Deman
             if profile.active_festival:
                 profile.contextual_message = f"Extreme {profile.active_festival} rush on this corridor. Alternate routes highly recommended."
             elif not profile.contextual_message:
-                profile.contextual_message = f"High demand travel corridor ({corridor.get('tier')} sector pressure)."
+                tier_str = corridor.demand_level.value if hasattr(corridor.demand_level, "value") else str(corridor.demand_level)
+                profile.contextual_message = f"High demand travel corridor ({tier_str} sector pressure)."
         elif demand_level == "high":
             profile.seat_modifier *= 0.85
             profile.crowd_modifier += 10

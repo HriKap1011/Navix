@@ -1,6 +1,6 @@
 [
   {
-    "id": "NX-948-F1",
+    "id": "NX-526-F1",
     "routeCombination": "Delhi -> Patna",
     "duration": "3h 50m",
     "estimatedPrice": "INR 9,994",
@@ -22,7 +22,7 @@
     "isRecommended": true,
     "departureTime": "11:30",
     "arrivalTime": "15:20",
-    "layoverDuration": "0m",
+    "layoverDuration": "0h 00m",
     "estimatedAvailability": 98,
     "confidenceScore": 80,
     "difficulty": "Easy",
@@ -48,7 +48,7 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-948-B1",
+    "id": "NX-526-B1",
     "routeCombination": "Delhi -> Patna",
     "duration": "20h 39m",
     "estimatedPrice": "INR 3,173",
@@ -70,7 +70,7 @@
     "isRecommended": false,
     "departureTime": "20:00",
     "arrivalTime": "16:39",
-    "layoverDuration": "0m",
+    "layoverDuration": "0h 00m",
     "estimatedAvailability": 51,
     "confidenceScore": 85,
     "difficulty": "Easy",
@@ -94,7 +94,7 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-948-T3",
+    "id": "NX-526-T3",
     "routeCombination": "Delhi -> Patna",
     "duration": "15h 46m",
     "estimatedPrice": "INR 1,678",
@@ -116,7 +116,7 @@
     "isRecommended": false,
     "departureTime": "12:00",
     "arrivalTime": "03:46",
-    "layoverDuration": "0m",
+    "layoverDuration": "0h 00m",
     "estimatedAvailability": 39,
     "confidenceScore": 90,
     "difficulty": "Easy",
@@ -140,7 +140,7 @@
     "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   },
   {
-    "id": "NX-948-T2",
+    "id": "NX-526-T2",
     "routeCombination": "Delhi -> Patna",
     "duration": "15h 46m",
     "estimatedPrice": "INR 1,678",
@@ -162,7 +162,7 @@
     "isRecommended": false,
     "departureTime": "08:15",
     "arrivalTime": "00:01",
-    "layoverDuration": "0m",
+    "layoverDuration": "0h 00m",
     "estimatedAvailability": 36,
     "confidenceScore": 80,
     "difficulty": "Easy",
@@ -186,7 +186,7 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-948-H1",
+    "id": "NX-526-H1",
     "routeCombination": "Delhi -> Patna",
     "duration": "13h 11m",
     "estimatedPrice": "INR 7,672",
@@ -241,7 +241,7 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-948-T1",
+    "id": "NX-526-T1",
     "routeCombination": "Delhi -> Patna",
     "duration": "15h 46m",
     "estimatedPrice": "INR 1,678",
@@ -263,7 +263,7 @@
     "isRecommended": false,
     "departureTime": "07:30",
     "arrivalTime": "23:16",
-    "layoverDuration": "0m",
+    "layoverDuration": "0h 00m",
     "estimatedAvailability": 15,
     "confidenceScore": 90,
     "difficulty": "Easy",
@@ -281,13 +281,13 @@
     "recommendationReasoning": [
       "Best Value Comfort"
     ],
-    "waitlistCode": "GNWL 48 / WL 29",
+    "waitlistCode": "GNWL 26 / WL 16",
     "confirmationLikelihood": "Low",
     "confirmationProbability": 15,
     "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar Terminal (ANVT)!"
   },
   {
-    "id": "NX-948-S1",
+    "id": "NX-526-S1",
     "routeCombination": "Delhi -> Patna",
     "duration": "18h 53m",
     "estimatedPrice": "INR 2,317",
