@@ -4,8 +4,16 @@ from app.providers.base import BaseProvider
 from app.providers.database_provider import DatabaseProvider
 from app.providers.csv_provider import CSVProvider
 from app.providers.mock_provider import MockProvider
-from app.providers.registry import get_active_provider, _registry
+from app.providers.registry import get_active_provider
 from app.generator import generate_routes
+from app.domain.city import City
+from app.domain.station import Station
+from app.domain.corridor import Corridor
+from app.domain.journey import Journey
+from app.domain.leg import Leg, Duration
+from app.domain.pricing import Pricing, Money
+from app.domain.availability import SeatAvailability
+from app.domain.services import calculate_friction_penalty, calculate_smart_scores
 
 def test_provider_interface_satisfaction():
     """
@@ -21,11 +29,12 @@ def test_provider_interface_satisfaction():
         assert isinstance(cities, list)
         if len(cities) > 0:
             c = cities[0]
-            assert "name" in c
-            assert "lat" in c
-            assert "lon" in c
-            assert "has_airport" in c
-            assert "has_train_station" in c
+            assert isinstance(c, City)
+            assert c.name
+            assert c.coordinates.latitude is not None
+            assert c.coordinates.longitude is not None
+            assert hasattr(c, "has_airport")
+            assert hasattr(c, "has_train_station")
             
         stations = provider.search_stations()
         assert isinstance(stations, dict)
@@ -34,9 +43,10 @@ def test_provider_interface_satisfaction():
         assert isinstance(corridors, dict)
         if len(corridors) > 0:
             corr = list(corridors.values())[0]
-            assert "source" in corr
-            assert "destination" in corr
-            assert "tier" in corr
+            assert isinstance(corr, Corridor)
+            assert corr.source
+            assert corr.destination
+            assert corr.demand_level is not None
             
         demands = provider.get_seasonal_demands()
         assert isinstance(demands, list)
@@ -67,36 +77,25 @@ def test_recommendation_engine_output_equivalency():
     assert len(db_routes) == len(csv_routes)
     assert len(db_routes) == len(mock_routes)
     
-    # Helper to strip non-deterministic keys (like timestamps if any, though our generator has none)
-    def clean_route_for_comparison(route: Dict[str, Any]) -> Dict[str, Any]:
-        cleaned = dict(route)
-        # Deep copy legs
-        if "legs" in cleaned:
-            cleaned["legs"] = [dict(leg) for leg in cleaned["legs"]]
-        return cleaned
-
     for i in range(len(db_routes)):
-        r_db = clean_route_for_comparison(db_routes[i])
-        r_csv = clean_route_for_comparison(csv_routes[i])
-        r_mock = clean_route_for_comparison(mock_routes[i])
+        r_db = db_routes[i]
+        r_csv = csv_routes[i]
+        r_mock = mock_routes[i]
         
         # Verify structure and content are identical
-        assert r_db["route_id"] == r_csv["route_id"]
-        assert r_db["route_id"] == r_mock["route_id"]
+        assert isinstance(r_db, Journey)
+        assert r_db.route_id == r_csv.route_id
+        assert r_db.route_id == r_mock.route_id
         
-        assert r_db["source"] == r_csv["source"]
-        assert r_db["destination"] == r_csv["destination"]
+        assert r_db.source == r_csv.source
+        assert r_db.destination == r_csv.destination
         
-        assert r_db["duration"] == r_csv["duration"]
-        assert r_db["price"] == r_csv["price"]
-        assert r_db["nx_score"] == r_csv["nx_score"]
-        assert r_db["seat_likelihood"] == r_csv["seat_likelihood"]
-        assert r_db["comfort_score"] == r_csv["comfort_score"]
-        assert r_db["transport_modes"] == r_csv["transport_modes"]
-        
-        # Deep compare everything
-        assert r_db == r_csv
-        assert r_db == r_mock
+        assert r_db.duration.minutes == r_csv.duration.minutes
+        assert r_db.price.total_price.amount == r_csv.price.total_price.amount
+        assert r_db.nx_score == r_csv.nx_score
+        assert r_db.seat_likelihood == r_csv.seat_likelihood
+        assert r_db.comfort_score == r_csv.comfort_score
+        assert r_db.transport_modes == r_csv.transport_modes
 
 def test_provider_resiliency_and_fallback(monkeypatch):
     """
@@ -123,4 +122,49 @@ def test_provider_resiliency_and_fallback(monkeypatch):
     # It must return a non-empty list of routes using the fallback provider!
     assert isinstance(routes, list)
     assert len(routes) > 0
-    assert routes[0]["source"] == "Delhi"
+    assert routes[0].source == "Delhi"
+
+def test_domain_services_provider_independence():
+    """
+    Verify that domain services calculate comfort, friction, and scores correctly
+    without depending on any provider context.
+    """
+    # Construct a dummy Journey completely in-memory
+    leg = Leg(
+        from_city="Delhi",
+        to_city="Patna",
+        mode="Train",
+        duration=Duration(minutes=600),
+        departure_time="08:00",
+        arrival_time="18:00"
+    )
+    
+    journey = Journey(
+        route_id="TEST-001",
+        source="Delhi",
+        destination="Patna",
+        duration=Duration(minutes=600),
+        price=Pricing(base_price=Money(1000.0), total_price=Money(1000.0)),
+        nx_score=0,
+        seat_likelihood=80.0,
+        comfort_score=75.0,
+        transport_modes=["Train"],
+        recommendation_reason="Test Reason",
+        departure_time="08:00",
+        arrival_time="18:00",
+        legs=[leg],
+        layover_duration=Duration(minutes=0),
+        availability=SeatAvailability(likelihood=80.0)
+    )
+    
+    # Run friction penalty calculation
+    penalty = calculate_friction_penalty(journey)
+    # The journey has convenient timings (08:00 to 18:00), no transfers, and high seat likelihood (80)
+    # Friction penalty should be 0.
+    assert penalty == 0
+    
+    # Run smart scoring
+    scored = calculate_smart_scores([journey])
+    assert len(scored) == 1
+    assert scored[0].nx_score > 0
+    assert scored[0].is_recommended is True

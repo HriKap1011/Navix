@@ -3,6 +3,13 @@ from sqlalchemy.orm import aliased
 from app.providers.base import BaseProvider
 from app.database import db_session
 from app.models import City, Station, NearbyStationMapping, Corridor, SeasonalDemand
+from app.domain.city import City as DomainCity, Coordinates
+from app.domain.station import Station as DomainStation
+from app.domain.corridor import Corridor as DomainCorridor
+from app.domain.recommendation import SeasonalDemand as DomainSeasonalDemand
+from app.domain.mappers import (
+    map_city_to_domain, map_station_to_domain, map_corridor_to_domain, map_seasonal_demand_to_domain
+)
 import hashlib
 
 class DatabaseProvider(BaseProvider):
@@ -16,27 +23,19 @@ class DatabaseProvider(BaseProvider):
             raise RuntimeError(f"Database error in search_stations: {e}")
         return {}
 
-    def search_city(self, name: str) -> Dict[str, Any]:
+    def search_city(self, name: str) -> DomainCity:
         try:
             with db_session() as db:
                 city = db.query(City).filter(City.city_name.ilike(name.strip())).first()
                 if city:
-                    return {
-                        "name": city.city_name,
-                        "lat": city.latitude,
-                        "lon": city.longitude,
-                        "has_airport": city.has_airport,
-                        "has_train_station": city.has_train_station,
-                        "code": city.code,
-                        "station": city.station
-                    }
+                    return map_city_to_domain(city)
         except Exception as e:
             raise RuntimeError(f"Database error in search_city: {e}")
 
         # Fallback hash generator for unseen cities
         h = int(hashlib.md5(name.lower().encode()).hexdigest(), 16)
         code = "".join(filter(str.isalnum, name))[:3].upper()
-        return {
+        city_dict = {
             "name": name,
             "lat": 10.0 + (h % 20),
             "lon": 70.0 + ((h >> 4) % 20),
@@ -45,6 +44,7 @@ class DatabaseProvider(BaseProvider):
             "code": code,
             "station": code
         }
+        return map_city_to_domain(city_dict)
 
     def get_nearby_stations(self, city_name: str) -> List[str]:
         try:
@@ -68,7 +68,7 @@ class DatabaseProvider(BaseProvider):
         city_code = cleaned[:3].upper()
         return [city_code, f"{city_code}C", f"{city_code}N"]
 
-    def get_corridor(self, source: str, destination: str) -> Optional[Dict[str, Any]]:
+    def get_corridor(self, source: str, destination: str) -> Optional[DomainCorridor]:
         corridors = self.get_all_corridors()
         return corridors.get(f"{source.lower()}-{destination.lower()}")
 
@@ -80,28 +80,17 @@ class DatabaseProvider(BaseProvider):
         except Exception:
             return False
 
-    def get_all_cities(self) -> List[Dict[str, Any]]:
+    def get_all_cities(self) -> List[DomainCity]:
         try:
             with db_session() as db:
                 db_cities = db.query(City).order_by(City.city_name).all()
                 if db_cities:
-                    return [
-                        {
-                            "name": city.city_name,
-                            "lat": city.latitude,
-                            "lon": city.longitude,
-                            "has_airport": city.has_airport,
-                            "has_train_station": city.has_train_station,
-                            "code": city.code,
-                            "station": city.station
-                        }
-                        for city in db_cities
-                    ]
+                    return [map_city_to_domain(city) for city in db_cities]
         except Exception as e:
             raise RuntimeError(f"Database error in get_all_cities: {e}")
         return []
 
-    def get_all_corridors(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_corridors(self) -> Dict[str, DomainCorridor]:
         try:
             with db_session() as db:
                 src_alias = aliased(City)
@@ -122,38 +111,18 @@ class DatabaseProvider(BaseProvider):
                 corridors_dict = {}
                 for r in results:
                     key = f"{r.src_name.lower()}-{r.dest_name.lower()}"
-                    corridors_dict[key] = {
-                        "source": r.src_name,
-                        "destination": r.dest_name,
-                        "tier": r.demand_level,
-                        "migration_relevance": r.migration_relevance or "Standard",
-                        "seasonal_pressure": r.seasonal_pressure or "Standard",
-                        "avg_duration": r.avg_duration or "12h"
-                    }
+                    corridors_dict[key] = map_corridor_to_domain(r)
                 return corridors_dict
         except Exception as e:
             raise RuntimeError(f"Database error in get_all_corridors: {e}")
         return {}
 
-    def get_seasonal_demands(self) -> List[Dict[str, Any]]:
+    def get_seasonal_demands(self) -> List[DomainSeasonalDemand]:
         try:
             with db_session() as db:
                 db_festivals = db.query(SeasonalDemand).all()
                 if db_festivals:
-                    return [
-                        {
-                            "name": f.festival_name,
-                            "start_month": f.start_month,
-                            "start_day": f.start_day,
-                            "end_month": f.end_month,
-                            "end_day": f.end_day,
-                            "seat_modifier": f.seat_modifier,
-                            "comfort_modifier": f.comfort_modifier,
-                            "price_multiplier": f.price_multiplier,
-                            "crowd_modifier": f.crowd_modifier
-                        }
-                        for f in db_festivals
-                    ]
+                    return [map_seasonal_demand_to_domain(f) for f in db_festivals]
         except Exception as e:
             raise RuntimeError(f"Database error in get_seasonal_demands: {e}")
         return []
@@ -166,3 +135,32 @@ class DatabaseProvider(BaseProvider):
         except Exception as e:
             raise RuntimeError(f"Database error in is_valid_city: {e}")
         return False
+
+    def get_all_stations(self) -> List[DomainStation]:
+        try:
+            with db_session() as db:
+                db_stations = db.query(Station).all()
+                return [map_station_to_domain(s) for s in db_stations]
+        except Exception as e:
+            raise RuntimeError(f"Database error in get_all_stations: {e}")
+
+    def get_all_nearby_mappings(self) -> List[Dict[str, Any]]:
+        try:
+            with db_session() as db:
+                db_mappings = db.query(
+                    City.city_name, Station.station_code, NearbyStationMapping.distance_km
+                ).join(
+                    NearbyStationMapping, NearbyStationMapping.city_id == City.id
+                ).join(
+                    Station, NearbyStationMapping.station_id == Station.id
+                ).all()
+                return [
+                    {
+                        "city_name": city_name,
+                        "station_code": station_code,
+                        "distance_km": distance_km
+                    }
+                    for city_name, station_code, distance_km in db_mappings
+                ]
+        except Exception as e:
+            raise RuntimeError(f"Database error in get_all_nearby_mappings: {e}")

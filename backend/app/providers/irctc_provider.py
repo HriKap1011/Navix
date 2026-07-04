@@ -1,44 +1,48 @@
 from typing import List, Dict, Any, Optional
 from app.providers.base import BaseProvider
+from app.domain.city import City
+from app.domain.station import Station
+from app.domain.corridor import Corridor
+from app.domain.recommendation import SeasonalDemand
+from app.domain.journey import Journey
 
 class IRCTCProvider(BaseProvider):
     """
     Placeholder IRCTC Provider for future rail search integration.
     """
-    def search_routes(self, source: str, destination: str, date: str) -> List[Dict[str, Any]]:
+    def search_routes(self, source: str, destination: str, date: str) -> List[Journey]:
         # Future implementation will query IRCTC API or Partner API
         raise NotImplementedError("IRCTC provider is not yet implemented.")
 
     def search_stations(self) -> Dict[str, str]:
         return {}
 
-    def search_city(self, name: str) -> Dict[str, Any]:
+    def search_city(self, name: str) -> City:
         raise NotImplementedError()
 
     def get_nearby_stations(self, city_name: str) -> List[str]:
         return []
 
-    def get_corridor(self, source: str, destination: str) -> Optional[Dict[str, Any]]:
+    def get_corridor(self, source: str, destination: str) -> Optional[Corridor]:
         return None
 
     def health_check(self) -> bool:
         return False
 
-    def get_all_cities(self) -> List[Dict[str, Any]]:
+    def get_all_cities(self) -> List[City]:
         return []
 
-    def get_all_corridors(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_corridors(self) -> Dict[str, Corridor]:
         return {}
 
-    def get_seasonal_demands(self) -> List[Dict[str, Any]]:
+    def get_seasonal_demands(self) -> List[SeasonalDemand]:
         return []
 
     def is_valid_city(self, name: str) -> bool:
         return False
 
-    def get_all_stations(self) -> List[Dict[str, Any]]:
+    def get_all_stations(self) -> List[Station]:
         return []
 
     def get_all_nearby_mappings(self) -> List[Dict[str, Any]]:
         return []
-

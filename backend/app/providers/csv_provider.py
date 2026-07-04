@@ -6,6 +6,13 @@ from app.ingestion.loader import load_data_file
 from app.ingestion.config import (
     CITIES_FILE, STATIONS_FILE, CORRIDORS_FILE, NEARBY_MAPPINGS_FILE, SEASONAL_DEMANDS_FILE
 )
+from app.domain.city import City as DomainCity
+from app.domain.station import Station as DomainStation
+from app.domain.corridor import Corridor as DomainCorridor
+from app.domain.recommendation import SeasonalDemand as DomainSeasonalDemand
+from app.domain.mappers import (
+    map_city_to_domain, map_station_to_domain, map_corridor_to_domain, map_seasonal_demand_to_domain
+)
 
 class CSVProvider(BaseProvider):
     def __init__(self):
@@ -14,6 +21,8 @@ class CSVProvider(BaseProvider):
         self._nearby_cache = None
         self._corridors_cache = None
         self._seasonal_demands_cache = None
+        self._station_id_to_code = {}
+        self._stations_raw = []
         
         # Load and parse caches on initialization
         self.load_all_caches()
@@ -53,6 +62,7 @@ class CSVProvider(BaseProvider):
         records = load_data_file(STATIONS_FILE)
         stations = {}
         self._station_id_to_code = {}
+        self._stations_raw = []
         for r in records:
             code = r.get("station_code")
             name = r.get("station_name")
@@ -60,6 +70,7 @@ class CSVProvider(BaseProvider):
             if code and name:
                 stations[code.upper().strip()] = name.strip()
                 self._station_id_to_code[s_id] = code.upper().strip()
+                self._stations_raw.append(r)
         self._stations_cache = stations
 
     def load_nearby_cache(self):
@@ -134,16 +145,16 @@ class CSVProvider(BaseProvider):
         self.load_stations_cache()
         return self._stations_cache
 
-    def search_city(self, name: str) -> Dict[str, Any]:
+    def search_city(self, name: str) -> DomainCity:
         self.load_cities_cache()
         for c in self._cities_cache:
             if c["name"].lower() == name.strip().lower():
-                return c
+                return map_city_to_domain(c)
         
         # Fallback hash generator
         h = int(hashlib.md5(name.lower().encode()).hexdigest(), 16)
         code = "".join(filter(str.isalnum, name))[:3].upper()
-        return {
+        city_dict = {
             "name": name,
             "lat": 10.0 + (h % 20),
             "lon": 70.0 + ((h >> 4) % 20),
@@ -152,6 +163,7 @@ class CSVProvider(BaseProvider):
             "code": code,
             "station": code
         }
+        return map_city_to_domain(city_dict)
 
     def get_nearby_stations(self, city_name: str) -> List[str]:
         self.load_nearby_cache()
@@ -162,9 +174,10 @@ class CSVProvider(BaseProvider):
         city_code = cleaned[:3].upper()
         return [city_code, f"{city_code}C", f"{city_code}N"]
 
-    def get_corridor(self, source: str, destination: str) -> Optional[Dict[str, Any]]:
+    def get_corridor(self, source: str, destination: str) -> Optional[DomainCorridor]:
         self.load_corridors_cache()
-        return self._corridors_cache.get(f"{source.lower()}-{destination.lower()}")
+        raw = self._corridors_cache.get(f"{source.lower()}-{destination.lower()}")
+        return map_corridor_to_domain(raw) if raw else None
 
     def health_check(self) -> bool:
         return (
@@ -173,18 +186,60 @@ class CSVProvider(BaseProvider):
             os.path.exists(CORRIDORS_FILE)
         )
 
-    def get_all_cities(self) -> List[Dict[str, Any]]:
+    def get_all_cities(self) -> List[DomainCity]:
         self.load_cities_cache()
-        return self._cities_cache
+        return [map_city_to_domain(c) for c in self._cities_cache]
 
-    def get_all_corridors(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_corridors(self) -> Dict[str, DomainCorridor]:
         self.load_corridors_cache()
-        return self._corridors_cache
+        return {k: map_corridor_to_domain(v) for k, v in self._corridors_cache.items()}
 
-    def get_seasonal_demands(self) -> List[Dict[str, Any]]:
+    def get_seasonal_demands(self) -> List[DomainSeasonalDemand]:
         self.load_seasonal_demands_cache()
-        return self._seasonal_demands_cache
+        return [map_seasonal_demand_to_domain(d) for d in self._seasonal_demands_cache]
 
     def is_valid_city(self, name: str) -> bool:
         self.load_cities_cache()
         return any(c["name"].lower() == name.strip().lower() for c in self._cities_cache)
+
+    def get_all_stations(self) -> List[DomainStation]:
+        self.load_cities_cache()
+        self.load_stations_cache()
+        city_id_to_name = {c["id"]: c["name"] for c in self._cities_cache}
+        
+        domain_stations = []
+        for r in self._stations_raw:
+            c_id = str(r.get("city_id"))
+            c_name = city_id_to_name.get(c_id) or r.get("city_name")
+            
+            station_dict = {
+                "station_code": r.get("station_code"),
+                "station_name": r.get("station_name"),
+                "city_name": c_name,
+                "station_type": r.get("station_type") or "Rail",
+                "importance_score": r.get("importance_score")
+            }
+            domain_stations.append(map_station_to_domain(station_dict))
+        return domain_stations
+
+    def get_all_nearby_mappings(self) -> List[Dict[str, Any]]:
+        self.load_cities_cache()
+        self.load_stations_cache()
+        records = load_data_file(NEARBY_MAPPINGS_FILE)
+        city_id_to_name = {c["id"]: c["name"] for c in self._cities_cache}
+        
+        mappings = []
+        for r in records:
+            city_id = str(r.get("city_id"))
+            station_id = str(r.get("station_id"))
+            city_name = city_id_to_name.get(city_id)
+            station_code = self._station_id_to_code.get(station_id)
+            dist = r.get("distance_km")
+            
+            if city_name and station_code:
+                mappings.append({
+                    "city_name": city_name,
+                    "station_code": station_code,
+                    "distance_km": float(dist) if dist is not None else 0.0
+                })
+        return mappings
