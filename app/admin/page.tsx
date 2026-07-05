@@ -78,6 +78,11 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
     </svg>
   ),
+  Train: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+    </svg>
+  ),
   Network: () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
@@ -100,8 +105,19 @@ export default function AdminDashboard() {
   const [graphSearchResults, setGraphSearchResults] = useState<any[]>([]);
   const [activeNode, setActiveNode] = useState<any>(null);
   const [graphLoading, setGraphLoading] = useState<boolean>(false);
-  const [graphPanel, setGraphPanel] = useState<string | null>(null); // 'health' | 'disconnected' | null
+  const [graphPanel, setGraphPanel] = useState<string | null>(null);
   const [graphToast, setGraphToast] = useState<{msg: string; ok: boolean} | null>(null);
+
+  // Railway Dataset state
+  const [railwayStatus, setRailwayStatus] = useState<any>(null);
+  const [railwayTrains, setRailwayTrains] = useState<any[]>([]);
+  const [railwayTotal, setRailwayTotal] = useState<number>(0);
+  const [railwayPage, setRailwayPage] = useState<number>(1);
+  const [railwaySearch, setRailwaySearch] = useState<string>("");
+  const [railwayTypeFilter, setRailwayTypeFilter] = useState<string>("");
+  const [selectedTrain, setSelectedTrain] = useState<any>(null);
+  const [railwayLoading, setRailwayLoading] = useState<boolean>(false);
+  const [railwayToast, setRailwayToast] = useState<{msg: string; ok: boolean} | null>(null);
   
   // States for CRUD listings
   const [loading, setLoading] = useState<boolean>(false);
@@ -236,6 +252,26 @@ export default function AdminDashboard() {
       }
       setLoading(false);
       return;
+    } else if (activeTab === "railway-dataset") {
+      // Fetch railway dataset status and first page of trains
+      try {
+        const [statusRes, trainsRes] = await Promise.all([
+          fetch(`${BACKEND_BASE_URL}/railway/status`),
+          fetch(`${BACKEND_BASE_URL}/railway/trains?page=1&limit=20`)
+        ]);
+        const statusPayload = await statusRes.json();
+        const trainsPayload = await trainsRes.json();
+        if (statusPayload.success) setRailwayStatus(statusPayload);
+        if (trainsPayload.success) {
+          setRailwayTrains(trainsPayload.trains || []);
+          setRailwayTotal(trainsPayload.total || 0);
+          setRailwayPage(1);
+        }
+      } catch (e) {
+        console.error("Failed to load railway data", e);
+      }
+      setLoading(false);
+      return;
     }
 
     try {
@@ -256,6 +292,7 @@ export default function AdminDashboard() {
 
   // Handle Tab transitions
   useEffect(() => {
+    setData([]);
     setPage(1);
     setSearch("");
     setSortBy("");
@@ -484,6 +521,7 @@ export default function AdminDashboard() {
               { id: "seasonal", label: "Seasonal Demands", icon: Icons.Seasonal },
               { id: "data-sources", label: "Data Sources", icon: Icons.DataSource },
               { id: "travel-network", label: "Travel Network", icon: Icons.Network },
+              { id: "railway-dataset", label: "Railway Dataset", icon: Icons.Train },
               { id: "import", label: "Import Center", icon: Icons.Import },
               { id: "audit", label: "Audit Trail", icon: Icons.Audit }
             ].map((tab) => {
@@ -1315,8 +1353,8 @@ export default function AdminDashboard() {
                   ) : data.length === 0 ? (
                     <div className="text-center py-12 text-slate-500">No registered data sources found.</div>
                   ) : (
-                    data.map((src: any) => (
-                      <div key={src.source_id} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-slate-700 transition">
+                    data.map((src: any, idx: number) => (
+                      <div key={src.source_id || `ds-${idx}`} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-slate-700 transition">
                         <div className="flex items-start space-x-4">
                           <div className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
                             <Icons.DataSource />
@@ -1871,6 +1909,265 @@ export default function AdminDashboard() {
                   ) : "Rebuild Travel Graph"}
                 </button>
               </div>
+
+            </div>
+          )}
+
+          {/* TAB 11: RAILWAY DATASET */}
+          {activeTab === "railway-dataset" && (
+            <div className="space-y-8 animate-fadeIn">
+
+              {/* Dataset Info Banner */}
+              <div className="rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-yellow-500/10 border border-amber-500/20 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-amber-400 text-lg font-extrabold">🚂 Indian Railways Train Time Table</span>
+                    <span className="text-[10px] font-mono bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">NDSAP Licensed</span>
+                  </div>
+                  <p className="text-xs text-slate-400">Source: <a href="https://data.gov.in/catalog/indian-railway-train-time-table" target="_blank" className="text-amber-400 underline hover:text-amber-300">data.gov.in</a> · License: Open Government Data License India v1.0</p>
+                  {railwayStatus?.last_import && (
+                    <p className="text-[10px] text-slate-500">
+                      Last imported: {new Date(railwayStatus.last_import.import_date).toLocaleString("en-IN")}
+                      {" · "} Version: {railwayStatus.last_import.dataset_version}
+                      {" · "} Status: <span className={railwayStatus.last_import.status === "SUCCESS" ? "text-emerald-400" : "text-amber-400"}>{railwayStatus.last_import.status}</span>
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  {railwayToast && (
+                    <div className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg border ${
+                      railwayToast.ok ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-rose-500/10 border-rose-500/20 text-rose-400"
+                    }`}>
+                      <span>{railwayToast.ok ? "✓" : "✕"}</span>
+                      <span>{railwayToast.msg}</span>
+                      <button onClick={() => setRailwayToast(null)} className="ml-1 text-slate-500 hover:text-white">✕</button>
+                    </div>
+                  )}
+                  <button
+                    disabled={railwayLoading}
+                    onClick={async () => {
+                      setRailwayLoading(true);
+                      setRailwayToast(null);
+                      try {
+                        const res = await fetch(`${BACKEND_BASE_URL}/railway/import?force=true`, { method: "POST" });
+                        const payload = await res.json();
+                        if (payload.success) {
+                          setRailwayToast({ msg: payload.message, ok: true });
+                          // Refresh status
+                          const statusRes = await fetch(`${BACKEND_BASE_URL}/railway/status`);
+                          const statusPayload = await statusRes.json();
+                          if (statusPayload.success) setRailwayStatus(statusPayload);
+                        } else {
+                          setRailwayToast({ msg: "Import failed: " + (payload.detail || "Unknown"), ok: false });
+                        }
+                      } catch {
+                        setRailwayToast({ msg: "Could not reach backend.", ok: false });
+                      } finally {
+                        setRailwayLoading(false);
+                      }
+                    }}
+                    className="shrink-0 px-5 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition"
+                  >
+                    {railwayLoading ? "Re-importing..." : "Re-Import Dataset"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Stats Cards */}
+              {railwayStatus && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                  {[
+                    { label: "Total Trains", value: railwayStatus.trains_count, color: "text-amber-400", bg: "from-amber-500/20 to-yellow-500/20", border: "border-amber-500/30" },
+                    { label: "Total Stops", value: railwayStatus.stops_count, color: "text-orange-400", bg: "from-orange-500/20 to-red-500/10", border: "border-orange-500/30" },
+                    { label: "Linked Trains", value: railwayStatus.linked_trains, color: "text-emerald-400", bg: "from-emerald-500/20 to-teal-500/10", border: "border-emerald-500/30" },
+                    { label: "Unlinked Stops", value: railwayStatus.unlinked_stations, color: "text-rose-400", bg: "from-rose-500/20 to-pink-500/10", border: "border-rose-500/30" },
+                  ].map((c, i) => (
+                    <div key={i} className={`p-5 rounded-2xl bg-gradient-to-br ${c.bg} border ${c.border} flex flex-col justify-between shadow-lg`}>
+                      <span className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">{c.label}</span>
+                      <span className={`text-3xl font-extrabold mt-3 font-mono ${c.color}`}>{c.value?.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Coverage Note */}
+              {railwayStatus?.coverage_note && (
+                <div className="text-xs text-slate-400 bg-slate-900/40 border border-slate-800 rounded-xl px-4 py-3">
+                  📊 <span className="text-slate-300 font-medium">Coverage:</span> {railwayStatus.coverage_note}
+                </div>
+              )}
+
+              {/* Train Explorer */}
+              <div className="bg-slate-950/50 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <h3 className="text-sm font-bold text-white">Train Explorer</h3>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Search trains, stations…"
+                      value={railwaySearch}
+                      onChange={async (e) => {
+                        setRailwaySearch(e.target.value);
+                        const q = new URLSearchParams({ page: "1", limit: "20", search: e.target.value, train_type: railwayTypeFilter });
+                        const res = await fetch(`${BACKEND_BASE_URL}/railway/trains?${q}`);
+                        const payload = await res.json();
+                        if (payload.success) { setRailwayTrains(payload.trains); setRailwayTotal(payload.total); setRailwayPage(1); }
+                      }}
+                      className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/50"
+                    />
+                    <select
+                      value={railwayTypeFilter}
+                      onChange={async (e) => {
+                        setRailwayTypeFilter(e.target.value);
+                        const q = new URLSearchParams({ page: "1", limit: "20", search: railwaySearch, train_type: e.target.value });
+                        const res = await fetch(`${BACKEND_BASE_URL}/railway/trains?${q}`);
+                        const payload = await res.json();
+                        if (payload.success) { setRailwayTrains(payload.trains); setRailwayTotal(payload.total); setRailwayPage(1); }
+                      }}
+                      className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-amber-500/50"
+                    >
+                      <option value="">All Types</option>
+                      <option value="Rajdhani">Rajdhani</option>
+                      <option value="Shatabdi">Shatabdi</option>
+                      <option value="Duronto">Duronto</option>
+                      <option value="Garib Rath">Garib Rath</option>
+                      <option value="Humsafar">Humsafar</option>
+                      <option value="Tejas">Tejas</option>
+                      <option value="Mail">Mail/Express</option>
+                      <option value="Superfast">Superfast</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Train List Table */}
+                <div className="overflow-x-auto rounded-xl border border-slate-800">
+                  <table className="w-full text-xs">
+                    <thead className="bg-slate-900/80">
+                      <tr>
+                        {["Train No.", "Name", "Type", "Zone", "From", "To", "Distance", "Stops", "Linked"].map(h => (
+                          <th key={h} className="text-left px-4 py-3 text-slate-400 font-semibold uppercase tracking-wider whitespace-nowrap">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800/60">
+                      {railwayTrains.map((t: any) => (
+                        <tr
+                          key={t.id}
+                          onClick={async () => {
+                            const res = await fetch(`${BACKEND_BASE_URL}/railway/trains/${t.train_number}`);
+                            const payload = await res.json();
+                            if (payload.success) setSelectedTrain(payload.train);
+                          }}
+                          className="hover:bg-slate-900/50 cursor-pointer transition group"
+                        >
+                          <td className="px-4 py-3 font-mono font-bold text-amber-400 group-hover:text-amber-300">{t.train_number}</td>
+                          <td className="px-4 py-3 text-slate-200 max-w-[180px] truncate" title={t.train_name}>{t.train_name}</td>
+                          <td className="px-4 py-3">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                              {t.train_type}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-slate-500 font-mono">{t.zone || "—"}</td>
+                          <td className="px-4 py-3 text-slate-300">{t.from_station_code}</td>
+                          <td className="px-4 py-3 text-slate-300">{t.to_station_code}</td>
+                          <td className="px-4 py-3 text-slate-400">{t.total_distance_km ? `${t.total_distance_km.toLocaleString()} km` : "—"}</td>
+                          <td className="px-4 py-3 text-slate-400">{t.total_stops}</td>
+                          <td className="px-4 py-3">
+                            {t.source_linked && t.destination_linked
+                              ? <span className="text-emerald-400">✓ Both</span>
+                              : <span className="text-amber-400">⚠ Partial</span>
+                            }
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Pagination */}
+                <div className="flex items-center justify-between text-xs text-slate-500">
+                  <span>{railwayTotal} trains total · Page {railwayPage} of {Math.ceil(railwayTotal / 20)}</span>
+                  <div className="flex gap-2">
+                    <button
+                      disabled={railwayPage <= 1}
+                      onClick={async () => {
+                        const np = railwayPage - 1;
+                        const q = new URLSearchParams({ page: String(np), limit: "20", search: railwaySearch, train_type: railwayTypeFilter });
+                        const res = await fetch(`${BACKEND_BASE_URL}/railway/trains?${q}`);
+                        const payload = await res.json();
+                        if (payload.success) { setRailwayTrains(payload.trains); setRailwayPage(np); }
+                      }}
+                      className="px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition"
+                    >
+                      ← Prev
+                    </button>
+                    <button
+                      disabled={railwayPage >= Math.ceil(railwayTotal / 20)}
+                      onClick={async () => {
+                        const np = railwayPage + 1;
+                        const q = new URLSearchParams({ page: String(np), limit: "20", search: railwaySearch, train_type: railwayTypeFilter });
+                        const res = await fetch(`${BACKEND_BASE_URL}/railway/trains?${q}`);
+                        const payload = await res.json();
+                        if (payload.success) { setRailwayTrains(payload.trains); setRailwayPage(np); }
+                      }}
+                      className="px-3 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition"
+                    >
+                      Next →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Train Detail View */}
+              {selectedTrain && (
+                <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6 space-y-5 animate-fadeIn">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl font-extrabold text-amber-400 font-mono">{selectedTrain.train_number}</span>
+                        <span className="text-sm font-bold text-white">{selectedTrain.train_name}</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">{selectedTrain.train_type}</span>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1">
+                        {selectedTrain.from_station_code} → {selectedTrain.to_station_code}
+                        {" · "}{selectedTrain.total_distance_km?.toLocaleString()} km
+                        {" · "}{selectedTrain.running_days}
+                        {" · "}Zone: {selectedTrain.zone || "—"}
+                      </p>
+                    </div>
+                    <button onClick={() => setSelectedTrain(null)} className="text-[10px] uppercase font-mono text-slate-500 hover:text-slate-300 transition">✕ Close</button>
+                  </div>
+
+                  {/* Stop Timeline */}
+                  <div className="space-y-1 max-h-96 overflow-y-auto pr-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-3">Stop-by-Stop Schedule ({selectedTrain.stops?.length} stops)</p>
+                    {selectedTrain.stops?.map((s: any, idx: number) => (
+                      <div key={idx} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs ${
+                        idx === 0 ? "bg-emerald-500/10 border border-emerald-500/20"
+                        : idx === (selectedTrain.stops.length - 1) ? "bg-rose-500/10 border border-rose-500/20"
+                        : "bg-slate-900/50 border border-slate-800"
+                      }`}>
+                        <span className="font-mono text-slate-500 w-5 text-right shrink-0">{s.stop_number}</span>
+                        <div className="flex-1">
+                          <span className={`font-bold ${
+                            idx === 0 ? "text-emerald-400" : idx === (selectedTrain.stops.length - 1) ? "text-rose-400" : "text-slate-200"
+                          }`}>
+                            {s.station_code}
+                          </span>
+                          <span className="text-slate-400 ml-2 truncate">{s.station_name}</span>
+                          {s.station_linked && <span className="ml-2 text-[9px] text-emerald-500">✓ linked</span>}
+                        </div>
+                        <div className="text-right font-mono text-slate-400 shrink-0">
+                          <span className="text-slate-500">arr</span> {s.arrival_time || "--:--"}
+                          <span className="mx-1 text-slate-700">|</span>
+                          <span className="text-slate-500">dep</span> {s.departure_time || "--:--"}
+                        </div>
+                        <span className="text-slate-600 font-mono shrink-0">{s.distance_from_source_km} km</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
             </div>
           )}

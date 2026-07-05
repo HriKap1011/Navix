@@ -123,7 +123,82 @@ def rebuild_graph() -> bool:
                         tkg.add_edge(stations[i], stations[j], "NEARBY", {"type": "intra_city"})
 
         logger.info(f"Travel Knowledge Graph successfully rebuilt. Nodes: {len(tkg.nodes)}, Edges: {sum(len(v) for v in tkg.edges.values())}")
+
+        # ── Phase 2: Enrich TKG with real railway stop connectivity ──────────
+        try:
+            from app.railway.models_ext import RailwayTrain, RailwayTrainStop
+
+            with SessionLocal() as db:
+                trains = db.query(RailwayTrain).all()
+                rail_edges = 0
+
+                for train in trains:
+                    stops = (
+                        db.query(RailwayTrainStop)
+                        .filter_by(train_id=train.id)
+                        .order_by(RailwayTrainStop.stop_number)
+                        .all()
+                    )
+                    if len(stops) < 2:
+                        continue
+
+                    for i in range(len(stops) - 1):
+                        src_code  = stops[i].station_code
+                        dest_code = stops[i + 1].station_code
+                        src_node  = f"Station:{src_code}"
+                        dest_node = f"Station:{dest_code}"
+
+                        # Auto-create station nodes for railway stops not yet in main DB
+                        if src_node not in tkg.nodes:
+                            tkg.add_node(src_node, "Station", {
+                                "code": src_code,
+                                "name": stops[i].station_name or src_code,
+                                "source": "railway_dataset"
+                            })
+                        if dest_node not in tkg.nodes:
+                            tkg.add_node(dest_node, "Station", {
+                                "code": dest_code,
+                                "name": stops[i + 1].station_name or dest_code,
+                                "source": "railway_dataset"
+                            })
+
+                        # Compute edge weight from departure→arrival times
+                        dep_min, arr_min = None, None
+                        try:
+                            if stops[i].departure_time and ":" in stops[i].departure_time:
+                                h, m = stops[i].departure_time.split(":")[:2]
+                                dep_min = int(h) * 60 + int(m)
+                            if stops[i + 1].arrival_time and ":" in stops[i + 1].arrival_time:
+                                h, m = stops[i + 1].arrival_time.split(":")[:2]
+                                arr_min = int(h) * 60 + int(m)
+                        except Exception:
+                            pass
+
+                        travel_min = 0
+                        if dep_min is not None and arr_min is not None:
+                            diff = arr_min - dep_min
+                            if diff < 0:
+                                diff += 1440  # overnight
+                            travel_min = diff
+
+                        tkg.add_edge(src_node, dest_node, "RAIL_SERVICE", {
+                            "train_number": train.train_number,
+                            "train_name":   train.train_name,
+                            "train_type":   train.train_type or "Express",
+                            "travel_minutes": travel_min,
+                            "distance_km": (
+                                (stops[i + 1].distance_from_source_km or 0)
+                                - (stops[i].distance_from_source_km or 0)
+                            ),
+                        })
+                        rail_edges += 1
+
+            logger.info(f"TKG Phase 2 (Railway): added {rail_edges} RAIL_SERVICE edges from {len(trains)} trains")
+        except Exception as rail_ex:
+            logger.warning(f"TKG Phase 2 (Railway) skipped: {rail_ex}")
+
         return True
     except Exception as e:
         logger.error(f"Failed to rebuild Travel Knowledge Graph: {e}", exc_info=True)
         return False
+

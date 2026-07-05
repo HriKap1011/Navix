@@ -10,5 +10,9 @@
     "MOCK": {
         "status": "Active",
         "priority": 3
+    },
+    "RAILWAY_SCHEDULE": {
+        "status": "Active",
+        "priority": 0
     }
 }

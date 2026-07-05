@@ -222,7 +222,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
     )
     
     direct_train = Journey(
-        route_id=f"NX-{seed%1000:03d}-T1",
+        route_id=f"NX-{seed:08d}-T1",
         source=src_city.name,
         destination=dest_city.name,
         duration=Duration(minutes=duration_min_1),
@@ -280,7 +280,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
         )
         
         smart_boarding = Journey(
-            route_id=f"NX-{seed%1000:03d}-T2",
+            route_id=f"NX-{seed:08d}-T2",
             source=src_city.name,
             destination=dest_city.name,
             duration=Duration(minutes=duration_min_2),
@@ -324,7 +324,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
         )
         
         congestion_bypass = Journey(
-            route_id=f"NX-{seed%1000:03d}-T3",
+            route_id=f"NX-{seed:08d}-T3",
             source=src_city.name,
             destination=dest_city.name,
             duration=Duration(minutes=duration_min_3),
@@ -392,7 +392,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
         )
         
         smart_split = Journey(
-            route_id=f"NX-{seed%1000:03d}-S1",
+            route_id=f"NX-{seed:08d}-S1",
             source=src_city.name,
             destination=dest_city.name,
             duration=Duration(minutes=dur_leg_1 + layover + dur_leg_2),
@@ -434,7 +434,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
     )
     
     overnight_bus = Journey(
-        route_id=f"NX-{seed%1000:03d}-B1",
+        route_id=f"NX-{seed:08d}-B1",
         source=src_city.name,
         destination=dest_city.name,
         duration=Duration(minutes=duration_min_4),
@@ -480,7 +480,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
         )
         
         premium_flight = Journey(
-            route_id=f"NX-{seed%1000:03d}-F1",
+            route_id=f"NX-{seed:08d}-F1",
             source=src_city.name,
             destination=dest_city.name,
             duration=Duration(minutes=duration_min_5),
@@ -549,7 +549,7 @@ def generate_routes_for_provider(source: str, destination: str, date: str, provi
         )
         
         air_hybrid = Journey(
-            route_id=f"NX-{seed%1000:03d}-H1",
+            route_id=f"NX-{seed:08d}-H1",
             source=src_city.name,
             destination=dest_city.name,
             duration=Duration(minutes=dur_h1 + layover_h + dur_h2),

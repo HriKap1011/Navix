@@ -1,10 +1,12 @@
 from typing import Dict, List, Optional
 from app.data_sources.connector import BaseConnector, DatabaseConnector, CSVConnector, MockConnector
+from app.railway.connector import RailwayScheduleConnector
 from app.data_sources.configuration import DataSourceConfiguration
 
 class DataSourceRegistry:
     def __init__(self):
         self._connectors: Dict[str, BaseConnector] = {
+            "RAILWAY_SCHEDULE": RailwayScheduleConnector(),
             "DATABASE": DatabaseConnector(),
             "CSV": CSVConnector(),
             "MOCK": MockConnector()

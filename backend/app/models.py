@@ -2,6 +2,11 @@ from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Uniq
 from sqlalchemy.orm import relationship
 from app.database import Base
 
+# Import railway dataset models so they are registered with Base.metadata
+# and created by Base.metadata.create_all()
+from app.railway.models_ext import RailwayTrain, RailwayTrainStop, RailwayDatasetImport  # noqa: F401
+
+
 class City(Base):
     __tablename__ = "cities"
 
