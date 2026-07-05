@@ -1,0 +1,324 @@
+train_number,train_name,train_type,zone,from_station_code,from_station_name,to_station_code,to_station_name,running_days,total_distance_km
+12951,Mumbai Rajdhani Express,Rajdhani,WR,NDLS,New Delhi,MMCT,Mumbai Central,Mon/Thu/Fri/Sat,1384
+12952,Mumbai Rajdhani Express,Rajdhani,WR,MMCT,Mumbai Central,NDLS,New Delhi,Tue/Wed/Sat/Sun,1384
+12953,August Kranti Rajdhani Express,Rajdhani,WR,NDLS,New Delhi,MMCT,Mumbai Central,Daily,1384
+12954,August Kranti Rajdhani Express,Rajdhani,WR,MMCT,Mumbai Central,NDLS,New Delhi,Daily,1384
+12301,Howrah Rajdhani Express,Rajdhani,ER,NDLS,New Delhi,HWH,Howrah Junction,Daily,1450
+12302,Howrah Rajdhani Express,Rajdhani,ER,HWH,Howrah Junction,NDLS,New Delhi,Daily,1450
+12305,Howrah Rajdhani Express (Via Patna),Rajdhani,ER,NDLS,New Delhi,HWH,Howrah Junction,Daily,1526
+12306,Howrah Rajdhani Express (Via Patna),Rajdhani,ER,HWH,Howrah Junction,NDLS,New Delhi,Daily,1526
+12313,Sealdah Rajdhani Express,Rajdhani,ER,NDLS,New Delhi,SDAH,Sealdah,Mon/Wed/Thu/Fri/Sat,1453
+12314,Sealdah Rajdhani Express,Rajdhani,ER,SDAH,Sealdah,NDLS,New Delhi,Tue/Thu/Fri/Sat/Sun,1453
+12431,Trivandrum Rajdhani Express,Rajdhani,SR,NDLS,New Delhi,TVC,Thiruvananthapuram Central,Wed/Fri,3146
+12432,Trivandrum Rajdhani Express,Rajdhani,SR,TVC,Thiruvananthapuram Central,NDLS,New Delhi,Thu/Sat,3146
+12433,Chennai Rajdhani Express,Rajdhani,SR,NDLS,New Delhi,MAS,MGR Chennai Central,Tue/Fri,2175
+12434,Chennai Rajdhani Express,Rajdhani,SR,MAS,MGR Chennai Central,NDLS,New Delhi,Wed/Sat,2175
+12435,Dibrugarh Rajdhani Express,Rajdhani,NFR,NDLS,New Delhi,DBG,Dibrugarh,Tue/Fri,2423
+12436,Dibrugarh Rajdhani Express,Rajdhani,NFR,DBG,Dibrugarh,NDLS,New Delhi,Sun/Wed,2423
+12439,Ranchi Rajdhani Express,Rajdhani,SER,NDLS,New Delhi,RNC,Ranchi Junction,Mon/Tue/Wed/Thu/Fri/Sat,1554
+12440,Ranchi Rajdhani Express,Rajdhani,SER,RNC,Ranchi Junction,NDLS,New Delhi,Tue/Wed/Thu/Fri/Sat/Sun,1554
+12453,Rajendra Nagar Rajdhani,Rajdhani,ECR,RJPB,Rajendra Nagar,NDLS,New Delhi,Mon/Tue/Wed/Thu/Fri/Sat,1003
+12454,Rajendra Nagar Rajdhani,Rajdhani,ECR,NDLS,New Delhi,RJPB,Rajendra Nagar,Tue/Wed/Thu/Fri/Sat/Sun,1003
+12423,Dibrugarh Rajdhani,Rajdhani,NFR,NDLS,New Delhi,DBG,Dibrugarh,Daily,2423
+12424,Dibrugarh Rajdhani,Rajdhani,NFR,DBG,Dibrugarh,NDLS,New Delhi,Daily,2423
+12425,Jammu Rajdhani Express,Rajdhani,NR,NDLS,New Delhi,JAT,Jammu Tawi,Tue/Wed/Fri/Sat,577
+12426,Jammu Rajdhani Express,Rajdhani,NR,JAT,Jammu Tawi,NDLS,New Delhi,Mon/Wed/Thu/Sat,577
+12437,Secunderabad Rajdhani Express,Rajdhani,SCR,NDLS,New Delhi,SC,Secunderabad,Mon/Sat,1758
+12438,Secunderabad Rajdhani Express,Rajdhani,SCR,SC,Secunderabad,NDLS,New Delhi,Tue/Sun,1758
+12001,New Delhi Bhopal Shatabdi,Shatabdi,CR,NDLS,New Delhi,BPL,Bhopal Junction,Mon/Tue/Wed/Thu/Fri/Sat,701
+12002,New Delhi Bhopal Shatabdi,Shatabdi,CR,BPL,Bhopal Junction,NDLS,New Delhi,Mon/Tue/Wed/Thu/Fri/Sat,701
+12003,Lucknow Shatabdi Express,Shatabdi,NR,NDLS,New Delhi,LKO,Lucknow Charbagh,Daily,512
+12004,Lucknow Shatabdi Express,Shatabdi,NR,LKO,Lucknow Charbagh,NDLS,New Delhi,Daily,512
+12005,Kalka Shatabdi Express,Shatabdi,NR,NDLS,New Delhi,CDG,Chandigarh Junction,Daily,256
+12006,Kalka Shatabdi Express,Shatabdi,NR,CDG,Chandigarh Junction,NDLS,New Delhi,Daily,256
+12007,Chennai Shatabdi Express,Shatabdi,SR,MAS,MGR Chennai Central,CBE,Coimbatore Junction,Daily,493
+12008,Chennai Shatabdi Express,Shatabdi,SR,CBE,Coimbatore Junction,MAS,MGR Chennai Central,Daily,493
+12009,Mumbai Shatabdi Express,Shatabdi,CR,MMCT,Mumbai Central,PUNE,Pune Junction,Daily,192
+12010,Mumbai Shatabdi Express,Shatabdi,CR,PUNE,Pune Junction,MMCT,Mumbai Central,Daily,192
+12011,Kalka Shatabdi Express,Shatabdi,NR,NDLS,New Delhi,CDG,Chandigarh Junction,Daily,256
+12012,Kalka Shatabdi Express,Shatabdi,NR,CDG,Chandigarh Junction,NDLS,New Delhi,Daily,256
+12013,New Delhi Amritsar Shatabdi,Shatabdi,NR,NDLS,New Delhi,ASR,Amritsar Junction,Daily,449
+12014,Amritsar New Delhi Shatabdi,Shatabdi,NR,ASR,Amritsar Junction,NDLS,New Delhi,Daily,449
+12015,Ajmer Shatabdi Express,Shatabdi,NWR,NDLS,New Delhi,AII,Ajmer Junction,Daily,441
+12016,Ajmer Shatabdi Express,Shatabdi,NWR,AII,Ajmer Junction,NDLS,New Delhi,Daily,441
+12017,Mumbai Shatabdi Express,Shatabdi,WR,NDLS,New Delhi,MMCT,Mumbai Central,Daily,1384
+12018,Mumbai Shatabdi Express,Shatabdi,WR,MMCT,Mumbai Central,NDLS,New Delhi,Daily,1384
+12019,Howrah Shatabdi Express,Shatabdi,ER,KOAA,Kolkata,NDLS,New Delhi,Daily,1454
+12020,Howrah Shatabdi Express,Shatabdi,ER,NDLS,New Delhi,KOAA,Kolkata,Daily,1454
+12021,Howrah Shatabdi Express (AC),Shatabdi,ER,HWH,Howrah Junction,NDLS,New Delhi,Daily,1450
+12022,Howrah Shatabdi Express (AC),Shatabdi,ER,NDLS,New Delhi,HWH,Howrah Junction,Daily,1450
+12025,Pune Shatabdi Express,Shatabdi,CR,PUNE,Pune Junction,SC,Secunderabad,Daily,582
+12026,Pune Shatabdi Express,Shatabdi,CR,SC,Secunderabad,PUNE,Pune Junction,Daily,582
+12027,Mumbai Kalaburagi Shatabdi,Shatabdi,SWR,CST,Mumbai CSMT,UBL,Hubballi Junction,Daily,622
+12028,Mumbai Kalaburagi Shatabdi,Shatabdi,SWR,UBL,Hubballi Junction,CST,Mumbai CSMT,Daily,622
+12029,Swarna Shatabdi,Shatabdi,NR,NDLS,New Delhi,ASR,Amritsar Junction,Daily,449
+12030,Swarna Shatabdi,Shatabdi,NR,ASR,Amritsar Junction,NDLS,New Delhi,Daily,449
+12213,Delhi Sarai Rohilla Yesvantpur Duronto,Duronto,NR,DEE,Delhi Sarai Rohilla,YPR,Yesvantpur,Tue/Fri,2444
+12214,Yesvantpur Delhi Sarai Rohilla Duronto,Duronto,NR,YPR,Yesvantpur,DEE,Delhi Sarai Rohilla,Wed/Sun,2444
+12219,Mumbai LTT Secunderabad Duronto,Duronto,CR,LTT,Lokmanya Tilak,SC,Secunderabad,Mon/Thu,787
+12220,Secunderabad Mumbai LTT Duronto,Duronto,CR,SC,Secunderabad,LTT,Lokmanya Tilak,Tue/Fri,787
+12221,Pune Mumbai Duronto,Duronto,CR,PUNE,Pune Junction,CST,Mumbai CSMT,Daily,192
+12222,Mumbai Pune Duronto,Duronto,CR,CST,Mumbai CSMT,PUNE,Pune Junction,Daily,192
+12223,Mumbai Lokmanya Tilak Ernakulam Duronto,Duronto,SR,LTT,Lokmanya Tilak,ERS,Kochi Junction,Mon/Thu,1527
+12224,Ernakulam Mumbai Duronto,Duronto,SR,ERS,Kochi Junction,LTT,Lokmanya Tilak,Tue/Fri,1527
+12225,Howrah Duronto Express,Duronto,ER,HWH,Howrah Junction,NDLS,New Delhi,Daily,1450
+12226,Howrah Duronto Express,Duronto,ER,NDLS,New Delhi,HWH,Howrah Junction,Daily,1450
+12245,Howrah Dibrugarh Duronto Express,Duronto,NFR,HWH,Howrah Junction,DBG,Dibrugarh,Mon/Thu,1197
+12246,Dibrugarh Howrah Duronto Express,Duronto,NFR,DBG,Dibrugarh,HWH,Howrah Junction,Tue/Fri,1197
+12267,Mumbai Rewa Duronto Express,Duronto,WCR,MMCT,Mumbai Central,REW,Rewa,Sat,1211
+12268,Rewa Mumbai Duronto Express,Duronto,WCR,REW,Rewa,MMCT,Mumbai Central,Sun,1211
+12269,Chennai Central Hazrat Nizamuddin Duronto,Duronto,SR,MAS,MGR Chennai Central,NZM,Hazrat Nizamuddin,Tue/Fri,2182
+12270,Hazrat Nizamuddin Chennai Duronto,Duronto,SR,NZM,Hazrat Nizamuddin,MAS,MGR Chennai Central,Mon/Thu,2182
+12285,Secunderabad Hazrat Nizamuddin Duronto,Duronto,SCR,SC,Secunderabad,NZM,Hazrat Nizamuddin,Sun/Wed,1758
+12286,Hazrat Nizamuddin Secunderabad Duronto,Duronto,SCR,NZM,Hazrat Nizamuddin,SC,Secunderabad,Mon/Fri,1758
+12621,Tamil Nadu Express,Mail/Express,SR,MAS,MGR Chennai Central,NDLS,New Delhi,Daily,2175
+12622,Tamil Nadu Express,Mail/Express,SR,NDLS,New Delhi,MAS,MGR Chennai Central,Daily,2175
+12627,Karnataka Express,Mail/Express,SWR,SBC,KSR Bengaluru,NDLS,New Delhi,Daily,2444
+12628,Karnataka Express,Mail/Express,SWR,NDLS,New Delhi,SBC,KSR Bengaluru,Daily,2444
+12613,Lalbagh Express,Mail/Express,SR,SBC,KSR Bengaluru,MAS,MGR Chennai Central,Daily,360
+12614,Lalbagh Express,Mail/Express,SR,MAS,MGR Chennai Central,SBC,KSR Bengaluru,Daily,360
+12657,Chennai Central Bengaluru Mail,Mail/Express,SR,MAS,MGR Chennai Central,SBC,KSR Bengaluru,Daily,357
+12658,Bengaluru Chennai Central Mail,Mail/Express,SR,SBC,KSR Bengaluru,MAS,MGR Chennai Central,Daily,357
+11301,Udyan Express,Mail/Express,CR,CST,Mumbai CSMT,SBC,KSR Bengaluru,Daily,1279
+11302,Udyan Express,Mail/Express,CR,SBC,KSR Bengaluru,CST,Mumbai CSMT,Daily,1279
+12027,Godan Express,Mail/Express,NER,GKP,Gorakhpur Junction,NDLS,New Delhi,Daily,759
+12028,Godan Express,Mail/Express,NER,NDLS,New Delhi,GKP,Gorakhpur Junction,Daily,759
+12357,Durgiana Express,Mail/Express,NR,KOAA,Kolkata,ASR,Amritsar Junction,Daily,1898
+12358,Durgiana Express,Mail/Express,NR,ASR,Amritsar Junction,KOAA,Kolkata,Daily,1898
+12903,Golden Temple Mail,Mail/Express,NR,MMCT,Mumbai Central,ASR,Amritsar Junction,Daily,1919
+12904,Golden Temple Mail,Mail/Express,NR,ASR,Amritsar Junction,MMCT,Mumbai Central,Daily,1919
+12137,Punjab Mail,Mail/Express,CR,CST,Mumbai CSMT,ASR,Amritsar Junction,Daily,1930
+12138,Punjab Mail,Mail/Express,CR,ASR,Amritsar Junction,CST,Mumbai CSMT,Daily,1930
+12321,Howrah Mumbai Mail,Mail/Express,CR,HWH,Howrah Junction,CST,Mumbai CSMT,Daily,1968
+12322,Mumbai Howrah Mail,Mail/Express,CR,CST,Mumbai CSMT,HWH,Howrah Junction,Daily,1968
+12309,Rajendra Nagar Patna Express,Mail/Express,ECR,NDLS,New Delhi,RJPB,Rajendra Nagar,Daily,1003
+12310,Rajendra Nagar Patna Express,Mail/Express,ECR,RJPB,Rajendra Nagar,NDLS,New Delhi,Daily,1003
+12391,Shramjeevi Express,Mail/Express,ECR,RJPB,Rajendra Nagar,NDLS,New Delhi,Daily,1003
+12392,Shramjeevi Express,Mail/Express,ECR,NDLS,New Delhi,RJPB,Rajendra Nagar,Daily,1003
+12801,Purushottam Express,Mail/Express,ECoR,NDLS,New Delhi,PURI,Puri,Daily,1757
+12802,Purushottam Express,Mail/Express,ECoR,PURI,Puri,NDLS,New Delhi,Daily,1757
+12073,Howrah Bhubaneswar Jan Shatabdi,Shatabdi,SER,HWH,Howrah Junction,BBS,Bhubaneswar Junction,Daily,439
+12074,Bhubaneswar Howrah Jan Shatabdi,Shatabdi,SER,BBS,Bhubaneswar Junction,HWH,Howrah Junction,Daily,439
+12377,Padatik Express,Mail/Express,ER,KOAA,Kolkata,NJP,New Jalpaiguri,Daily,599
+12378,Padatik Express,Mail/Express,ER,NJP,New Jalpaiguri,KOAA,Kolkata,Daily,599
+12595,Gorakhpur Anand Vihar Humsafar,Humsafar,NER,GKP,Gorakhpur Junction,ANVT,Anand Vihar Terminal,Mon/Thu,759
+12596,Anand Vihar Gorakhpur Humsafar,Humsafar,NER,ANVT,Anand Vihar Terminal,GKP,Gorakhpur Junction,Wed/Sat,759
+12417,Prayagraj Express,Superfast,NCR,PRYJ,Prayagraj Junction,NDLS,New Delhi,Daily,635
+12418,Prayagraj Express,Superfast,NCR,NDLS,New Delhi,PRYJ,Prayagraj Junction,Daily,635
+12401,Magadh Express,Mail/Express,ECR,NDLS,New Delhi,ISLD,Islampur,Daily,1179
+12402,Magadh Express,Mail/Express,ECR,ISLD,Islampur,NDLS,New Delhi,Daily,1179
+12381,Poorva Express,Mail/Express,ER,HWH,Howrah Junction,NDLS,New Delhi,Daily,1532
+12382,Poorva Express,Mail/Express,ER,NDLS,New Delhi,HWH,Howrah Junction,Daily,1532
+12395,Ziyarat Express,Superfast,NER,GKP,Gorakhpur Junction,NDLS,New Delhi,Daily,759
+12396,Ziyarat Express,Superfast,NER,NDLS,New Delhi,GKP,Gorakhpur Junction,Daily,759
+22209,New Delhi Mumbai Central Rajdhani,Rajdhani,WR,NDLS,New Delhi,MMCT,Mumbai Central,Daily,1384
+22210,Mumbai Central New Delhi Rajdhani,Rajdhani,WR,MMCT,Mumbai Central,NDLS,New Delhi,Daily,1384
+12955,Mumbai Jaipur Superfast,Superfast,NWR,MMCT,Mumbai Central,JP,Jaipur Junction,Tue/Thu,1091
+12956,Jaipur Mumbai Superfast,Superfast,NWR,JP,Jaipur Junction,MMCT,Mumbai Central,Wed/Fri,1091
+12961,Avantika Express,Mail/Express,WR,MMCT,Mumbai Central,INDB,Indore Junction,Daily,779
+12962,Avantika Express,Mail/Express,WR,INDB,Indore Junction,MMCT,Mumbai Central,Daily,779
+12473,Sarvodaya Express,Superfast,NWR,JP,Jaipur Junction,SC,Secunderabad,Mon/Thu,1523
+12474,Sarvodaya Express,Superfast,NWR,SC,Secunderabad,JP,Jaipur Junction,Tue/Sat,1523
+12721,Dakshin Express,Mail/Express,SCR,SC,Secunderabad,NDLS,New Delhi,Daily,1758
+12722,Dakshin Express,Mail/Express,SCR,NDLS,New Delhi,SC,Secunderabad,Daily,1758
+12659,Gurudev Express,Mail/Express,CR,CST,Mumbai CSMT,NGP,Nagpur Junction,Daily,1065
+12660,Gurudev Express,Mail/Express,CR,NGP,Nagpur Junction,CST,Mumbai CSMT,Daily,1065
+12051,Dadar Jan Shatabdi,Shatabdi,CR,DR,Dadar,MAO,Madgaon Junction,Daily,747
+12052,Goa Jan Shatabdi,Shatabdi,CR,MAO,Madgaon Junction,DR,Dadar,Daily,747
+12711,Pinakini Express,Mail/Express,SCR,MAS,MGR Chennai Central,SC,Secunderabad,Daily,753
+12712,Pinakini Express,Mail/Express,SCR,SC,Secunderabad,MAS,MGR Chennai Central,Daily,753
+12163,Chennai Egmore Mumbai LTT Express,Superfast,SR,MS,Chennai Egmore,LTT,Lokmanya Tilak,Daily,1279
+12164,Mumbai LTT Chennai Egmore Express,Superfast,SR,LTT,Lokmanya Tilak,MS,Chennai Egmore,Daily,1279
+12643,Nagercoil Express,Mail/Express,SR,NZM,Hazrat Nizamuddin,NCJ,Nagercoil Junction,Tue,3291
+12644,Nagercoil Express,Mail/Express,SR,NCJ,Nagercoil Junction,NZM,Hazrat Nizamuddin,Thu,3291
+12645,Millennium Express,Mail/Express,SR,NZM,Hazrat Nizamuddin,TVC,Thiruvananthapuram Central,Daily,3146
+12646,Millennium Express,Mail/Express,SR,TVC,Thiruvananthapuram Central,NZM,Hazrat Nizamuddin,Daily,3146
+12649,Karnataka Sampark Kranti,Superfast,SWR,SBC,KSR Bengaluru,NZM,Hazrat Nizamuddin,Tue/Fri,2444
+12650,Karnataka Sampark Kranti,Superfast,SWR,NZM,Hazrat Nizamuddin,SBC,KSR Bengaluru,Mon/Thu,2444
+12651,Sampark Kranti Express,Superfast,SR,MAS,MGR Chennai Central,NZM,Hazrat Nizamuddin,Mon/Wed/Fri,2175
+12652,Sampark Kranti Express,Superfast,SR,NZM,Hazrat Nizamuddin,MAS,MGR Chennai Central,Tue/Thu/Sat,2175
+12617,Mangala Lakshadweep Express,Mail/Express,SR,NDLS,New Delhi,ERS,Kochi Junction,Daily,3059
+12618,Mangala Lakshadweep Express,Mail/Express,SR,ERS,Kochi Junction,NDLS,New Delhi,Daily,3059
+12625,Kerala Express,Mail/Express,SR,NDLS,New Delhi,TVC,Thiruvananthapuram Central,Daily,3146
+12626,Kerala Express,Mail/Express,SR,TVC,Thiruvananthapuram Central,NDLS,New Delhi,Daily,3146
+16031,Andaman Express,Mail/Express,SR,MAS,MGR Chennai Central,DG,Danushkodi,Sat,681
+16032,Andaman Express,Mail/Express,SR,DG,Danushkodi,MAS,MGR Chennai Central,Mon,681
+12779,Goa Express,Mail/Express,CR,NZM,Hazrat Nizamuddin,VSG,Vasco Da Gama,Daily,1872
+12780,Goa Express,Mail/Express,CR,VSG,Vasco Da Gama,NZM,Hazrat Nizamuddin,Daily,1872
+12483,Kochuveli Amritsar Express,Superfast,NR,KCVL,Kochuveli,ASR,Amritsar Junction,Mon,3448
+12484,Amritsar Kochuveli Express,Superfast,NR,ASR,Amritsar Junction,KCVL,Kochuveli,Wed,3448
+22691,Rajdhani Express,Rajdhani,SWR,SBC,KSR Bengaluru,NDLS,New Delhi,Tue/Fri,2444
+22692,Rajdhani Express,Rajdhani,SWR,NDLS,New Delhi,SBC,KSR Bengaluru,Mon/Thu,2444
+12029,Swarna Jayanti Rajdhani,Rajdhani,NR,NDLS,New Delhi,LDH,Ludhiana Junction,Daily,311
+12030,Swarna Jayanti Rajdhani,Rajdhani,NR,LDH,Ludhiana Junction,NDLS,New Delhi,Daily,311
+12909,Bandra Terminus Garib Rath,Garib Rath,WR,BDTS,Bandra Terminus,SC,Secunderabad,Mon/Wed/Fri,1590
+12910,Secunderabad Bandra Garib Rath,Garib Rath,WR,SC,Secunderabad,BDTS,Bandra Terminus,Tue/Thu/Sat,1590
+12215,Delhi Sarai Rohilla Garib Rath,Garib Rath,WR,DEE,Delhi Sarai Rohilla,ADI,Ahmedabad Junction,Daily,941
+12216,Ahmedabad Garib Rath,Garib Rath,WR,ADI,Ahmedabad Junction,DEE,Delhi Sarai Rohilla,Daily,941
+12581,Patna New Delhi Express,Superfast,ECR,PNBE,Patna Junction,NDLS,New Delhi,Daily,1003
+12582,New Delhi Patna Express,Superfast,ECR,NDLS,New Delhi,PNBE,Patna Junction,Daily,1003
+15483,Mahananda Express,Mail/Express,NFR,DBG,Dibrugarh,CSMT,Mumbai CSMT,Mon,3157
+15484,Mahananda Express,Mail/Express,NFR,CSMT,Mumbai CSMT,DBG,Dibrugarh,Wed,3157
+12553,Vaishali Express,Superfast,ECR,PNBE,Patna Junction,NDLS,New Delhi,Daily,1003
+12554,Vaishali Express,Superfast,ECR,NDLS,New Delhi,PNBE,Patna Junction,Daily,1003
+12987,Ajmer Sealdah Express,Superfast,ER,AII,Ajmer Junction,SDAH,Sealdah,Tue,1909
+12988,Sealdah Ajmer Express,Superfast,ER,SDAH,Sealdah,AII,Ajmer Junction,Wed,1909
+12239,Delhi Sarai Rohilla Bandra Duronto,Duronto,WR,DEE,Delhi Sarai Rohilla,BDTS,Bandra Terminus,Tue/Thu/Sat,1413
+12240,Bandra Terminus Delhi Sarai Rohilla Duronto,Duronto,WR,BDTS,Bandra Terminus,DEE,Delhi Sarai Rohilla,Mon/Wed/Fri,1413
+12241,Chandigarh New Delhi Shatabdi,Shatabdi,NR,CDG,Chandigarh Junction,NDLS,New Delhi,Daily,256
+12242,New Delhi Chandigarh Shatabdi,Shatabdi,NR,NDLS,New Delhi,CDG,Chandigarh Junction,Daily,256
+12075,Jan Shatabdi Express,Shatabdi,NR,NDLS,New Delhi,CDG,Chandigarh Junction,Daily,256
+12076,Jan Shatabdi Express,Shatabdi,NR,CDG,Chandigarh Junction,NDLS,New Delhi,Daily,256
+12077,Jan Shatabdi Express,Shatabdi,NR,LKO,Lucknow Charbagh,NDLS,New Delhi,Daily,512
+12078,Jan Shatabdi Express,Shatabdi,NR,NDLS,New Delhi,LKO,Lucknow Charbagh,Daily,512
+12079,Jan Shatabdi Express,Shatabdi,NR,NDLS,New Delhi,GKP,Gorakhpur Junction,Daily,759
+12080,Jan Shatabdi Express,Shatabdi,NR,GKP,Gorakhpur Junction,NDLS,New Delhi,Daily,759
+12169,Varanasi Mumbai LTT Express,Superfast,ECR,BSB,Varanasi Junction,LTT,Lokmanya Tilak,Wed,1765
+12170,Mumbai LTT Varanasi Express,Superfast,ECR,LTT,Lokmanya Tilak,BSB,Varanasi Junction,Mon,1765
+12687,Debogiri Express,Mail/Express,CR,CST,Mumbai CSMT,MAS,MGR Chennai Central,Daily,1279
+12688,Debogiri Express,Mail/Express,CR,MAS,MGR Chennai Central,CST,Mumbai CSMT,Daily,1279
+11401,Nandigram Express,Mail/Express,CR,CST,Mumbai CSMT,GWL,Gwalior Junction,Daily,1220
+11402,Nandigram Express,Mail/Express,CR,GWL,Gwalior Junction,CST,Mumbai CSMT,Daily,1220
+12321,Howrah Mumbai Mail,Mail/Express,CR,HWH,Howrah Junction,CSMT,Mumbai CSMT,Daily,1968
+12322,Mumbai Howrah Mail,Mail/Express,CR,CSMT,Mumbai CSMT,HWH,Howrah Junction,Daily,1968
+13007,Udayan Abha Toofan Express,Mail/Express,ER,HWH,Howrah Junction,ANVT,Anand Vihar Terminal,Daily,1450
+13008,Udayan Abha Toofan Express,Mail/Express,ER,ANVT,Anand Vihar Terminal,HWH,Howrah Junction,Daily,1450
+12369,Kumbha Express,Mail/Express,ECR,HWH,Howrah Junction,PRYJ,Prayagraj Junction,Daily,806
+12370,Kumbha Express,Mail/Express,ECR,PRYJ,Prayagraj Junction,HWH,Howrah Junction,Daily,806
+12805,Janmabhoomi Express,Mail/Express,ECoR,VSKP,Visakhapatnam Junction,HWH,Howrah Junction,Daily,710
+12806,Janmabhoomi Express,Mail/Express,ECoR,HWH,Howrah Junction,VSKP,Visakhapatnam Junction,Daily,710
+12809,Howrah Mumbai Mail,Mail/Express,CR,HWH,Howrah Junction,CSMT,Mumbai CSMT,Daily,1968
+12810,Mumbai Howrah Mail,Mail/Express,CR,CSMT,Mumbai CSMT,HWH,Howrah Junction,Daily,1968
+12839,Howrah Madras Mail,Mail/Express,SR,HWH,Howrah Junction,MAS,MGR Chennai Central,Daily,1663
+12840,Chennai Howrah Mail,Mail/Express,SR,MAS,MGR Chennai Central,HWH,Howrah Junction,Daily,1663
+12841,Coromandel Express,Superfast,ECoR,HWH,Howrah Junction,MAS,MGR Chennai Central,Daily,1663
+12842,Coromandel Express,Superfast,ECoR,MAS,MGR Chennai Central,HWH,Howrah Junction,Daily,1663
+12829,Bhubaneswar Rajdhani Express,Rajdhani,ECoR,BBS,Bhubaneswar Junction,NDLS,New Delhi,Daily,1983
+12830,Bhubaneswar Rajdhani Express,Rajdhani,ECoR,NDLS,New Delhi,BBS,Bhubaneswar Junction,Daily,1983
+16317,Himsagar Express,Mail/Express,SR,JAT,Jammu Tawi,CAPE,Kanyakumari,Sat,3745
+16318,Himsagar Express,Mail/Express,SR,CAPE,Kanyakumari,JAT,Jammu Tawi,Mon,3745
+12549,Doon Express,Mail/Express,NR,DDN,Dehradun Junction,CSMT,Mumbai CSMT,Wed,2006
+12550,Doon Express,Mail/Express,NR,CSMT,Mumbai CSMT,DDN,Dehradun Junction,Fri,2006
+12055,Dehradun Jan Shatabdi,Shatabdi,NR,DDN,Dehradun Junction,NDLS,New Delhi,Daily,302
+12056,Dehradun Jan Shatabdi,Shatabdi,NR,NDLS,New Delhi,DDN,Dehradun Junction,Daily,302
+14521,Unchahar Express,Mail/Express,NCR,NDLS,New Delhi,UNCH,Unchahar Junction,Daily,697
+14522,Unchahar Express,Mail/Express,NCR,UNCH,Unchahar Junction,NDLS,New Delhi,Daily,697
+12471,Swaraj Express,Mail/Express,NWR,JP,Jaipur Junction,INDB,Indore Junction,Daily,559
+12472,Swaraj Express,Mail/Express,NWR,INDB,Indore Junction,JP,Jaipur Junction,Daily,559
+12977,Maru Sagar Express,Superfast,NWR,MMCT,Mumbai Central,JP,Jaipur Junction,Daily,1091
+12978,Maru Sagar Express,Superfast,NWR,JP,Jaipur Junction,MMCT,Mumbai Central,Daily,1091
+12905,Porbandar Express,Mail/Express,WR,MMCT,Mumbai Central,PBR,Porbandar,Daily,836
+12906,Porbandar Express,Mail/Express,WR,PBR,Porbandar,MMCT,Mumbai Central,Daily,836
+19015,Saurashtra Express,Mail/Express,WR,MMCT,Mumbai Central,OKA,Okha,Daily,982
+19016,Saurashtra Express,Mail/Express,WR,OKA,Okha,MMCT,Mumbai Central,Daily,982
+19019,Mumbai Dehradun Express,Mail/Express,NR,BDTS,Bandra Terminus,DDN,Dehradun Junction,Daily,1541
+19020,Dehradun Mumbai Express,Mail/Express,NR,DDN,Dehradun Junction,BDTS,Bandra Terminus,Daily,1541
+12931,Ahmedabad Mumbai Double Decker,Superfast,WR,ADI,Ahmedabad Junction,MMCT,Mumbai Central,Daily,493
+12932,Mumbai Ahmedabad Double Decker,Superfast,WR,MMCT,Mumbai Central,ADI,Ahmedabad Junction,Daily,493
+12269,Chennai Duronto,Duronto,SR,MAS,MGR Chennai Central,NZM,Hazrat Nizamuddin,Tue/Fri,2175
+12270,Hazrat Nizamuddin Chennai Duronto,Duronto,SR,NZM,Hazrat Nizamuddin,MAS,MGR Chennai Central,Mon/Thu,2175
+12779,Goa Express,Mail/Express,CR,NZM,Hazrat Nizamuddin,MAO,Madgaon Junction,Fri,1890
+12780,Madgaon Hazrat Nizamuddin Express,Mail/Express,CR,MAO,Madgaon Junction,NZM,Hazrat Nizamuddin,Mon,1890
+12415,Indrayan Express,Superfast,NR,NDLS,New Delhi,LKO,Lucknow Charbagh,Daily,512
+12416,Indrayan Express,Superfast,NR,LKO,Lucknow Charbagh,NDLS,New Delhi,Daily,512
+15707,Amrapali Express,Mail/Express,NER,ANVT,Anand Vihar Terminal,DBG,Dibrugarh,Mon/Fri,1888
+15708,Amrapali Express,Mail/Express,NER,DBG,Dibrugarh,ANVT,Anand Vihar Terminal,Tue/Sat,1888
+12333,Vibhuti Express,Mail/Express,ECR,HWH,Howrah Junction,PNBE,Patna Junction,Daily,528
+12334,Vibhuti Express,Mail/Express,ECR,PNBE,Patna Junction,HWH,Howrah Junction,Daily,528
+12351,Danapur Rajendra Nagar Express,Mail/Express,ECR,PNBE,Patna Junction,RJPB,Rajendra Nagar,Daily,10
+12352,Rajendra Nagar Danapur Express,Mail/Express,ECR,RJPB,Rajendra Nagar,PNBE,Patna Junction,Daily,10
+12367,Vikramshila Express,Mail/Express,ECR,BHGP,Bhagalpur,ANVT,Anand Vihar Terminal,Daily,1244
+12368,Vikramshila Express,Mail/Express,ECR,ANVT,Anand Vihar Terminal,BHGP,Bhagalpur,Daily,1244
+14113,Allahabad Express,Mail/Express,NCR,PRYJ,Prayagraj Junction,NDLS,New Delhi,Daily,635
+14114,Allahabad Express,Mail/Express,NCR,NDLS,New Delhi,PRYJ,Prayagraj Junction,Daily,635
+12191,Shridham Express,Mail/Express,WCR,NDLS,New Delhi,JBP,Jabalpur Junction,Daily,978
+12192,Shridham Express,Mail/Express,WCR,JBP,Jabalpur Junction,NDLS,New Delhi,Daily,978
+11057,Amritsar CSMT Express,Mail/Express,CR,ASR,Amritsar Junction,CSMT,Mumbai CSMT,Daily,1930
+11058,CSMT Amritsar Express,Mail/Express,CR,CSMT,Mumbai CSMT,ASR,Amritsar Junction,Daily,1930
+22109,Mumbai LTT Hazrat Nizamuddin AC Express,Superfast,CR,LTT,Lokmanya Tilak,NZM,Hazrat Nizamuddin,Daily,1385
+22110,Hazrat Nizamuddin Mumbai LTT AC Express,Superfast,CR,NZM,Hazrat Nizamuddin,LTT,Lokmanya Tilak,Daily,1385
+12149,Pune Danapur Exp,Superfast,CR,PUNE,Pune Junction,DNR,Danapur,Mon/Wed,1710
+12150,Danapur Pune Express,Superfast,CR,DNR,Danapur,PUNE,Pune Junction,Thu/Sat,1710
+22211,Mysore Duronto,Duronto,SWR,MYS,Mysore Junction,NZM,Hazrat Nizamuddin,Fri,2504
+22212,Mysore Duronto,Duronto,SWR,NZM,Hazrat Nizamuddin,MYS,Mysore Junction,Wed,2504
+12571,Gorakhpur Anand Vihar Humsafar,Humsafar,NER,GKP,Gorakhpur Junction,ANVT,Anand Vihar Terminal,Tue/Fri,759
+12572,Anand Vihar Gorakhpur Humsafar,Humsafar,NER,ANVT,Anand Vihar Terminal,GKP,Gorakhpur Junction,Wed/Sat,759
+12589,Gorakhpur Pune Express,Mail/Express,NER,GKP,Gorakhpur Junction,PUNE,Pune Junction,Mon,1802
+12590,Pune Gorakhpur Express,Mail/Express,NER,PUNE,Pune Junction,GKP,Gorakhpur Junction,Fri,1802
+12279,Taj Express,Mail/Express,NCR,NDLS,New Delhi,AGC,Agra Cantt,Daily,195
+12280,Taj Express,Mail/Express,NCR,AGC,Agra Cantt,NDLS,New Delhi,Daily,195
+12627,Karnataka Sampark Kranti Express,Superfast,SWR,SBC,KSR Bengaluru,NZM,Hazrat Nizamuddin,Tue/Thu,2444
+12628,Karnataka Sampark Kranti Express,Superfast,SWR,NZM,Hazrat Nizamuddin,SBC,KSR Bengaluru,Wed/Sun,2444
+16787,Tirupati Express,Mail/Express,SR,TEN,Tirunelveli,MAS,MGR Chennai Central,Daily,754
+16788,Tirupati Express,Mail/Express,SR,MAS,MGR Chennai Central,TEN,Tirunelveli,Daily,754
+12827,Howrah Purulia Express,Mail/Express,SER,HWH,Howrah Junction,PRR,Purulia Junction,Daily,356
+12828,Purulia Howrah Express,Mail/Express,SER,PRR,Purulia Junction,HWH,Howrah Junction,Daily,356
+12853,Amaravati Express,Superfast,SCR,VSKP,Visakhapatnam Junction,SC,Secunderabad,Daily,697
+12854,Amaravati Express,Superfast,SCR,SC,Secunderabad,VSKP,Visakhapatnam Junction,Daily,697
+12701,Hussain Sagar Express,Mail/Express,SCR,SC,Secunderabad,CST,Mumbai CSMT,Daily,786
+12702,Hussain Sagar Express,Mail/Express,SCR,CST,Mumbai CSMT,SC,Secunderabad,Daily,786
+17201,Golconda Express,Mail/Express,SCR,SC,Secunderabad,MAS,MGR Chennai Central,Daily,753
+17202,Golconda Express,Mail/Express,SCR,MAS,MGR Chennai Central,SC,Secunderabad,Daily,753
+12203,Garib Rath Express,Garib Rath,ECR,SDAH,Sealdah,NDLS,New Delhi,Wed/Sun,1453
+12204,Garib Rath Express,Garib Rath,ECR,NDLS,New Delhi,SDAH,Sealdah,Thu/Mon,1453
+22823,Bhubaneswar Rajdhani Express,Rajdhani,ECoR,BBS,Bhubaneswar Junction,NZM,Hazrat Nizamuddin,Daily,1927
+22824,Bhubaneswar Rajdhani Express,Rajdhani,ECoR,NZM,Hazrat Nizamuddin,BBS,Bhubaneswar Junction,Daily,1927
+12441,Bilaspur Rajdhani,Rajdhani,SECR,BSP,Bilaspur Junction,NDLS,New Delhi,Fri,1282
+12442,Bilaspur Rajdhani,Rajdhani,SECR,NDLS,New Delhi,BSP,Bilaspur Junction,Wed,1282
+22811,Bhubaneswar New Delhi Rajdhani,Rajdhani,ECoR,BBS,Bhubaneswar Junction,NDLS,New Delhi,Tue/Thu,1983
+22812,Bhubaneswar New Delhi Rajdhani,Rajdhani,ECoR,NDLS,New Delhi,BBS,Bhubaneswar Junction,Mon/Wed,1983
+12615,Grand Trunk Express,Mail/Express,SR,MAS,MGR Chennai Central,NDLS,New Delhi,Daily,2175
+12616,Grand Trunk Express,Mail/Express,SR,NDLS,New Delhi,MAS,MGR Chennai Central,Daily,2175
+11027,Chennai Mail,Mail/Express,CR,CST,Mumbai CSMT,MAS,MGR Chennai Central,Daily,1279
+11028,Chennai Mail,Mail/Express,CR,MAS,MGR Chennai Central,CST,Mumbai CSMT,Daily,1279
+12633,Kanyakumari Express,Mail/Express,SR,NZM,Hazrat Nizamuddin,CAPE,Kanyakumari,Daily,3291
+12634,Kanyakumari Express,Mail/Express,SR,CAPE,Kanyakumari,NZM,Hazrat Nizamuddin,Daily,3291
+12617,Mangala Lakshadweep Express,Mail/Express,SR,NDLS,New Delhi,TVC,Thiruvananthapuram Central,Daily,3059
+12618,Mangala Lakshadweep Express,Mail/Express,SR,TVC,Thiruvananthapuram Central,NDLS,New Delhi,Daily,3059
+16333,Venad Express,Mail/Express,SR,ERS,Kochi Junction,TVC,Thiruvananthapuram Central,Daily,198
+16334,Venad Express,Mail/Express,SR,TVC,Thiruvananthapuram Central,ERS,Kochi Junction,Daily,198
+16301,Venad Express Trivandrum,Mail/Express,SR,SRR,Shoranur Junction,TVC,Thiruvananthapuram Central,Daily,227
+16302,Venad Express Trivandrum,Mail/Express,SR,TVC,Thiruvananthapuram Central,SRR,Shoranur Junction,Daily,227
+12057,Una Himachal Jan Shatabdi,Shatabdi,NR,NDLS,New Delhi,UNA,Una Himachal,Daily,305
+12058,Una Himachal Jan Shatabdi,Shatabdi,NR,UNA,Una Himachal,NDLS,New Delhi,Daily,305
+12059,Kota Jan Shatabdi,Shatabdi,WCR,NDLS,New Delhi,KOTA,Kota Junction,Daily,456
+12060,Kota Jan Shatabdi,Shatabdi,WCR,KOTA,Kota Junction,NDLS,New Delhi,Daily,456
+12061,Habibganj Jabalpur Shatabdi,Shatabdi,WCR,HBJ,Habibganj,JBP,Jabalpur Junction,Daily,333
+12062,Habibganj Jabalpur Shatabdi,Shatabdi,WCR,JBP,Jabalpur Junction,HBJ,Habibganj,Daily,333
+12191,Shridham Express,Mail/Express,WCR,JBP,Jabalpur Junction,NDLS,New Delhi,Daily,978
+12192,Shridham Express,Mail/Express,WCR,NDLS,New Delhi,JBP,Jabalpur Junction,Daily,978
+22477,Bikaner Jodhpur SF,Superfast,NWR,BKN,Bikaner Junction,JU,Jodhpur Junction,Daily,256
+22478,Jodhpur Bikaner SF,Superfast,NWR,JU,Jodhpur Junction,BKN,Bikaner Junction,Daily,256
+13005,Amritsar Mail,Mail/Express,ER,HWH,Howrah Junction,ASR,Amritsar Junction,Daily,1898
+13006,Amritsar Mail,Mail/Express,ER,ASR,Amritsar Junction,HWH,Howrah Junction,Daily,1898
+12069,Gorakhpur Jan Shatabdi,Shatabdi,NER,GKP,Gorakhpur Junction,NDLS,New Delhi,Daily,759
+12070,Gorakhpur Jan Shatabdi,Shatabdi,NER,NDLS,New Delhi,GKP,Gorakhpur Junction,Daily,759
+12071,Jamnagar Jan Shatabdi,Shatabdi,WR,BDTS,Bandra Terminus,JAM,Jamnagar,Daily,897
+12072,Jamnagar Jan Shatabdi,Shatabdi,WR,JAM,Jamnagar,BDTS,Bandra Terminus,Daily,897
+12179,Agra Cantt LKO Express,Superfast,NCR,AGC,Agra Cantt,LKO,Lucknow Charbagh,Daily,368
+12180,LKO Agra Cantt Express,Superfast,NCR,LKO,Lucknow Charbagh,AGC,Agra Cantt,Daily,368
+22125,Kochuveli Nagpur AC Express,Superfast,CR,KCVL,Kochuveli,NGP,Nagpur Junction,Mon,1794
+22126,Nagpur Kochuveli AC Express,Superfast,CR,NGP,Nagpur Junction,KCVL,Kochuveli,Fri,1794
+12571,Guwahati Express,Mail/Express,NFR,GHY,Guwahati Junction,NDLS,New Delhi,Daily,1952
+12572,Guwahati Express,Mail/Express,NFR,NDLS,New Delhi,GHY,Guwahati Junction,Daily,1952
+15651,Lohit Express,Mail/Express,NFR,GHY,Guwahati Junction,LTT,Lokmanya Tilak,Mon,3088
+15652,Lohit Express,Mail/Express,NFR,LTT,Lokmanya Tilak,GHY,Guwahati Junction,Thu,3088
+12501,Poorvottar Sampark Kranti,Superfast,NFR,GHY,Guwahati Junction,NDLS,New Delhi,Daily,1952
+12502,Poorvottar Sampark Kranti,Superfast,NFR,NDLS,New Delhi,GHY,Guwahati Junction,Daily,1952
+12911,Ajmer Bandra Terminus Express,Superfast,NWR,AII,Ajmer Junction,BDTS,Bandra Terminus,Mon/Wed/Fri,948
+12912,Bandra Terminus Ajmer Express,Superfast,NWR,BDTS,Bandra Terminus,AII,Ajmer Junction,Tue/Thu/Sat,948
+12983,Ajmer Chennai Central Express,Superfast,SR,AII,Ajmer Junction,MAS,MGR Chennai Central,Mon,2375
+12984,Chennai Ajmer Express,Superfast,SR,MAS,MGR Chennai Central,AII,Ajmer Junction,Fri,2375
+19021,Bandra Ludhiana Express,Mail/Express,NR,BDTS,Bandra Terminus,LDH,Ludhiana Junction,Tue,1875
+19022,Ludhiana Bandra Express,Mail/Express,NR,LDH,Ludhiana Junction,BDTS,Bandra Terminus,Thu,1875
+12479,Mumbai Amritsar Express,Superfast,NR,MMCT,Mumbai Central,ASR,Amritsar Junction,Daily,1919
+12480,Amritsar Mumbai Express,Superfast,NR,ASR,Amritsar Junction,MMCT,Mumbai Central,Daily,1919
+12671,Nilagiri Express,Mail/Express,SR,CBE,Coimbatore Junction,MAS,MGR Chennai Central,Daily,493
+12672,Nilagiri Express,Mail/Express,SR,MAS,MGR Chennai Central,CBE,Coimbatore Junction,Daily,493
+22851,Visakhapatnam Mumbai Tejas,Tejas,ECoR,VSKP,Visakhapatnam Junction,LTT,Lokmanya Tilak,Mon/Thu,1578
+22852,Mumbai Visakhapatnam Tejas,Tejas,ECoR,LTT,Lokmanya Tilak,VSKP,Visakhapatnam Junction,Wed/Sat,1578
+20503,New Delhi Dibrugarh Rajdhani,Rajdhani,NFR,NDLS,New Delhi,DBG,Dibrugarh,Daily,2423
+20504,Dibrugarh New Delhi Rajdhani,Rajdhani,NFR,DBG,Dibrugarh,NDLS,New Delhi,Daily,2423
+22823,Bhubaneswar Rajdhani Express,Rajdhani,ECoR,BBS,Bhubaneswar Junction,NDLS,New Delhi,Daily,1983
+22886,Puri Mumbai Express,Superfast,ECoR,PURI,Puri,LTT,Lokmanya Tilak,Tue,2022
+22885,Mumbai Puri Express,Superfast,ECoR,LTT,Lokmanya Tilak,PURI,Puri,Thu,2022

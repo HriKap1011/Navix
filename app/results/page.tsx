@@ -143,8 +143,15 @@ export default async function ResultsPage({
       }
     }
 
-    // Filter
-    routeOptions = [...rawWithScores];
+    // Deduplicate rawWithScores by id — guard against any duplicate IDs from the API
+    const seenIds = new Set<string>();
+    const uniqueRaw = rawWithScores.filter((r: any) => {
+      if (seenIds.has(r.id)) return false;
+      seenIds.add(r.id);
+      return true;
+    });
+    routeOptions = [...uniqueRaw];
+
     if (mode !== "all") {
       routeOptions = routeOptions.filter(route =>
         route.travelModes.some((m: string) => m.toLowerCase().includes(mode.toLowerCase()))
@@ -172,7 +179,7 @@ export default async function ResultsPage({
       routeOptions.sort((a, b) => b.navixScore - a.navixScore);
     }
 
-    priceValues = rawWithScores.map(r => parseFloat(r.estimatedPrice.replace(/[^0-9.]/g, ""))).sort((a, b) => a - b);
+    priceValues = uniqueRaw.map(r => parseFloat(r.estimatedPrice.replace(/[^0-9.]/g, ""))).sort((a, b) => a - b);
     const maxPriceValue = priceValues.length > 0 ? Math.max(...priceValues) : 0;
 
     const getQuartile = (arr: number[], q: number) => {
@@ -187,7 +194,7 @@ export default async function ResultsPage({
     const q3 = getQuartile(priceValues, 0.75);
     const iqr = q3 - q1;
 
-    rawWithScores.forEach((route) => {
+    uniqueRaw.forEach((route) => {
       const p = parseFloat(route.estimatedPrice.replace(/[^0-9.]/g, ""));
       let rank = 1; // Default: Fair
 
@@ -207,7 +214,9 @@ export default async function ResultsPage({
     const hasFlightOption = displayedRoutes.some(r => r.travelModes.includes("Flight"));
 
     if (!hasFlightOption && routeOptions.length > 6) {
-      const bestFlightRoute = routeOptions.find(r => r.travelModes.includes("Flight"));
+      // Search only from routes OUTSIDE the already-displayed slice to avoid duplicate keys
+      const displayedIds = new Set(displayedRoutes.map(r => r.id));
+      const bestFlightRoute = routeOptions.find(r => r.travelModes.includes("Flight") && !displayedIds.has(r.id));
       if (bestFlightRoute) {
         displayedRoutes[5] = bestFlightRoute;
       }

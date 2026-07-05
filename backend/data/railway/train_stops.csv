@@ -1,0 +1,447 @@
+train_number,stop_number,station_code,station_name,arrival_time,departure_time,halt_minutes,distance_from_source_km
+12951,1,NDLS,New Delhi,--:--,17:55,0,0
+12951,2,MTJ,Mathura Junction,20:18,20:20,2,142
+12951,3,RTM,Ratlam Junction,00:30,00:35,5,618
+12951,4,BRC,Vadodara Junction,03:05,03:10,5,779
+12951,5,ST,Surat Junction,04:47,04:50,3,895
+12951,6,BVI,Borivali,06:48,06:50,2,1349
+12951,7,MMCT,Mumbai Central,07:40,--:--,0,1384
+12952,1,MMCT,Mumbai Central,17:00,--:--,0,0
+12952,2,BVI,Borivali,17:40,17:42,2,35
+12952,3,ST,Surat Junction,19:40,19:42,2,489
+12952,4,BRC,Vadodara Junction,21:05,21:10,5,605
+12952,5,RTM,Ratlam Junction,23:45,23:50,5,766
+12952,6,MTJ,Mathura Junction,03:55,03:57,2,1242
+12952,7,NDLS,New Delhi,06:25,--:--,0,1384
+12301,1,NDLS,New Delhi,16:55,--:--,0,0
+12301,2,CNB,Kanpur Junction,21:00,21:05,5,440
+12301,3,PRYJ,Prayagraj Junction,22:50,22:55,5,635
+12301,4,MGS,Mughal Sarai Junction,01:15,01:20,5,792
+12301,5,DHN,Dhanbad Junction,04:10,04:15,5,1166
+12301,6,ASNSN,Asansol Junction,05:30,05:32,2,1254
+12301,7,HWH,Howrah Junction,08:05,--:--,0,1450
+12302,1,HWH,Howrah Junction,11:55,--:--,0,0
+12302,2,ASNSN,Asansol Junction,14:20,14:22,2,196
+12302,3,DHN,Dhanbad Junction,15:40,15:42,2,284
+12302,4,MGS,Mughal Sarai Junction,18:30,18:35,5,658
+12302,5,PRYJ,Prayagraj Junction,19:52,19:55,3,815
+12302,6,CNB,Kanpur Junction,21:45,21:50,5,1010
+12302,7,NDLS,New Delhi,02:00,--:--,0,1450
+12305,1,NDLS,New Delhi,10:55,--:--,0,0
+12305,2,CNB,Kanpur Junction,15:05,15:10,5,440
+12305,3,LKO,Lucknow Charbagh,16:55,17:00,5,512
+12305,4,BSB,Varanasi Junction,20:30,20:35,5,762
+12305,5,PNBE,Patna Junction,23:45,23:50,5,1000
+12305,6,DHN,Dhanbad Junction,03:00,03:05,5,1201
+12305,7,HWH,Howrah Junction,06:35,--:--,0,1526
+12306,1,HWH,Howrah Junction,14:05,--:--,0,0
+12306,2,DHN,Dhanbad Junction,17:30,17:32,2,325
+12306,3,PNBE,Patna Junction,20:30,20:35,5,526
+12306,4,BSB,Varanasi Junction,23:40,23:45,5,764
+12306,5,LKO,Lucknow Charbagh,02:55,03:00,5,1014
+12306,6,CNB,Kanpur Junction,04:35,04:40,5,1086
+12306,7,NDLS,New Delhi,09:05,--:--,0,1526
+12313,1,NDLS,New Delhi,16:00,--:--,0,0
+12313,2,CNB,Kanpur Junction,20:15,20:20,5,440
+12313,3,PRYJ,Prayagraj Junction,22:10,22:15,5,635
+12313,4,MGS,Mughal Sarai Junction,00:05,00:10,5,792
+12313,5,DHN,Dhanbad Junction,03:20,03:25,5,1166
+12313,6,SDAH,Sealdah,08:30,--:--,0,1453
+12314,1,SDAH,Sealdah,07:05,--:--,0,0
+12314,2,DHN,Dhanbad Junction,12:00,12:05,5,287
+12314,3,MGS,Mughal Sarai Junction,15:15,15:20,5,661
+12314,4,PRYJ,Prayagraj Junction,16:55,17:00,5,818
+12314,5,CNB,Kanpur Junction,19:00,19:05,5,1013
+12314,6,NDLS,New Delhi,23:55,--:--,0,1453
+12001,1,NDLS,New Delhi,06:00,--:--,0,0
+12001,2,AGC,Agra Cantt,07:52,07:55,3,195
+12001,3,GWL,Gwalior Junction,08:53,08:55,2,305
+12001,4,JHS,Jhansi Junction,09:55,10:00,5,410
+12001,5,BPL,Bhopal Junction,12:30,--:--,0,701
+12002,1,BPL,Bhopal Junction,15:10,--:--,0,0
+12002,2,JHS,Jhansi Junction,17:40,17:45,5,291
+12002,3,GWL,Gwalior Junction,18:42,18:44,2,396
+12002,4,AGC,Agra Cantt,19:42,19:45,3,506
+12002,5,NDLS,New Delhi,22:15,--:--,0,701
+12003,1,NDLS,New Delhi,06:10,--:--,0,0
+12003,2,CNB,Kanpur Junction,09:55,10:00,5,440
+12003,3,LKO,Lucknow Charbagh,11:30,--:--,0,512
+12004,1,LKO,Lucknow Charbagh,16:30,--:--,0,0
+12004,2,CNB,Kanpur Junction,18:10,18:15,5,72
+12004,3,NDLS,New Delhi,21:45,--:--,0,512
+12013,1,NDLS,New Delhi,07:20,--:--,0,0
+12013,2,LDH,Ludhiana Junction,10:38,10:40,2,311
+12013,3,JUC,Jalandhar Junction,11:23,11:25,2,358
+12013,4,ASR,Amritsar Junction,12:30,--:--,0,449
+12014,1,ASR,Amritsar Junction,14:05,--:--,0,0
+12014,2,JUC,Jalandhar Junction,15:05,15:07,2,91
+12014,3,LDH,Ludhiana Junction,15:50,15:52,2,138
+12014,4,NDLS,New Delhi,18:55,--:--,0,449
+12019,1,HWH,Howrah Junction,05:55,--:--,0,0
+12019,2,ASNSN,Asansol Junction,08:28,08:30,2,196
+12019,3,DHN,Dhanbad Junction,09:50,09:52,2,284
+12019,4,GAYA,Gaya Junction,11:25,11:27,2,407
+12019,5,MGS,Mughal Sarai Junction,13:10,13:15,5,536
+12019,6,PRYJ,Prayagraj Junction,15:00,15:05,5,693
+12019,7,CNB,Kanpur Junction,17:10,17:15,5,888
+12019,8,NDLS,New Delhi,22:30,--:--,0,1454
+12021,1,HWH,Howrah Junction,22:55,--:--,0,0
+12021,2,BGP,Bhagalpur Junction,03:20,03:22,2,360
+12021,3,PNBE,Patna Junction,05:48,05:52,4,536
+12021,4,MGS,Mughal Sarai Junction,08:20,08:25,5,718
+12021,5,NDLS,New Delhi,13:10,--:--,0,1450
+12022,1,NDLS,New Delhi,14:50,--:--,0,0
+12022,2,MGS,Mughal Sarai Junction,20:20,20:25,5,732
+12022,3,PNBE,Patna Junction,22:52,22:55,3,914
+12022,4,BGP,Bhagalpur Junction,01:12,01:14,2,1090
+12022,5,HWH,Howrah Junction,05:15,--:--,0,1450
+12225,1,HWH,Howrah Junction,05:55,--:--,0,0
+12225,2,DHN,Dhanbad Junction,09:20,09:25,5,284
+12225,3,PRYJ,Prayagraj Junction,15:30,15:35,5,677
+12225,4,NDLS,New Delhi,22:45,--:--,0,1450
+12226,1,NDLS,New Delhi,07:15,--:--,0,0
+12226,2,PRYJ,Prayagraj Junction,12:40,12:45,5,773
+12226,3,DHN,Dhanbad Junction,18:55,19:00,5,1166
+12226,4,HWH,Howrah Junction,22:30,--:--,0,1450
+12433,1,NDLS,New Delhi,22:30,--:--,0,0
+12433,2,CNB,Kanpur Junction,02:25,02:30,5,440
+12433,3,BSB,Varanasi Junction,06:20,06:25,5,763
+12433,4,MGS,Mughal Sarai Junction,07:15,07:20,5,793
+12433,5,DHN,Dhanbad Junction,11:00,11:05,5,1167
+12433,6,TATA,Jamshedpur Junction,12:55,13:00,5,1265
+12433,7,BBS,Bhubaneswar Junction,17:45,17:50,5,1710
+12433,8,MAS,MGR Chennai Central,19:30,--:--,0,2175
+12434,1,MAS,MGR Chennai Central,07:00,--:--,0,0
+12434,2,BBS,Bhubaneswar Junction,12:20,12:25,5,465
+12434,3,TATA,Jamshedpur Junction,17:00,17:05,5,910
+12434,4,DHN,Dhanbad Junction,18:58,19:00,2,1008
+12434,5,MGS,Mughal Sarai Junction,22:45,22:50,5,1382
+12434,6,BSB,Varanasi Junction,23:40,23:45,5,1412
+12434,7,CNB,Kanpur Junction,03:30,03:35,5,1735
+12434,8,NDLS,New Delhi,07:30,--:--,0,2175
+12431,1,NDLS,New Delhi,11:25,--:--,0,0
+12431,2,NGP,Nagpur Junction,21:00,21:05,5,1093
+12431,3,SC,Secunderabad,01:05,01:10,5,1665
+12431,4,ERS,Kochi Junction,18:00,18:05,5,2998
+12431,5,TVC,Thiruvananthapuram Central,22:30,--:--,0,3146
+12432,1,TVC,Thiruvananthapuram Central,12:30,--:--,0,0
+12432,2,ERS,Kochi Junction,16:55,17:00,5,148
+12432,3,SC,Secunderabad,06:00,06:05,5,1481
+12432,4,NGP,Nagpur Junction,10:10,10:15,5,2053
+12432,5,NDLS,New Delhi,20:35,--:--,0,3146
+12621,1,MAS,MGR Chennai Central,22:00,--:--,0,0
+12621,2,RU,Renigunta Junction,00:35,00:40,5,130
+12621,3,GNT,Guntur Junction,04:20,04:25,5,447
+12621,4,BZA,Vijayawada Junction,05:40,05:45,5,490
+12621,5,VSKP,Visakhapatnam Junction,10:05,10:10,5,795
+12621,6,BBS,Bhubaneswar Junction,14:35,14:40,5,1228
+12621,7,CTC,Cuttack Junction,15:12,15:14,2,1265
+12621,8,TATA,Jamshedpur Junction,19:45,19:50,5,1512
+12621,9,DHN,Dhanbad Junction,21:30,21:35,5,1600
+12621,10,ASNSN,Asansol Junction,22:50,22:52,2,1688
+12621,11,MGS,Mughal Sarai Junction,01:35,01:40,5,1762
+12621,12,BSB,Varanasi Junction,02:30,02:35,5,1792
+12621,13,PRYJ,Prayagraj Junction,04:15,04:20,5,1948
+12621,14,CNB,Kanpur Junction,06:10,06:15,5,2143
+12621,15,AGC,Agra Cantt,09:55,10:00,5,2338
+12621,16,NDLS,New Delhi,11:55,--:--,0,2175
+12622,1,NDLS,New Delhi,16:30,--:--,0,0
+12622,2,AGC,Agra Cantt,18:42,18:45,3,195
+12622,3,CNB,Kanpur Junction,22:00,22:05,5,440
+12622,4,PRYJ,Prayagraj Junction,23:55,00:00,5,635
+12622,5,BSB,Varanasi Junction,01:45,01:50,5,802
+12622,6,MGS,Mughal Sarai Junction,02:45,02:50,5,832
+12622,7,ASNSN,Asansol Junction,05:45,05:47,2,906
+12622,8,DHN,Dhanbad Junction,07:00,07:05,5,994
+12622,9,TATA,Jamshedpur Junction,08:50,08:52,2,1092
+12622,10,CTC,Cuttack Junction,13:15,13:17,2,1290
+12622,11,BBS,Bhubaneswar Junction,13:55,14:00,5,1327
+12622,12,VSKP,Visakhapatnam Junction,18:20,18:25,5,1760
+12622,13,BZA,Vijayawada Junction,22:45,22:50,5,2065
+12622,14,GNT,Guntur Junction,23:55,00:00,5,2108
+12622,15,MAS,MGR Chennai Central,05:15,--:--,0,2175
+12627,1,SBC,KSR Bengaluru,21:20,--:--,0,0
+12627,2,YPR,Yesvantpur,21:40,21:42,2,7
+12627,3,DHO,Dhone Junction,01:55,02:00,5,311
+12627,4,GNT,Guntur Junction,04:55,05:00,5,583
+12627,5,BZA,Vijayawada Junction,06:05,06:10,5,625
+12627,6,VSKP,Visakhapatnam Junction,10:55,11:00,5,930
+12627,7,BBS,Bhubaneswar Junction,15:45,15:50,5,1363
+12627,8,TATA,Jamshedpur Junction,20:30,20:35,5,1610
+12627,9,DHN,Dhanbad Junction,22:15,22:20,5,1698
+12627,10,ASNSN,Asansol Junction,23:35,23:37,2,1786
+12627,11,MGS,Mughal Sarai Junction,02:30,02:35,5,1930
+12627,12,PRYJ,Prayagraj Junction,04:10,04:15,5,2086
+12627,13,CNB,Kanpur Junction,06:15,06:20,5,2281
+12627,14,AGC,Agra Cantt,09:55,10:00,5,2476
+12627,15,NDLS,New Delhi,11:50,--:--,0,2444
+12628,1,NDLS,New Delhi,22:30,--:--,0,0
+12628,2,AGC,Agra Cantt,00:30,00:35,5,195
+12628,3,CNB,Kanpur Junction,04:05,04:10,5,440
+12628,4,PRYJ,Prayagraj Junction,05:55,06:00,5,635
+12628,5,MGS,Mughal Sarai Junction,07:55,08:00,5,832
+12628,6,ASNSN,Asansol Junction,10:55,10:57,2,906
+12628,7,DHN,Dhanbad Junction,12:20,12:25,5,994
+12628,8,TATA,Jamshedpur Junction,14:05,14:10,5,1092
+12628,9,BBS,Bhubaneswar Junction,18:40,18:45,5,1457
+12628,10,VSKP,Visakhapatnam Junction,23:10,23:15,5,1890
+12628,11,BZA,Vijayawada Junction,03:30,03:35,5,2195
+12628,12,GNT,Guntur Junction,04:45,04:50,5,2238
+12628,13,YPR,Yesvantpur,09:10,09:12,2,2437
+12628,14,SBC,KSR Bengaluru,09:30,--:--,0,2444
+12309,1,NDLS,New Delhi,22:25,--:--,0,0
+12309,2,AGC,Agra Cantt,00:22,00:25,3,195
+12309,3,CNB,Kanpur Junction,03:45,03:50,5,440
+12309,4,LKO,Lucknow Charbagh,05:30,05:35,5,512
+12309,5,BSB,Varanasi Junction,08:55,09:00,5,762
+12309,6,PNBE,Patna Junction,12:35,12:40,5,1000
+12309,7,RJPB,Rajendra Nagar,13:00,--:--,0,1003
+12310,1,RJPB,Rajendra Nagar,17:10,--:--,0,0
+12310,2,PNBE,Patna Junction,17:25,17:30,5,3
+12310,3,BSB,Varanasi Junction,21:00,21:05,5,241
+12310,4,LKO,Lucknow Charbagh,00:30,00:35,5,491
+12310,5,CNB,Kanpur Junction,02:10,02:15,5,563
+12310,6,AGC,Agra Cantt,05:30,05:35,5,808
+12310,7,NDLS,New Delhi,07:50,--:--,0,1003
+12581,1,PNBE,Patna Junction,12:00,--:--,0,0
+12581,2,BSB,Varanasi Junction,15:30,15:35,5,241
+12581,3,LKO,Lucknow Charbagh,18:55,19:00,5,491
+12581,4,CNB,Kanpur Junction,20:30,20:35,5,563
+12581,5,AGC,Agra Cantt,23:50,23:55,5,808
+12581,6,NDLS,New Delhi,02:20,--:--,0,1003
+12582,1,NDLS,New Delhi,18:15,--:--,0,0
+12582,2,AGC,Agra Cantt,20:15,20:18,3,195
+12582,3,CNB,Kanpur Junction,23:35,23:40,5,440
+12582,4,LKO,Lucknow Charbagh,01:15,01:20,5,512
+12582,5,BSB,Varanasi Junction,04:35,04:40,5,762
+12582,6,PNBE,Patna Junction,08:05,--:--,0,1003
+12553,1,PNBE,Patna Junction,11:25,--:--,0,0
+12553,2,BSB,Varanasi Junction,15:10,15:15,5,241
+12553,3,LKO,Lucknow Charbagh,18:35,18:40,5,491
+12553,4,CNB,Kanpur Junction,20:10,20:15,5,563
+12553,5,AGC,Agra Cantt,23:25,23:30,5,808
+12553,6,NDLS,New Delhi,02:00,--:--,0,1003
+12554,1,NDLS,New Delhi,16:35,--:--,0,0
+12554,2,AGC,Agra Cantt,18:35,18:38,3,195
+12554,3,CNB,Kanpur Junction,22:00,22:05,5,440
+12554,4,LKO,Lucknow Charbagh,23:45,23:50,5,512
+12554,5,BSB,Varanasi Junction,03:10,03:15,5,762
+12554,6,PNBE,Patna Junction,06:45,--:--,0,1003
+12953,1,NDLS,New Delhi,17:25,--:--,0,0
+12953,2,MTJ,Mathura Junction,19:42,19:44,2,142
+12953,3,KOTA,Kota Junction,22:25,22:30,5,456
+12953,4,RTM,Ratlam Junction,01:00,01:05,5,779
+12953,5,BRC,Vadodara Junction,03:20,03:25,5,940
+12953,6,ST,Surat Junction,04:55,04:57,2,1056
+12953,7,BVI,Borivali,07:05,07:07,2,1511
+12953,8,MMCT,Mumbai Central,08:05,--:--,0,1545
+12954,1,MMCT,Mumbai Central,17:50,--:--,0,0
+12954,2,BVI,Borivali,18:30,18:32,2,35
+12954,3,ST,Surat Junction,20:40,20:43,3,489
+12954,4,BRC,Vadodara Junction,22:10,22:15,5,605
+12954,5,RTM,Ratlam Junction,01:00,01:05,5,766
+12954,6,KOTA,Kota Junction,03:40,03:45,5,1089
+12954,7,MTJ,Mathura Junction,06:25,06:28,3,1403
+12954,8,NDLS,New Delhi,08:35,--:--,0,1545
+12617,1,NDLS,New Delhi,22:00,--:--,0,0
+12617,2,CNB,Kanpur Junction,01:50,01:55,5,440
+12617,3,BSB,Varanasi Junction,05:45,05:50,5,763
+12617,4,NGP,Nagpur Junction,12:10,12:15,5,1344
+12617,5,SC,Secunderabad,18:00,18:05,5,1916
+12617,6,ERS,Kochi Junction,08:00,08:05,5,2951
+12617,7,TVC,Thiruvananthapuram Central,13:15,--:--,0,3059
+12618,1,TVC,Thiruvananthapuram Central,11:30,--:--,0,0
+12618,2,ERS,Kochi Junction,16:55,17:00,5,108
+12618,3,SC,Secunderabad,06:45,06:50,5,1143
+12618,4,NGP,Nagpur Junction,13:05,13:10,5,1715
+12618,5,BSB,Varanasi Junction,20:55,21:00,5,2296
+12618,6,CNB,Kanpur Junction,01:05,01:10,5,2619
+12618,7,NDLS,New Delhi,05:10,--:--,0,3059
+12625,1,NDLS,New Delhi,11:25,--:--,0,0
+12625,2,NGP,Nagpur Junction,23:30,23:35,5,1093
+12625,3,SC,Secunderabad,03:40,03:45,5,1665
+12625,4,CBE,Coimbatore Junction,14:25,14:30,5,2965
+12625,5,TVC,Thiruvananthapuram Central,19:30,--:--,0,3146
+12626,1,TVC,Thiruvananthapuram Central,07:30,--:--,0,0
+12626,2,CBE,Coimbatore Junction,12:25,12:30,5,181
+12626,3,SC,Secunderabad,23:05,23:10,5,1481
+12626,4,NGP,Nagpur Junction,03:20,03:25,5,2053
+12626,5,NDLS,New Delhi,14:25,--:--,0,3146
+12841,1,HWH,Howrah Junction,14:30,--:--,0,0
+12841,2,BBS,Bhubaneswar Junction,19:30,19:35,5,439
+12841,3,VSKP,Visakhapatnam Junction,23:50,23:55,5,872
+12841,4,BZA,Vijayawada Junction,04:00,04:05,5,1177
+12841,5,OGL,Ongole Junction,05:45,05:48,3,1295
+12841,6,MAS,MGR Chennai Central,09:35,--:--,0,1663
+12842,1,MAS,MGR Chennai Central,08:45,--:--,0,0
+12842,2,OGL,Ongole Junction,12:40,12:43,3,368
+12842,3,BZA,Vijayawada Junction,14:35,14:40,5,486
+12842,4,VSKP,Visakhapatnam Junction,19:00,19:05,5,791
+12842,5,BBS,Bhubaneswar Junction,23:05,23:10,5,1224
+12842,6,HWH,Howrah Junction,04:05,--:--,0,1663
+12417,1,PRYJ,Prayagraj Junction,18:10,--:--,0,0
+12417,2,CNB,Kanpur Junction,20:10,20:15,5,195
+12417,3,AGC,Agra Cantt,23:40,23:45,5,440
+12417,4,NDLS,New Delhi,01:55,--:--,0,635
+12418,1,NDLS,New Delhi,19:00,--:--,0,0
+12418,2,AGC,Agra Cantt,21:05,21:10,5,195
+12418,3,CNB,Kanpur Junction,00:30,00:35,5,440
+12418,4,PRYJ,Prayagraj Junction,02:25,--:--,0,635
+12721,1,SC,Secunderabad,18:10,--:--,0,0
+12721,2,NGP,Nagpur Junction,00:05,00:10,5,665
+12721,3,JBP,Jabalpur Junction,05:00,05:05,5,1053
+12721,4,PRYJ,Prayagraj Junction,11:15,11:20,5,1337
+12721,5,CNB,Kanpur Junction,13:35,13:40,5,1532
+12721,6,AGC,Agra Cantt,17:05,17:10,5,1777
+12721,7,NDLS,New Delhi,19:30,--:--,0,1758
+12722,1,NDLS,New Delhi,16:25,--:--,0,0
+12722,2,AGC,Agra Cantt,18:30,18:35,5,195
+12722,3,CNB,Kanpur Junction,22:00,22:05,5,440
+12722,4,PRYJ,Prayagraj Junction,00:05,00:10,5,635
+12722,5,JBP,Jabalpur Junction,06:20,06:25,5,919
+12722,6,NGP,Nagpur Junction,10:15,10:20,5,1307
+12722,7,SC,Secunderabad,17:10,--:--,0,1758
+12829,1,BBS,Bhubaneswar Junction,06:20,--:--,0,0
+12829,2,BZA,Vijayawada Junction,11:00,11:05,5,445
+12829,3,SC,Secunderabad,15:40,15:45,5,861
+12829,4,NGP,Nagpur Junction,20:45,20:50,5,1428
+12829,5,PRYJ,Prayagraj Junction,02:45,02:50,5,1782
+12829,6,CNB,Kanpur Junction,04:55,05:00,5,1977
+12829,7,AGC,Agra Cantt,08:30,08:35,5,2222
+12829,8,NDLS,New Delhi,10:35,--:--,0,1983
+12830,1,NDLS,New Delhi,20:05,--:--,0,0
+12830,2,AGC,Agra Cantt,22:10,22:15,5,195
+12830,3,CNB,Kanpur Junction,01:35,01:40,5,440
+12830,4,PRYJ,Prayagraj Junction,03:30,03:35,5,635
+12830,5,NGP,Nagpur Junction,09:45,09:50,5,1201
+12830,6,SC,Secunderabad,14:30,14:35,5,1768
+12830,7,BZA,Vijayawada Junction,19:05,19:10,5,2184
+12830,8,BBS,Bhubaneswar Junction,23:45,--:--,0,1983
+12381,1,HWH,Howrah Junction,08:05,--:--,0,0
+12381,2,PNBE,Patna Junction,13:25,13:30,5,528
+12381,3,MGS,Mughal Sarai Junction,15:50,15:55,5,710
+12381,4,PRYJ,Prayagraj Junction,17:40,17:45,5,867
+12381,5,CNB,Kanpur Junction,20:00,20:05,5,1062
+12381,6,AGC,Agra Cantt,23:30,23:35,5,1307
+12381,7,NDLS,New Delhi,02:00,--:--,0,1532
+12382,1,NDLS,New Delhi,17:55,--:--,0,0
+12382,2,AGC,Agra Cantt,20:05,20:10,5,195
+12382,3,CNB,Kanpur Junction,23:25,23:30,5,440
+12382,4,PRYJ,Prayagraj Junction,01:25,01:30,5,635
+12382,5,MGS,Mughal Sarai Junction,03:15,03:20,5,832
+12382,6,PNBE,Patna Junction,05:35,05:40,5,1014
+12382,7,HWH,Howrah Junction,11:00,--:--,0,1532
+12615,1,MAS,MGR Chennai Central,19:30,--:--,0,0
+12615,2,GNT,Guntur Junction,23:55,00:00,5,447
+12615,3,BZA,Vijayawada Junction,01:05,01:10,5,490
+12615,4,VSKP,Visakhapatnam Junction,05:30,05:35,5,795
+12615,5,BBS,Bhubaneswar Junction,10:15,10:20,5,1228
+12615,6,TATA,Jamshedpur Junction,15:00,15:05,5,1512
+12615,7,DHN,Dhanbad Junction,16:55,17:00,5,1600
+12615,8,PNBE,Patna Junction,20:20,20:25,5,1728
+12615,9,MGS,Mughal Sarai Junction,22:30,22:35,5,1762
+12615,10,BSB,Varanasi Junction,23:20,23:25,5,1792
+12615,11,PRYJ,Prayagraj Junction,01:15,01:20,5,1940
+12615,12,CNB,Kanpur Junction,03:15,03:20,5,2135
+12615,13,AGC,Agra Cantt,07:00,07:05,5,2380
+12615,14,NDLS,New Delhi,09:05,--:--,0,2175
+12616,1,NDLS,New Delhi,21:40,--:--,0,0
+12616,2,AGC,Agra Cantt,23:45,23:50,5,195
+12616,3,CNB,Kanpur Junction,03:15,03:20,5,440
+12616,4,PRYJ,Prayagraj Junction,05:10,05:15,5,635
+12616,5,BSB,Varanasi Junction,07:05,07:10,5,802
+12616,6,MGS,Mughal Sarai Junction,08:00,08:05,5,832
+12616,7,PNBE,Patna Junction,10:30,10:35,5,1014
+12616,8,TATA,Jamshedpur Junction,14:05,14:10,5,1312
+12616,9,DHN,Dhanbad Junction,16:00,16:05,5,1400
+12616,10,BBS,Bhubaneswar Junction,20:45,20:50,5,1847
+12616,11,VSKP,Visakhapatnam Junction,01:10,01:15,5,2280
+12616,12,BZA,Vijayawada Junction,05:25,05:30,5,2585
+12616,13,GNT,Guntur Junction,06:30,06:35,5,2628
+12616,14,MAS,MGR Chennai Central,12:00,--:--,0,2175
+11027,1,CST,Mumbai CSMT,12:50,--:--,0,0
+11027,2,ST,Surat Junction,16:45,16:50,5,263
+11027,3,BRC,Vadodara Junction,18:25,18:30,5,379
+11027,4,RTM,Ratlam Junction,21:20,21:25,5,540
+11027,5,BPL,Bhopal Junction,01:05,01:10,5,838
+11027,6,NGP,Nagpur Junction,06:05,06:10,5,1174
+11027,7,SC,Secunderabad,12:45,12:50,5,1698
+11027,8,VSKP,Visakhapatnam Junction,21:30,21:35,5,2099
+11027,9,BBS,Bhubaneswar Junction,01:35,01:40,5,2532
+11027,10,HWH,Howrah Junction,06:30,06:35,5,2725
+11027,11,MAS,MGR Chennai Central,10:30,--:--,0,1279
+11028,1,MAS,MGR Chennai Central,23:45,--:--,0,0
+11028,2,HWH,Howrah Junction,04:30,04:35,5,1663
+11028,3,BBS,Bhubaneswar Junction,09:45,09:50,5,2102
+11028,4,VSKP,Visakhapatnam Junction,13:55,14:00,5,2535
+11028,5,SC,Secunderabad,22:30,22:35,5,2936
+11028,6,NGP,Nagpur Junction,04:45,04:50,5,3082
+11028,7,BPL,Bhopal Junction,09:50,09:55,5,3418
+11028,8,RTM,Ratlam Junction,13:35,13:40,5,3578
+11028,9,BRC,Vadodara Junction,16:20,16:25,5,3739
+11028,10,ST,Surat Junction,17:55,18:00,5,3855
+11028,11,CST,Mumbai CSMT,22:30,--:--,0,1279
+12903,1,MMCT,Mumbai Central,14:00,--:--,0,0
+12903,2,BRC,Vadodara Junction,16:25,16:30,5,157
+12903,3,RTM,Ratlam Junction,19:05,19:10,5,318
+12903,4,NAD,Nagda Junction,19:50,19:52,2,363
+12903,5,KOTA,Kota Junction,22:35,22:40,5,622
+12903,6,AGC,Agra Cantt,01:35,01:40,5,857
+12903,7,MTJ,Mathura Junction,02:45,02:50,5,916
+12903,8,NDLS,New Delhi,05:25,05:30,5,1093
+12903,9,CNB,Kanpur Junction,09:45,09:50,5,1533
+12903,10,LKO,Lucknow Charbagh,11:35,11:40,5,1605
+12903,11,LJN,Lucknow Junction,12:00,12:05,5,1610
+12903,12,MB,Moradabad Junction,15:00,15:05,5,1730
+12903,13,UMB,Ambala Cantt,18:25,18:30,5,1862
+12903,14,LDH,Ludhiana Junction,20:15,20:20,5,1909
+12903,15,JUC,Jalandhar Junction,21:05,21:10,5,1956
+12903,16,ASR,Amritsar Junction,22:30,--:--,0,1919
+12321,1,HWH,Howrah Junction,22:10,--:--,0,0
+12321,2,DHN,Dhanbad Junction,01:30,01:35,5,284
+12321,3,ASNSN,Asansol Junction,02:50,02:52,2,372
+12321,4,TATA,Jamshedpur Junction,04:35,04:40,5,420
+12321,5,NGP,Nagpur Junction,14:05,14:10,5,1185
+12321,6,BPL,Bhopal Junction,19:30,19:35,5,1521
+12321,7,KOTA,Kota Junction,22:35,22:40,5,1730
+12321,8,RTM,Ratlam Junction,01:30,01:35,5,1859
+12321,9,BRC,Vadodara Junction,03:55,04:00,5,2020
+12321,10,ST,Surat Junction,05:35,05:38,3,2136
+12321,11,CST,Mumbai CSMT,09:40,--:--,0,1968
+12322,1,CST,Mumbai CSMT,22:30,--:--,0,0
+12322,2,ST,Surat Junction,02:30,02:35,5,263
+12322,3,BRC,Vadodara Junction,04:05,04:10,5,379
+12322,4,RTM,Ratlam Junction,07:00,07:05,5,540
+12322,5,KOTA,Kota Junction,09:55,10:00,5,669
+12322,6,BPL,Bhopal Junction,12:55,13:00,5,878
+12322,7,NGP,Nagpur Junction,18:20,18:25,5,1214
+12322,8,TATA,Jamshedpur Junction,03:00,03:05,5,1979
+12322,9,ASNSN,Asansol Junction,04:45,04:47,2,2027
+12322,10,DHN,Dhanbad Junction,06:05,06:10,5,2115
+12322,11,HWH,Howrah Junction,09:30,--:--,0,1968
+12701,1,SC,Secunderabad,21:35,--:--,0,0
+12701,2,GNT,Guntur Junction,00:05,00:10,5,240
+12701,3,BZA,Vijayawada Junction,01:25,01:30,5,283
+12701,4,NGP,Nagpur Junction,09:30,09:35,5,1030
+12701,5,BPL,Bhopal Junction,15:00,15:05,5,1366
+12701,6,KOTA,Kota Junction,18:20,18:25,5,1575
+12701,7,MTJ,Mathura Junction,21:25,21:30,5,1754
+12701,8,CST,Mumbai CSMT,09:30,--:--,0,786
+12702,1,CST,Mumbai CSMT,17:10,--:--,0,0
+12702,2,MTJ,Mathura Junction,23:35,23:40,5,142
+12702,3,KOTA,Kota Junction,02:35,02:40,5,456
+12702,4,BPL,Bhopal Junction,06:35,06:40,5,665
+12702,5,NGP,Nagpur Junction,12:30,12:35,5,1001
+12702,6,BZA,Vijayawada Junction,20:45,20:50,5,1748
+12702,7,GNT,Guntur Junction,21:55,22:00,5,1791
+12702,8,SC,Secunderabad,00:50,--:--,0,786
+12279,1,NDLS,New Delhi,07:15,--:--,0,0
+12279,2,AGC,Agra Cantt,09:25,--:--,0,195
+12280,1,AGC,Agra Cantt,20:05,--:--,0,0
+12280,2,NDLS,New Delhi,22:30,--:--,0,195
+12853,1,VSKP,Visakhapatnam Junction,15:25,--:--,0,0
+12853,2,BZA,Vijayawada Junction,19:45,19:50,5,347
+12853,3,SC,Secunderabad,00:25,--:--,0,697
+12854,1,SC,Secunderabad,23:45,--:--,0,0
+12854,2,BZA,Vijayawada Junction,04:15,04:20,5,350
+12854,3,VSKP,Visakhapatnam Junction,08:30,--:--,0,697

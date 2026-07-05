@@ -17,6 +17,23 @@ def startup_event():
     from app.graph.graph_builder import rebuild_graph
     rebuild_graph()
 
+    # Auto-import railway dataset if tables are empty (idempotent)
+    try:
+        from app.database import SessionLocal
+        from app.railway.importer import run_import
+        db = SessionLocal()
+        try:
+            result = run_import(db, force=False)
+            if not result.get("skipped"):
+                import logging
+                logging.getLogger("navix.railway.importer").info(result["message"])
+        finally:
+            db.close()
+    except Exception as e:
+        import logging
+        logging.getLogger("navix.railway.importer").error(f"Railway auto-import failed: {e}")
+
+
 
 
 # Configure CORS so local Next.js frontend can communicate with the backend
@@ -48,7 +65,7 @@ def search_routes(request: RouteSearchRequest):
             return RouteSearchResponse(success=False, routes=[], error="Source and destination cities cannot be the same")
             
         from app.search.orchestrator import SearchOrchestrator
-        orchestrator = SearchOrchestrator(provider_names=["DATABASE", "CSV", "MOCK"])
+        orchestrator = SearchOrchestrator(provider_names=["RAILWAY_SCHEDULE", "DATABASE", "CSV", "MOCK"])
         result = orchestrator.search(source, destination, request.date)
         demand = result["demand_profile"]
         demand_data = {
