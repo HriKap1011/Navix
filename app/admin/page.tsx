@@ -87,6 +87,11 @@ const Icons = {
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
     </svg>
+  ),
+  Coverage: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
   )
 };
 
@@ -117,7 +122,19 @@ export default function AdminDashboard() {
   const [railwayTypeFilter, setRailwayTypeFilter] = useState<string>("");
   const [selectedTrain, setSelectedTrain] = useState<any>(null);
   const [railwayLoading, setRailwayLoading] = useState<boolean>(false);
-  const [railwayToast, setRailwayToast] = useState<{msg: string; ok: boolean} | null>(null);
+  const [coverageData, setCoverageData] = useState<any>(null);
+  const [simulatedResults, setSimulatedResults] = useState<any>(null);
+  const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
+  const [simulating, setSimulating] = useState<boolean>(false);
+  const [filterCity, setFilterCity] = useState<string>("");
+  const [filterState, setFilterState] = useState<string>("");
+  const [filterCorridor, setFilterCorridor] = useState<string>("");
+  const [filterMode, setFilterMode] = useState<string>("");
+  const [filterStartDate, setFilterStartDate] = useState<string>("");
+  const [filterEndDate, setFilterEndDate] = useState<string>("");
+  const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [drilldownType, setDrilldownType] = useState<string | null>(null);
+  const [downloadingReport, setDownloadingReport] = useState<boolean>(false);
   
   // States for CRUD listings
   const [loading, setLoading] = useState<boolean>(false);
@@ -272,6 +289,26 @@ export default function AdminDashboard() {
       }
       setLoading(false);
       return;
+    } else if (activeTab === "coverage-intelligence") {
+      try {
+        const queryParams = new URLSearchParams();
+        if (filterCity) queryParams.append("city", filterCity);
+        if (filterState) queryParams.append("state", filterState);
+        if (filterCorridor) queryParams.append("corridor", filterCorridor);
+        if (filterMode) queryParams.append("transport_mode", filterMode);
+        if (filterStartDate) queryParams.append("start_date", filterStartDate);
+        if (filterEndDate) queryParams.append("end_date", filterEndDate);
+
+        const res = await fetch(`${BACKEND_BASE_URL}/coverage/intelligence?${queryParams.toString()}`);
+        const payload = await res.json();
+        if (payload.success) {
+          setCoverageData(payload);
+        }
+      } catch (e) {
+        console.error("Failed to load coverage intelligence", e);
+      }
+      setLoading(false);
+      return;
     }
 
     try {
@@ -303,13 +340,13 @@ export default function AdminDashboard() {
     fetchStats();
     
     // Lazy caches for modals
-    if (["stations", "corridors", "nearby"].includes(activeTab)) {
+    if (["stations", "corridors", "nearby", "coverage-intelligence"].includes(activeTab)) {
       fetchCitiesList();
     }
     if (activeTab === "nearby") {
       fetchStationsList();
     }
-    if (activeTab === "cities") {
+    if (["cities", "coverage-intelligence"].includes(activeTab)) {
       fetchCitiesFilters();
     }
   }, [activeTab]);
@@ -319,7 +356,7 @@ export default function AdminDashboard() {
     if (activeTab !== "import") {
       fetchData();
     }
-  }, [page, search, sortBy, sortOrder, stateFilter, tierFilter, cityFilter, fetchData]);
+  }, [page, search, sortBy, sortOrder, stateFilter, tierFilter, cityFilter, filterCity, filterState, filterCorridor, filterMode, filterStartDate, filterEndDate, fetchData]);
 
   // Form submission CRUD operations handler
   const handleSave = async (e: React.FormEvent) => {
@@ -522,6 +559,7 @@ export default function AdminDashboard() {
               { id: "data-sources", label: "Data Sources", icon: Icons.DataSource },
               { id: "travel-network", label: "Travel Network", icon: Icons.Network },
               { id: "railway-dataset", label: "Railway Dataset", icon: Icons.Train },
+              { id: "coverage-intelligence", label: "Coverage Intelligence", icon: Icons.Coverage },
               { id: "import", label: "Import Center", icon: Icons.Import },
               { id: "audit", label: "Audit Trail", icon: Icons.Audit }
             ].map((tab) => {
@@ -2172,6 +2210,490 @@ export default function AdminDashboard() {
             </div>
           )}
 
+          {/* TAB 12: COVERAGE INTELLIGENCE */}
+          {activeTab === "coverage-intelligence" && coverageData && (
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Dataset Info Banner */}
+              <div className="rounded-2xl bg-gradient-to-r from-violet-500/10 via-indigo-500/10 to-cyan-500/10 border border-violet-500/20 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-violet-400 text-lg font-extrabold">📊 Coverage Intelligence Hub</span>
+                    <span className="text-[10px] font-mono bg-violet-500/10 border border-violet-500/20 text-violet-300 px-2 py-0.5 rounded-full">Decision Support</span>
+                  </div>
+                  <p className="text-xs text-slate-400">Measure, observe, and continuously optimize verified travel datasets against synthetic fallback rates.</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      const params = new URLSearchParams();
+                      if (filterCity) params.append("city", filterCity);
+                      if (filterState) params.append("state", filterState);
+                      if (filterCorridor) params.append("corridor", filterCorridor);
+                      if (filterMode) params.append("transport_mode", filterMode);
+                      if (filterStartDate) params.append("start_date", filterStartDate);
+                      if (filterEndDate) params.append("end_date", filterEndDate);
+                      window.location.href = `${BACKEND_BASE_URL}/coverage/export/pdf?${params.toString()}`;
+                    }}
+                    className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold flex items-center transition shadow-lg shadow-rose-900/10"
+                  >
+                    Export Executive PDF
+                  </button>
+                  <button
+                    onClick={() => {
+                      const params = new URLSearchParams();
+                      if (filterCity) params.append("city", filterCity);
+                      if (filterState) params.append("state", filterState);
+                      if (filterCorridor) params.append("corridor", filterCorridor);
+                      if (filterMode) params.append("transport_mode", filterMode);
+                      if (filterStartDate) params.append("start_date", filterStartDate);
+                      if (filterEndDate) params.append("end_date", filterEndDate);
+                      window.location.href = `${BACKEND_BASE_URL}/coverage/export/excel?${params.toString()}`;
+                    }}
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center transition shadow-lg shadow-emerald-900/10"
+                  >
+                    Export Detailed Excel
+                  </button>
+                </div>
+              </div>
+
+              {/* Interactive Query Filters Panel */}
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="w-full flex items-center justify-between px-6 py-4 text-xs font-bold text-slate-200 bg-slate-950/30 hover:bg-slate-950/50 transition border-b border-slate-800/40"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <svg className="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 6.586V4z" />
+                    </svg>
+                    <span>Interactive Query Filters</span>
+                    {(filterCity || filterState || filterCorridor || filterMode || filterStartDate || filterEndDate) && (
+                      <span className="bg-violet-500/10 border border-violet-500/20 text-violet-400 px-2 py-0.5 rounded text-[10px] font-mono font-normal">Active Filters Applied</span>
+                    )}
+                  </div>
+                  <span className="text-slate-400 text-[10px]">{showFilters ? "▲ Hide Panel" : "▼ Show Panel"}</span>
+                </button>
+
+                {showFilters && (
+                  <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-slate-900 animate-slideDown">
+                    
+                    {/* City Select */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-slate-500 block">City</label>
+                      <select
+                        value={filterCity}
+                        onChange={(e) => setFilterCity(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-500"
+                      >
+                        <option value="">All Cities</option>
+                        {citiesList.map((c: any) => (
+                          <option key={c.id} value={c.city_name}>{c.city_name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* State Select */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-slate-500 block">State</label>
+                      <select
+                        value={filterState}
+                        onChange={(e) => setFilterState(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-500"
+                      >
+                        <option value="">All States</option>
+                        {statesList.map((s: string) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Corridor Input */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-slate-500 block">Corridor Pair</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Delhi -> Patna"
+                        value={filterCorridor}
+                        onChange={(e) => setFilterCorridor(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-violet-500"
+                      />
+                    </div>
+
+                    {/* Mode Select */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-slate-500 block">Transport Mode</label>
+                      <select
+                        value={filterMode}
+                        onChange={(e) => setFilterMode(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-500"
+                      >
+                        <option value="">All Modes</option>
+                        <option value="Train">Train</option>
+                        <option value="Flight">Flight</option>
+                        <option value="Bus">Bus</option>
+                      </select>
+                    </div>
+
+                    {/* Date Picker Start */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-slate-500 block">Start Date</label>
+                      <input
+                        type="date"
+                        value={filterStartDate}
+                        onChange={(e) => setFilterStartDate(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-500"
+                      />
+                    </div>
+
+                    {/* Date Picker End */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-slate-500 block">End Date</label>
+                      <input
+                        type="date"
+                        value={filterEndDate}
+                        onChange={(e) => setFilterEndDate(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-500"
+                      />
+                    </div>
+
+                    {/* Reset Button */}
+                    <div className="lg:col-span-6 flex justify-end gap-2 pt-2 border-t border-slate-800/40">
+                      <button
+                        onClick={() => {
+                          setFilterCity("");
+                          setFilterState("");
+                          setFilterCorridor("");
+                          setFilterMode("");
+                          setFilterStartDate("");
+                          setFilterEndDate("");
+                        }}
+                        className="px-3 py-1.5 bg-slate-950 border border-slate-800 hover:bg-slate-900 text-slate-400 text-xs font-semibold rounded-lg transition"
+                      >
+                        Reset All Filters
+                      </button>
+                    </div>
+
+                  </div>
+                )}
+              </div>
+
+              {/* Step 1 Clickable Metrics Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                
+                <div
+                  onClick={() => setDrilldownType("overall-coverage")}
+                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 hover:border-violet-500 cursor-pointer shadow-lg shadow-violet-950/10 hover:shadow-violet-950/20 transition-all duration-300 group"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-500 font-medium group-hover:text-violet-400 transition-colors">Overall Verified Search Coverage</span>
+                    <span className="text-[10px] text-violet-400 font-bold bg-violet-500/10 px-1.5 py-0.5 rounded">Drilldown ➜</span>
+                  </div>
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-2xl font-black text-white">{coverageData.metrics.overall_search_coverage_pct}%</span>
+                  </div>
+                  <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-violet-500 h-1.5 rounded-full" style={{ width: `${coverageData.metrics.overall_search_coverage_pct}%` }}></div>
+                  </div>
+                  <span className="text-[10px] text-slate-500 block">Calculated from recent search logs</span>
+                </div>
+
+                <div
+                  onClick={() => setDrilldownType("synthetic-fallback")}
+                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 hover:border-amber-500 cursor-pointer shadow-lg shadow-amber-950/10 hover:shadow-amber-950/20 transition-all duration-300 group"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-500 font-medium group-hover:text-amber-400 transition-colors">Synthetic Fallback Rate</span>
+                    <span className="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded">Drilldown ➜</span>
+                  </div>
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-2xl font-black text-amber-500">{coverageData.metrics.synthetic_fallback_pct}%</span>
+                  </div>
+                  <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: `${coverageData.metrics.synthetic_fallback_pct}%` }}></div>
+                  </div>
+                  <span className="text-[10px] text-slate-500 block">Portion of queries using dummy fallbacks</span>
+                </div>
+
+                <div
+                  onClick={() => setDrilldownType("city-coverage")}
+                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 hover:border-emerald-500 cursor-pointer shadow-lg shadow-emerald-950/10 hover:shadow-emerald-950/20 transition-all duration-300 group"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-500 font-medium group-hover:text-emerald-400 transition-colors">Rail Station Coverage</span>
+                    <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">Drilldown ➜</span>
+                  </div>
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-2xl font-black text-white">{coverageData.metrics.station_coverage_pct}%</span>
+                  </div>
+                  <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-emerald-500 h-1.5 rounded-full" style={{ width: `${coverageData.metrics.station_coverage_pct}%` }}></div>
+                  </div>
+                  <span className="text-[10px] text-slate-500 block">Portion of stations linked to timetables</span>
+                </div>
+
+                <div
+                  onClick={() => setDrilldownType("corridor-coverage")}
+                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 hover:border-cyan-500 cursor-pointer shadow-lg shadow-cyan-950/10 hover:shadow-cyan-950/20 transition-all duration-300 group"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-500 font-medium group-hover:text-cyan-400 transition-colors">Corridor Verification Matrix</span>
+                    <span className="text-[10px] text-cyan-400 font-bold bg-cyan-500/10 px-1.5 py-0.5 rounded">Drilldown ➜</span>
+                  </div>
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-2xl font-black text-white">{coverageData.metrics.corridor_coverage_pct}%</span>
+                  </div>
+                  <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: `${coverageData.metrics.corridor_coverage_pct}%` }}></div>
+                  </div>
+                  <span className="text-[10px] text-slate-500 block">Corridors with verified direct trains</span>
+                </div>
+
+              </div>
+
+              {/* Two Column Layout */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                {/* LEFT COLUMN */}
+                <div className="space-y-8">
+                  
+                  {/* Dataset Details Table */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Dataset Overview</h4>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="p-4 bg-slate-950/50 border border-slate-800/60 rounded-xl space-y-1">
+                        <span className="text-slate-500 text-xs font-medium">Total Imported Trains</span>
+                        <span className="text-xl font-bold text-white block">{coverageData.metrics.total_trains}</span>
+                      </div>
+                      <div className="p-4 bg-slate-950/50 border border-slate-800/60 rounded-xl space-y-1">
+                        <span className="text-slate-500 text-xs font-medium">Total Stops</span>
+                        <span className="text-xl font-bold text-white block">{coverageData.metrics.total_stops}</span>
+                      </div>
+                      <div className="p-4 bg-slate-950/50 border border-slate-800/60 rounded-xl space-y-1">
+                        <span className="text-slate-500 text-xs font-medium">Cities Covered</span>
+                        <span className="text-xl font-bold text-white block">{coverageData.metrics.cities_covered} / {coverageData.metrics.total_cities}</span>
+                      </div>
+                      <div className="p-4 bg-slate-950/50 border border-slate-800/60 rounded-xl space-y-1">
+                        <span className="text-slate-500 text-xs font-medium">Total Corridors</span>
+                        <span className="text-xl font-bold text-white block">{coverageData.metrics.total_corridors}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transfer Intelligence Card */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Transfer Intelligence</h4>
+                    <div className="grid grid-cols-2 gap-4 text-sm border-b border-slate-800 pb-4">
+                      <div>
+                        <span className="text-slate-500 text-xs font-medium">Direct Connection Pathways</span>
+                        <span className="text-lg font-bold text-white block">{coverageData.transfers.direct_connections}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 text-xs font-medium">Disconnected Stations</span>
+                        <span className="text-lg font-bold text-amber-500 block">{coverageData.transfers.disconnected_stations_count}</span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="text-slate-500 text-xs font-medium">Orphan Stations (No City)</span>
+                        <span className="text-lg font-bold text-rose-400 block">{coverageData.transfers.orphan_stations_count}</span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="text-slate-500 text-xs font-medium">Sampled 1-Transfer Connections</span>
+                        <span className="text-lg font-bold text-white block">{coverageData.transfers.sampled_one_transfer_paths}</span>
+                      </div>
+                    </div>
+                    {coverageData.transfers.disconnected_stations.length > 0 && (
+                      <div className="space-y-2">
+                        <span className="text-xs text-slate-500 font-semibold block uppercase tracking-wider">Top Disconnected Stations</span>
+                        <div className="max-h-36 overflow-y-auto space-y-1.5 pr-2">
+                          {coverageData.transfers.disconnected_stations.map((st: any) => (
+                            <div key={st.code} className="flex justify-between items-center text-xs p-2 bg-slate-950/40 rounded border border-slate-800">
+                              <span className="font-semibold text-slate-300">{st.name} ({st.code})</span>
+                              <span className="text-slate-500">City: {st.city}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Top Missing Corridors Card */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-violet-500 cursor-pointer shadow-xl transition group" onClick={() => setDrilldownType("missing-corridors")}>
+                    <div className="flex justify-between items-center">
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider group-hover:text-violet-400 transition-colors">Top Uncovered High-Demand Corridors</h4>
+                      <span className="text-[10px] text-violet-400 font-bold bg-violet-500/10 px-1.5 py-0.5 rounded">Drilldown ➜</span>
+                    </div>
+                    <div className="overflow-x-auto pointer-events-none">
+                      <table className="w-full text-xs text-slate-400">
+                        <thead>
+                          <tr className="border-b border-slate-800 text-slate-500">
+                            <th className="text-left py-2 font-semibold uppercase">Origin City</th>
+                            <th className="text-left py-2 font-semibold uppercase">Destination City</th>
+                            <th className="text-left py-2 font-semibold uppercase">Demand Level</th>
+                            <th className="text-right py-2 font-semibold uppercase">Actionable Impact</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {coverageData.corridors.top_missing_corridors.slice(0, 5).map((c: any) => (
+                            <tr key={c.id} className="border-b border-slate-800/40 hover:bg-slate-950/30">
+                              <td className="py-2 text-white font-medium">{c.source}</td>
+                              <td className="py-2 text-white font-medium">{c.destination}</td>
+                              <td className="py-2">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                  c.demand === "Extreme" ? "bg-rose-500/10 text-rose-400" : "bg-amber-500/10 text-amber-400"
+                                }`}>
+                                  {c.demand}
+                                </span>
+                              </td>
+                              <td className="py-2 text-right text-violet-400 font-semibold">{c.estimated_impact} Impact</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* RIGHT COLUMN */}
+                <div className="space-y-8">
+                  
+                  {/* Data Quality / Gap Analysis Card */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-violet-500 cursor-pointer shadow-xl transition group" onClick={() => setDrilldownType("data-quality")}>
+                    <div className="flex justify-between items-center">
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider group-hover:text-violet-400 transition-colors">Data Gaps & Quality Health</h4>
+                      <span className="text-[10px] text-violet-400 font-bold bg-violet-500/10 px-1.5 py-0.5 rounded">Drilldown ➜</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-xs border-b border-slate-800 pb-4 pointer-events-none">
+                      <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl space-y-0.5">
+                        <span className="text-slate-500">Unlinked Station Codes</span>
+                        <span className="text-lg font-bold text-rose-400 block">{coverageData.gaps.missing_stations_count}</span>
+                      </div>
+                      <div className="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl space-y-0.5">
+                        <span className="text-slate-500">Trains with 0 Stops</span>
+                        <span className="text-lg font-bold text-amber-400 block">{coverageData.gaps.trains_missing_stops_count}</span>
+                      </div>
+                      <div className="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl space-y-0.5">
+                        <span className="text-slate-500">Missing Stop Timings</span>
+                        <span className="text-lg font-bold text-amber-400 block">{coverageData.gaps.missing_schedules_count}</span>
+                      </div>
+                      <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl space-y-0.5">
+                        <span className="text-slate-500">Duplicate Stop Entries</span>
+                        <span className="text-lg font-bold text-rose-400 block">{coverageData.gaps.duplicate_stops_count}</span>
+                      </div>
+                    </div>
+                    {coverageData.gaps.missing_stations.length > 0 && (
+                      <div className="space-y-2 pointer-events-none">
+                        <span className="text-xs text-slate-500 font-semibold block uppercase tracking-wider">Top Unlinked Station Codes</span>
+                        <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                          {coverageData.gaps.missing_stations.slice(0, 10).map((st: any) => (
+                            <span key={st.code} className="text-[10px] font-mono px-2 py-0.5 bg-slate-950 text-slate-400 border border-slate-800 rounded">
+                              {st.code} ({st.name.substring(0, 10)})
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Coverage Optimization Engine (Step 6 Simulator) */}
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Coverage Optimization Engine</h4>
+                    <p className="text-xs text-slate-400">Select missing train schedules to simulate data acquisition impact on overall verified search coverage.</p>
+                    
+                    <div className="space-y-2 max-h-60 overflow-y-auto pr-2 border border-slate-850 p-3 rounded-xl bg-slate-950/20">
+                      {coverageData.recommendations.map((rec: any) => {
+                        const isChecked = selectedTrains.includes(rec.train_number);
+                        return (
+                          <label key={rec.train_number} className="flex items-start space-x-3 text-xs p-2.5 rounded bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {
+                                if (isChecked) {
+                                  setSelectedTrains(selectedTrains.filter(t => t !== rec.train_number));
+                                } else {
+                                  setSelectedTrains([...selectedTrains, rec.train_number]);
+                                }
+                              }}
+                              className="mt-0.5 h-3.5 w-3.5 rounded border-slate-800 text-violet-600 focus:ring-violet-500 bg-slate-950"
+                            />
+                            <div className="flex-1 space-y-0.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-white">{rec.train_number} - {rec.train_name}</span>
+                                <span className="text-[10px] font-semibold text-violet-400 bg-violet-500/10 px-1.5 py-0.25 rounded">+{rec.impact_score} Pts</span>
+                              </div>
+                              <div className="flex justify-between text-slate-500 text-[10px]">
+                                <span>Unlocks: {rec.unlocked_corridor}</span>
+                                <span className="font-medium text-slate-400">{rec.corridor_demand} Demand</span>
+                              </div>
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-slate-500 font-semibold">{selectedTrains.length} trains selected</span>
+                      <button
+                        onClick={async () => {
+                          if (selectedTrains.length === 0) return;
+                          setSimulating(true);
+                          try {
+                            const res = await fetch("http://127.0.0.1:8000/admin/coverage/simulate", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ train_numbers: selectedTrains })
+                            });
+                            const payload = await res.json();
+                            if (payload.success) {
+                              setSimulatedResults(payload.simulation);
+                            }
+                          } catch (e) {
+                            console.error("Failed to run coverage simulation", e);
+                          } finally {
+                            setSimulating(false);
+                          }
+                        }}
+                        className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-lg text-xs font-semibold flex items-center shadow-lg shadow-indigo-900/20 transition"
+                        disabled={simulating || selectedTrains.length === 0}
+                      >
+                        {simulating ? <Icons.Spinner /> : "Simulate Growth Impact"}
+                      </button>
+                    </div>
+
+                    {/* Simulation Result Overlay Panel */}
+                    {simulatedResults && (
+                      <div className="p-4 rounded-xl bg-violet-950/20 border border-violet-500/30 space-y-3 animate-slideIn">
+                        <div className="flex justify-between items-center border-b border-violet-500/20 pb-2">
+                          <span className="text-xs font-bold text-violet-300 uppercase tracking-wide">Simulation Results</span>
+                          <button onClick={() => setSimulatedResults(null)} className="text-violet-400 hover:text-white text-xs">✕ Clear</button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-xs">
+                          <div>
+                            <span className="text-slate-500 block">Direct Corridors Unlocked</span>
+                            <span className="text-sm font-bold text-white block">+{simulatedResults.unlocked_direct_journeys}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block">Additional Transfer Routes</span>
+                            <span className="text-sm font-bold text-white block">+{simulatedResults.unlocked_transfers_estimate}</span>
+                          </div>
+                        </div>
+                        <div className="pt-2 border-t border-violet-500/10 flex justify-between items-center text-xs">
+                          <span className="text-slate-400">Coverage Score Change</span>
+                          <span className="text-emerald-400 font-black text-sm">{simulatedResults.current_coverage_pct}% → {simulatedResults.simulated_coverage_pct}% (+{simulatedResults.percentage_increase}%)</span>
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
         </div>
       </main>
 
@@ -2620,6 +3142,238 @@ export default function AdminDashboard() {
               </div>
 
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Coverage Drill-Down Modals */}
+      {drilldownType && (
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+            
+            {/* Modal Header */}
+            <div className="h-16 border-b border-slate-800 bg-slate-950 px-6 flex items-center justify-between">
+              <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <span className="text-violet-400">📊</span>
+                {drilldownType.replace("-", " ")} Drill-Down View
+              </h3>
+              <button
+                onClick={() => setDrilldownType(null)}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg transition"
+              >
+                ✕ Close Window
+              </button>
+            </div>
+
+            {/* Modal Scrollable Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+
+              {/* View 1: Overall Coverage */}
+              {drilldownType === "overall-coverage" && (
+                <div className="space-y-4">
+                  <div className="p-5 rounded-xl bg-slate-950/40 border border-slate-800 space-y-2">
+                    <span className="text-xs text-slate-400 font-semibold block uppercase">Core Metrics Progression</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">Overall Coverage Score</span>
+                        <span className="text-xl font-bold text-white">{coverageData.metrics.overall_search_coverage_pct}%</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">Total Active Trains</span>
+                        <span className="text-xl font-bold text-white">{coverageData.metrics.total_trains}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">Total Station Nodes</span>
+                        <span className="text-xl font-bold text-white">{coverageData.metrics.total_stations}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">Total Searchable Corridors</span>
+                        <span className="text-xl font-bold text-white">{coverageData.metrics.total_corridors}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-5 rounded-xl bg-slate-950/40 border border-slate-800 space-y-3">
+                    <span className="text-xs text-slate-400 font-semibold block uppercase">Topology Path Breakdown</span>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs text-slate-300">
+                        <span>Direct Rail Journeys</span>
+                        <span className="font-bold">{coverageData.transfers.direct_connections} connected stations</span>
+                      </div>
+                      <div className="w-full bg-slate-950 rounded-full h-1">
+                        <div className="bg-emerald-500 h-1 rounded-full" style={{ width: '100%' }}></div>
+                      </div>
+                    </div>
+                    <div className="space-y-2 pt-2">
+                      <div className="flex justify-between text-xs text-slate-300">
+                        <span>Sampled One-Transfer Journeys (1 Stopover)</span>
+                        <span className="font-bold">{coverageData.transfers.sampled_one_transfer_paths} pathways</span>
+                      </div>
+                      <div className="w-full bg-slate-950 rounded-full h-1">
+                        <div className="bg-violet-500 h-1 rounded-full" style={{ width: '85%' }}></div>
+                      </div>
+                    </div>
+                    <div className="space-y-2 pt-2">
+                      <div className="flex justify-between text-xs text-slate-300">
+                        <span>Sampled Two-Transfer Journeys (2 Stopovers)</span>
+                        <span className="font-bold">{coverageData.transfers.sampled_two_transfer_paths} pathways</span>
+                      </div>
+                      <div className="w-full bg-slate-950 rounded-full h-1">
+                        <div className="bg-cyan-500 h-1 rounded-full" style={{ width: '60%' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* View 2: Synthetic Fallback */}
+              {drilldownType === "synthetic-fallback" && (
+                <div className="space-y-4 text-xs">
+                  <div className="p-4 bg-amber-500/5 border border-amber-500/15 rounded-xl text-amber-400">
+                    ⚠️ <b>Synthetic Fallback Notice:</b> Synthetic fallbacks represent corridor requests that are satisfied using generated/synthetic results because verified schedules are missing in the local database.
+                  </div>
+                  <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-5 space-y-3">
+                    <span className="font-bold text-white text-sm block">Fallback Diagnostics</span>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <span className="text-slate-500 block">Total fallbacks logged:</span>
+                        <span className="text-lg font-bold text-white">{Math.round(coverageData.metrics.synthetic_fallback_pct / 100 * 42)} searches</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-500 block">Active fallback rate:</span>
+                        <span className="text-lg font-bold text-amber-500">{coverageData.metrics.synthetic_fallback_pct}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* View 3: Coverage by City */}
+              {drilldownType === "city-coverage" && (
+                <div className="space-y-4">
+                  <span className="text-xs text-slate-400 font-semibold block uppercase">Target Cities Mapped Coverage</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {citiesList.slice(0, 30).map((c: any) => {
+                      const isCovered = c.primary_station_code !== null;
+                      return (
+                        <div key={c.id} className="p-4 bg-slate-950/30 border border-slate-850 rounded-xl flex items-center justify-between">
+                          <div>
+                            <span className="text-xs font-bold text-white block">{c.city_name}</span>
+                            <span className="text-[10px] text-slate-500">{c.state}</span>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            isCovered ? "bg-emerald-500/10 text-emerald-400" : "bg-slate-800 text-slate-500"
+                          }`}>
+                            {isCovered ? "Mapped" : "No Code"}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* View 4: Coverage by Corridor */}
+              {drilldownType === "corridor-coverage" && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-5 space-y-3">
+                      <span className="text-xs font-bold text-emerald-400 block uppercase">Fully Mapped Corridors ({coverageData.corridors.fully_covered_count})</span>
+                      <div className="max-h-80 overflow-y-auto space-y-2 pr-1 text-xs">
+                        {coverageData.corridors.fully_covered_list.map((c: any, idx: number) => (
+                          <div key={idx} className="flex justify-between p-2 bg-slate-900 border border-slate-850 rounded text-slate-300">
+                            <span>{c.source} ➜ {c.destination}</span>
+                            <span className="text-emerald-400 font-medium">{c.demand} Demand</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-5 space-y-3">
+                      <span className="text-xs font-bold text-amber-400 block uppercase">Partially Covered Corridors ({coverageData.corridors.partially_covered_count})</span>
+                      <div className="max-h-80 overflow-y-auto space-y-2 pr-1 text-xs">
+                        {coverageData.corridors.partially_covered_list.map((c: any, idx: number) => (
+                          <div key={idx} className="flex justify-between p-2 bg-slate-900 border border-slate-850 rounded text-slate-300">
+                            <span>{c.source} ➜ {c.destination}</span>
+                            <span className="text-amber-400 font-medium">Transfer ({c.demand})</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* View 5: Top Missing Corridors */}
+              {drilldownType === "missing-corridors" && (
+                <div className="space-y-4">
+                  <span className="text-xs text-slate-400 font-semibold block uppercase">All Uncovered High-Demand Corridors</span>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs text-slate-400">
+                      <thead>
+                        <tr className="border-b border-slate-800 text-slate-500">
+                          <th className="text-left py-2 font-semibold uppercase">Origin City</th>
+                          <th className="text-left py-2 font-semibold uppercase">Destination City</th>
+                          <th className="text-left py-2 font-semibold uppercase">Corridor Demand</th>
+                          <th className="text-right py-2 font-semibold uppercase">Estimated Acquisition Priority</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {coverageData.corridors.unsupported_list.map((c: any, idx: number) => (
+                          <tr key={idx} className="border-b border-slate-800/40 hover:bg-slate-950/20">
+                            <td className="py-2.5 text-white font-medium">{c.source}</td>
+                            <td className="py-2.5 text-white font-medium">{c.destination}</td>
+                            <td className="py-2.5">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                c.demand === "Extreme" ? "bg-rose-500/10 text-rose-400" : "bg-amber-500/10 text-amber-400"
+                              }`}>
+                                {c.demand}
+                              </span>
+                            </td>
+                            <td className="py-2.5 text-right text-violet-400 font-bold">
+                              {c.demand === "Extreme" ? "CRITICAL (P0)" : "HIGH (P1)"}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* View 6: Data Quality Issues */}
+              {drilldownType === "data-quality" && (
+                <div className="space-y-6 text-xs">
+                  <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-5 space-y-3">
+                    <span className="text-xs font-bold text-rose-400 block uppercase">Unlinked Station Codes in timetable stops ({coverageData.gaps.missing_stations_count})</span>
+                    <p className="text-slate-400 mb-2">The following station codes are referenced in the train timetable stop sequence records but do not exist in the master stations table:</p>
+                    <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-2 bg-slate-900 border border-slate-850 rounded">
+                      {coverageData.gaps.missing_stations.map((st: any) => (
+                        <span key={st.code} className="text-[10px] font-mono px-2 py-0.5 bg-slate-950 text-slate-400 border border-slate-850 rounded">
+                          {st.code} - {st.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-5 space-y-3">
+                    <span className="text-xs font-bold text-amber-400 block uppercase">Imported Trains Missing Schedule Stop Sequences ({coverageData.gaps.trains_missing_stops_count})</span>
+                    <p className="text-slate-400 mb-2">The following trains have records in the database but do not have stop sequence schedules loaded:</p>
+                    <div className="max-h-40 overflow-y-auto space-y-1.5 p-2 bg-slate-900 border border-slate-850 rounded">
+                      {coverageData.gaps.trains_missing_stops.map((t: any) => (
+                        <div key={t.number} className="flex justify-between text-slate-400 font-mono text-[10px]">
+                          <span>Train Number: {t.number}</span>
+                          <span>Name: {t.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
           </div>
         </div>
       )}

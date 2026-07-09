@@ -1,3 +1,26 @@
+import logging
+from typing import Optional, List
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app.database import get_db
+
+logger = logging.getLogger("navix.railway.api")
+router = APIRouter(prefix="/admin", tags=["admin"])
+
+def log_audit(db: Session, operation: str, entity: str, record_id: Optional[str], details: Optional[str] = None):
+    try:
+        from app.models import AuditLog
+        log_entry = AuditLog(
+            operation=operation,
+            entity=entity,
+            record_id=str(record_id) if record_id is not None else None,
+            details=details
+        )
+        db.add(log_entry)
+        db.commit()
+    except Exception as e:
+        logger.error(f"Failed to write audit log: {e}")
+        db.rollback()
 
 # =============================================================================
 # RAILWAY DATASET ENDPOINTS

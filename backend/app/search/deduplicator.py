@@ -4,10 +4,20 @@ from app.domain.journey import Journey
 
 class DeduplicationStage:
     def process(self, context: PipelineContext, journeys: List[Journey]) -> List[Journey]:
+        # Check if we have any real train schedules from the database
+        has_real_trains = any(journey.route_id.startswith("RAIL-") for journey in journeys)
+        
+        filtered_journeys = []
+        for journey in journeys:
+            # If we have real train data, drop synthetic/dummy train routes (NX- prefix + "Train" mode)
+            if has_real_trains and (journey.route_id.startswith("NX-") or not journey.route_id.startswith("RAIL-")) and "Train" in journey.transport_modes:
+                continue
+            filtered_journeys.append(journey)
+            
         seen_signatures: Set[str] = set()
         deduplicated: List[Journey] = []
         
-        for journey in journeys:
+        for journey in filtered_journeys:
             leg_sigs = []
             for leg in journey.legs:
                 # Signature consists of origin, destination, transport mode, and departure time
@@ -19,3 +29,4 @@ class DeduplicationStage:
                 deduplicated.append(journey)
                 
         return deduplicated
+
