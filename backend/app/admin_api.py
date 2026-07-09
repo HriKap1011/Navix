@@ -1290,3 +1290,201 @@ def railway_search_coverage(source: str = "", destination: str = "", db: Session
     except Exception as e:
         logger.error(f"railway_search_coverage error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+from pydantic import BaseModel
+
+class SimulateRequest(BaseModel):
+    train_numbers: List[str]
+
+@router.get("/coverage/intelligence")
+def coverage_intelligence(
+    start_date: str = None,
+    end_date: str = None,
+    city: str = None,
+    state: str = None,
+    corridor: str = None,
+    transport_mode: str = None,
+    db: Session = Depends(get_db)
+):
+    try:
+        from app.railway.coverage_engine import (
+            get_dataset_coverage_metrics,
+            get_transfer_intelligence,
+            get_corridor_intelligence,
+            get_data_gap_report,
+            get_coverage_optimization_ranking
+        )
+        filters = {
+            "start_date": start_date,
+            "end_date": end_date,
+            "city": city,
+            "state": state,
+            "corridor": corridor,
+            "transport_mode": transport_mode
+        }
+        return {
+            "success": True,
+            "metrics": get_dataset_coverage_metrics(db, filters),
+            "transfers": get_transfer_intelligence(db, filters),
+            "corridors": get_corridor_intelligence(db, filters),
+            "gaps": get_data_gap_report(db, filters),
+            "recommendations": get_coverage_optimization_ranking(db)[:10]  # top 10
+        }
+    except Exception as e:
+        logger.error(f"coverage_intelligence error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/coverage/simulate")
+def coverage_simulate(req: SimulateRequest, db: Session = Depends(get_db)):
+    try:
+        from app.railway.coverage_engine import simulate_coverage_growth
+        res = simulate_coverage_growth(db, req.train_numbers)
+        return {
+            "success": True,
+            "simulation": res
+        }
+    except Exception as e:
+        logger.error(f"coverage_simulate error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/coverage/export/excel")
+def coverage_export_excel(
+    start_date: str = None,
+    end_date: str = None,
+    city: str = None,
+    state: str = None,
+    corridor: str = None,
+    transport_mode: str = None,
+    db: Session = Depends(get_db)
+):
+    """Exports structured spreadsheet report of all coverage details with styled worksheets."""
+    try:
+        from app.railway.coverage_engine import generate_coverage_excel
+        filters = {
+            "start_date": start_date,
+            "end_date": end_date,
+            "city": city,
+            "state": state,
+            "corridor": corridor,
+            "transport_mode": transport_mode
+        }
+        excel_data = generate_coverage_excel(db, filters)
+        from fastapi.responses import Response
+        return Response(
+            content=excel_data.getvalue(),
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={
+                "Content-Disposition": "attachment; filename=navix_coverage_detailed_analytics.xlsx"
+            }
+        )
+    except Exception as e:
+        logger.error(f"coverage_export_excel error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/coverage/export/pdf")
+def coverage_export_pdf(
+    start_date: str = None,
+    end_date: str = None,
+    city: str = None,
+    state: str = None,
+    corridor: str = None,
+    transport_mode: str = None,
+    db: Session = Depends(get_db)
+):
+    """Exports high-quality, formatted executive summary PDF report of Coverage status."""
+    try:
+        from app.railway.coverage_engine import generate_coverage_pdf
+        filters = {
+            "start_date": start_date,
+            "end_date": end_date,
+            "city": city,
+            "state": state,
+            "corridor": corridor,
+            "transport_mode": transport_mode
+        }
+        pdf_data = generate_coverage_pdf(db, filters)
+        from fastapi.responses import Response
+        return Response(
+            content=pdf_data.getvalue(),
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": "attachment; filename=navix_coverage_report.pdf"
+            }
+        )
+    except Exception as e:
+        logger.error(f"coverage_export_pdf error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/coverage/report")
+def coverage_report(db: Session = Depends(get_db)):
+    """Generates a downloadable, clean Markdown report of the coverage analysis (legacy fallback)."""
+    try:
+        import datetime
+        from app.railway.coverage_engine import (
+            get_dataset_coverage_metrics,
+            get_transfer_intelligence,
+            get_corridor_intelligence,
+            get_data_gap_report,
+            get_coverage_optimization_ranking
+        )
+        
+        metrics = get_dataset_coverage_metrics(db)
+        transfers = get_transfer_intelligence(db)
+        corridors = get_corridor_intelligence(db)
+        gaps = get_data_gap_report(db)
+        recs = get_coverage_optimization_ranking(db)[:10]
+
+        report_md = f"""# NAVIX COVERAGE INTELLIGENCE REPORT
+Generated on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+
+## 1. Dataset Overview
+- **Total Trains**: {metrics['total_trains']}
+- **Total Stations**: {metrics['total_stations']}
+- **Total Stops**: {metrics['total_stops']}
+- **Total Corridors**: {metrics['total_corridors']}
+- **Completeness Rate**: {metrics['completeness_pct']}% (trains with schedules)
+- **Dataset Version**: {metrics['dataset_freshness']}
+
+## 2. Search Coverage Metrics
+- **Overall Verified Search Coverage**: {metrics['overall_search_coverage_pct']}%
+- **Synthetic Fallback Rate**: {metrics['synthetic_fallback_pct']}%
+- **Station Coverage**: {metrics['station_coverage_pct']}% of Rail Stations in system
+- **Corridor Coverage**: {metrics['corridor_coverage_pct']}% of Corridors with direct train
+
+## 3. Transfer Intelligence
+- **Direct Connections (Edges)**: {transfers['direct_connections']}
+- **Disconnected Stations**: {transfers['disconnected_stations_count']} stations without active direct routes
+- **Orphan Stations**: {transfers['orphan_stations_count']} stations without parent city mappings
+
+## 4. Corridor Intelligence
+- **Fully Covered Corridors**: {corridors['fully_covered_count']}
+- **Partially Covered Corridors**: {corridors['partially_covered_count']}
+- **Unsupported Corridors**: {corridors['unsupported_count']}
+
+## 5. Data Gap Analysis
+- **Missing Station Mappings**: {gaps['missing_stations_count']} station codes referenced in stops but not in Stations table
+- **Missing Stop Sequences**: {gaps['trains_missing_stops_count']} trains without scheduled stops
+- **Missing Schedules (Empty Times)**: {gaps['missing_schedules_count']} stops without arrival/departure timings
+- **Duplicate Stop Records**: {gaps['duplicate_stops_count']} duplicate stop entries
+- **Invalid Station Mappings**: {gaps['invalid_mappings_count']} nearby mappings with negative distances
+
+## 6. Coverage Growth Recommendations
+Top 5 trains recommended for schedule import to maximize coverage impact:
+"""
+        for i, r in enumerate(recs[:5], 1):
+            report_md += f"{i}. **Train {r['train_number']}** ({r['train_name']}) covering **{r['unlocked_corridor']}** | Demand: {r['corridor_demand']} | Impact Score: {r['impact_score']} points\\n"
+
+        from fastapi.responses import Response
+        return Response(
+            content=report_md,
+            media_type="text/markdown",
+            headers={
+                "Content-Disposition": "attachment; filename=navix_coverage_intelligence_report.md"
+            }
+        )
+    except Exception as e:
+        logger.error(f"coverage_report error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+

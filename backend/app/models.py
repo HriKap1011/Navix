@@ -156,4 +156,26 @@ class SyncHistory(Base):
     logs = Column(String(4000), nullable=True)
 
 
+class SearchCoverageLog(Base):
+    __tablename__ = "search_coverage_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    search_log_id = Column(Integer, ForeignKey("search_logs.id", ondelete="CASCADE"), nullable=True)
+    source = Column(String(100), nullable=False)
+    destination = Column(String(100), nullable=False)
+    date = Column(String(20), nullable=True)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+
+    source_station_found = Column(Boolean, default=False)
+    destination_station_found = Column(Boolean, default=False)
+    direct_real_exists = Column(Boolean, default=False)
+    one_transfer_real_exists = Column(Boolean, default=False)
+    two_transfer_real_exists = Column(Boolean, default=False)
+    synthetic_fallback_used = Column(Boolean, default=False)
+    coverage_score = Column(Float, default=0.0)
+
+    classification = Column(String(50), nullable=False)  # Fully Verified, Partially Verified, Synthetic Assisted, Unsupported
+
+
+
 

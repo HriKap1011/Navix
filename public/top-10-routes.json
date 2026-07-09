@@ -38,6 +38,7 @@
     "comfortScore": 88,
     "seatLikelihood": 82,
     "recommendationReasoning": [
+      "Highly economical optimal route",
       "Saves transfer stress",
       "Highly confident seat availability",
       "Superior comfort and low travel friction",
@@ -83,7 +84,7 @@
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 81,
+    "navixScore": 78,
     "comfortScore": 62,
     "seatLikelihood": 48,
     "recommendationReasoning": [
@@ -129,7 +130,7 @@
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 74,
+    "navixScore": 72,
     "comfortScore": 60,
     "seatLikelihood": 98,
     "recommendationReasoning": [
@@ -139,52 +140,6 @@
     "confirmationLikelihood": null,
     "confirmationProbability": null,
     "rescueRecommendation": null
-  },
-  {
-    "id": "NX-3504305020826593878864337055795312107-T3",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "15h 46m",
-    "estimatedPrice": "INR 2,136",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "New Delhi (NDLS)",
-        "to": "Danapur (DNR)",
-        "mode": "Train - Humsafar (22317)",
-        "duration": "15h 46m",
-        "departureTime": "12:00",
-        "arrivalTime": "03:46"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "12:00",
-    "arrivalTime": "03:46",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 9,
-    "confidenceScore": 80,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 56,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 45,
-    "comfortScore": 44,
-    "seatLikelihood": 9,
-    "recommendationReasoning": [
-      "Easier Transfer"
-    ],
-    "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 9,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   },
   {
     "id": "NX-3504305020826593878864337055795312107-B1",
@@ -211,7 +166,7 @@
     "arrivalTime": "16:39",
     "layoverDuration": "0h 00m",
     "estimatedAvailability": 11,
-    "confidenceScore": 85,
+    "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "High",
@@ -221,7 +176,7 @@
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 45,
+    "navixScore": 26,
     "comfortScore": 38,
     "seatLikelihood": 11,
     "recommendationReasoning": [
@@ -231,207 +186,5 @@
     "confirmationLikelihood": null,
     "confirmationProbability": null,
     "rescueRecommendation": null
-  },
-  {
-    "id": "NX-3504305020826593878864337055795312107-T2",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "15h 46m",
-    "estimatedPrice": "INR 2,136",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Anand Vihar Terminal (ANVT)",
-        "to": "Patna Jn (PNBE)",
-        "mode": "Train - SF Exp (12395)",
-        "duration": "15h 46m",
-        "departureTime": "08:15",
-        "arrivalTime": "00:01"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "08:15",
-    "arrivalTime": "00:01",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 8,
-    "confidenceScore": 90,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 58,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 44,
-    "comfortScore": 42,
-    "seatLikelihood": 8,
-    "recommendationReasoning": [
-      "Easier Transfer"
-    ],
-    "waitlistCode": "RLWL 10 / WL 4",
-    "confirmationLikelihood": "Medium",
-    "confirmationProbability": 8,
-    "rescueRecommendation": null
-  },
-  {
-    "id": "NX-3504305020826593878864337055795312107-T1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "15h 46m",
-    "estimatedPrice": "INR 2,136",
-    "travelModes": [
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "New Delhi (NDLS)",
-        "to": "Patna Jn (PNBE)",
-        "mode": "Train - Exp (12393)",
-        "duration": "15h 46m",
-        "departureTime": "07:30",
-        "arrivalTime": "23:16"
-      }
-    ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "07:30",
-    "arrivalTime": "23:16",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 5,
-    "confidenceScore": 80,
-    "difficulty": "Easy",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 75,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 38,
-    "comfortScore": 25,
-    "seatLikelihood": 5,
-    "recommendationReasoning": [
-      "Easier Transfer"
-    ],
-    "waitlistCode": "GNWL 47 / WL 28",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 5,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at Anand Vihar Terminal (ANVT)!"
-  },
-  {
-    "id": "NX-3504305020826593878864337055795312107-S1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "18h 53m",
-    "estimatedPrice": "INR 2,949",
-    "travelModes": [
-      "Bus",
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Delhi",
-        "to": "Lucknow",
-        "mode": "Intercity Bus - IntrCity AC",
-        "duration": "9h 22m",
-        "departureTime": "06:00",
-        "arrivalTime": "15:22"
-      },
-      {
-        "from": "Lucknow Charbagh (LKO)",
-        "to": "Patna Jn (PNBE)",
-        "mode": "Train - SF Exp",
-        "duration": "8h 01m",
-        "departureTime": "16:52",
-        "arrivalTime": "00:53"
-      }
-    ],
-    "recommendationTag": "Lower crowding than main corridor",
-    "tagTone": "cyan",
-    "isRecommended": false,
-    "departureTime": "06:00",
-    "arrivalTime": "00:53",
-    "layoverDuration": "1h 30m",
-    "estimatedAvailability": 10,
-    "confidenceScore": 85,
-    "difficulty": "Moderate",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Lower crowding than main corridor",
-      "crowdLevel": 60,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 21,
-    "comfortScore": 40,
-    "seatLikelihood": 10,
-    "recommendationReasoning": [
-      "Lower crowding than main corridor"
-    ],
-    "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 10,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
-  },
-  {
-    "id": "NX-3504305020826593878864337055795312107-H1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "13h 11m",
-    "estimatedPrice": "INR 9,764",
-    "travelModes": [
-      "Flight",
-      "Train"
-    ],
-    "legs": [
-      {
-        "from": "Delhi Airport (DEL)",
-        "to": "Lucknow Airport (LKO)",
-        "mode": "Flight - IndiGo",
-        "duration": "0h 40m",
-        "departureTime": "11:00",
-        "arrivalTime": "11:40"
-      },
-      {
-        "from": "Lucknow Charbagh (LKO)",
-        "to": "Patna Jn (PNBE)",
-        "mode": "Train - SF Exp",
-        "duration": "8h 01m",
-        "departureTime": "14:10",
-        "arrivalTime": "22:11"
-      }
-    ],
-    "recommendationTag": "Air hybrid saves hours vs direct rail",
-    "tagTone": "violet",
-    "isRecommended": false,
-    "departureTime": "09:00",
-    "arrivalTime": "22:11",
-    "layoverDuration": "2h 00m",
-    "estimatedAvailability": 12,
-    "confidenceScore": 90,
-    "difficulty": "Moderate",
-    "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
-      "seasonalTip": "Air hybrid saves hours vs direct rail",
-      "crowdLevel": 45,
-      "priceTrend": "Stable",
-      "trendDescription": "Fares are stable on this corridor."
-    },
-    "navixScore": 18,
-    "comfortScore": 55,
-    "seatLikelihood": 12,
-    "recommendationReasoning": [
-      "Air hybrid saves hours vs direct rail"
-    ],
-    "waitlistCode": "GNWL 25 / WL 12",
-    "confirmationLikelihood": "Low",
-    "confirmationProbability": 12,
-    "rescueRecommendation": "Navix Comfort Tip: Secure better seat availability by boarding at secondary station or choosing an air hybrid path!"
   }
 ]

@@ -108,6 +108,13 @@ class SearchOrchestrator:
                 )
                 db.add(log_entry)
                 db.commit()
+                
+                # Log coverage intelligence details for this search
+                try:
+                    from app.railway.coverage_engine import classify_and_log_search
+                    classify_and_log_search(db, log_entry.id, source, destination, date, final_dtos)
+                except Exception as cov_ex:
+                    logger.error(f"Failed to log search coverage: {cov_ex}")
         except Exception as db_ex:
             logger.error(f"Failed to write SearchLog to database: {db_ex}")
             
