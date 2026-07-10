@@ -9,8 +9,9 @@ class DeduplicationStage:
         
         filtered_journeys = []
         for journey in journeys:
-            # If we have real train data, drop synthetic/dummy train routes (NX- prefix + "Train" mode)
-            if has_real_trains and (journey.route_id.startswith("NX-") or not journey.route_id.startswith("RAIL-")) and "Train" in journey.transport_modes:
+            # If we have real train data, drop synthetic direct train routes (i.e. pure Train mode only),
+            # but preserve multi-modal connecting routes (e.g. Bus + Train, Flight + Train).
+            if has_real_trains and (journey.route_id.startswith("NX-") or not journey.route_id.startswith("RAIL-")) and journey.transport_modes == ["Train"]:
                 continue
             filtered_journeys.append(journey)
             

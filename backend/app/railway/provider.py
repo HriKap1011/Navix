@@ -265,10 +265,36 @@ class RailwayScheduleProvider(BaseProvider):
             dep_time = src_stop.departure_time or "--:--"
             arr_time = dest_stop.arrival_time  or "--:--"
 
+            # Data anomaly fallback: if dep_time is missing but arrival_time exists on source stop, use it.
+            if dep_time == "--:--" and src_stop.arrival_time and src_stop.arrival_time != "--:--":
+                dep_time = src_stop.arrival_time
+            # Data anomaly fallback: if arr_time is missing but departure_time exists on destination stop, use it.
+            if arr_time == "--:--" and dest_stop.departure_time and dest_stop.departure_time != "--:--":
+                arr_time = dest_stop.departure_time
+
+            missing_time = (dep_time == "--:--" or arr_time == "--:--" or not dep_time or not arr_time)
             duration_min = _duration_minutes(dep_time, arr_time)
             # Guard against missing times producing 0 — estimate from distance instead
-            if duration_min == 0 and dest_stop.distance_from_source_km and src_stop.distance_from_source_km:
-                dist = dest_stop.distance_from_source_km - src_stop.distance_from_source_km
+            if duration_min == 0 or missing_time:
+                dist = 0.0
+                if dest_stop.distance_from_source_km is not None and src_stop.distance_from_source_km is not None:
+                    dist = max(0.0, float(dest_stop.distance_from_source_km - src_stop.distance_from_source_km))
+                if dist == 0.0 and train.total_distance_km:
+                    dist = float(train.total_distance_km)
+                if dist == 0.0:
+                    try:
+                        from app.domain.services import calculate_distance
+                        src_c = self.search_city(source_city)
+                        dst_c = self.search_city(dest_city)
+                        if src_c and dst_c:
+                            dist = calculate_distance(
+                                src_c.coordinates.latitude, src_c.coordinates.longitude,
+                                dst_c.coordinates.latitude, dst_c.coordinates.longitude
+                            )
+                    except Exception:
+                        pass
+                if dist == 0.0:
+                    dist = 500.0
                 # Average Indian train speed ~65 km/h
                 duration_min = max(60, int((dist / 65.0) * 60))
 
@@ -320,7 +346,7 @@ class RailwayScheduleProvider(BaseProvider):
                 train.train_number, src_stop.station_code, dest_stop.station_code
             )
 
-            return Journey(
+            j = Journey(
                 route_id=route_id,
                 source=source_city,
                 destination=dest_city,
@@ -340,6 +366,8 @@ class RailwayScheduleProvider(BaseProvider):
                 availability=availability,
                 is_recommended=False,
             )
+            j._missing_time = missing_time
+            return j
         except Exception as e:
             logger.warning(f"Failed to build Journey for train {getattr(train, 'train_number', '?')}: {e}")
             return None

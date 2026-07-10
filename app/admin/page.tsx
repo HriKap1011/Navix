@@ -122,6 +122,7 @@ export default function AdminDashboard() {
   const [railwayTypeFilter, setRailwayTypeFilter] = useState<string>("");
   const [selectedTrain, setSelectedTrain] = useState<any>(null);
   const [railwayLoading, setRailwayLoading] = useState<boolean>(false);
+  const [railwayToast, setRailwayToast] = useState<{ msg: string; ok: boolean } | null>(null);
   const [coverageData, setCoverageData] = useState<any>(null);
   const [simulatedResults, setSimulatedResults] = useState<any>(null);
   const [selectedTrains, setSelectedTrains] = useState<string[]>([]);
