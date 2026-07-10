@@ -2,7 +2,7 @@
   {
     "id": "RAIL-12022-NDLS-PNBE-77111D",
     "routeCombination": "Delhi -> Patna",
-    "duration": "0h 00m",
+    "duration": "8h 02m",
     "estimatedPrice": "INR 5,510",
     "travelModes": [
       "Train"
@@ -12,15 +12,15 @@
         "from": "New Delhi",
         "to": "Patna Junction",
         "mode": "Train",
-        "duration": "0h 00m",
-        "departureTime": "--:--",
+        "duration": "8h 02m",
+        "departureTime": "14:50",
         "arrivalTime": "22:52"
       }
     ],
     "recommendationTag": "12022 Howrah Shatabdi Express (AC)",
     "tagTone": "cyan",
     "isRecommended": true,
-    "departureTime": "--:--",
+    "departureTime": "14:50",
     "arrivalTime": "22:52",
     "layoverDuration": "0h 00m",
     "estimatedAvailability": 82,
@@ -34,15 +34,13 @@
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 91,
+    "navixScore": 83,
     "comfortScore": 88,
     "seatLikelihood": 82,
     "recommendationReasoning": [
-      "Highly economical optimal route",
-      "Saves transfer stress",
-      "Highly confident seat availability",
-      "Superior comfort and low travel friction",
-      "Daylight schedule with no waiting pain"
+      "Outstanding travel comfort (comfort level: 88/100)",
+      "Direct connection with no transfer delays",
+      "Ranked above other alternatives primarily due to better seat certainty"
     ],
     "waitlistCode": "AVL",
     "confirmationLikelihood": "Highly Likely",
@@ -50,53 +48,145 @@
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12309-NDLS-RJPB-E57CE7",
+    "id": "RAIL-12554-NDLS-PNBE-8F0C48",
     "routeCombination": "Delhi -> Patna",
-    "duration": "0h 00m",
-    "estimatedPrice": "INR 1,204",
+    "duration": "14h 10m",
+    "estimatedPrice": "INR 1,504",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
         "from": "New Delhi",
-        "to": "Rajendra Nagar",
+        "to": "Patna Junction",
         "mode": "Train",
-        "duration": "0h 00m",
-        "departureTime": "--:--",
-        "arrivalTime": "13:00"
+        "duration": "14h 10m",
+        "departureTime": "16:35",
+        "arrivalTime": "06:45"
       }
     ],
-    "recommendationTag": "Best Value Comfort",
+    "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "--:--",
-    "arrivalTime": "13:00",
+    "departureTime": "16:35",
+    "arrivalTime": "06:45",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 48,
+    "estimatedAvailability": 60,
     "confidenceScore": 85,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 38,
+      "seasonalTip": "Easier Transfer",
+      "crowdLevel": 30,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 78,
-    "comfortScore": 62,
-    "seatLikelihood": 48,
+    "navixScore": 72,
+    "comfortScore": 70,
+    "seatLikelihood": 60,
     "recommendationReasoning": [
-      "Best Value Comfort"
+      "Easier Transfer"
     ],
-    "waitlistCode": "WL/5",
-    "confirmationLikelihood": "Uncertain",
-    "confirmationProbability": 40,
+    "waitlistCode": "RAC",
+    "confirmationLikelihood": "Likely",
+    "confirmationProbability": 65,
     "rescueRecommendation": null
   },
   {
-    "id": "NX-3504305020826593878864337055795312107-F1",
+    "id": "RAIL-12582-NDLS-PNBE-E23F11",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "13h 50m",
+    "estimatedPrice": "INR 1,504",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi",
+        "to": "Patna Junction",
+        "mode": "Train",
+        "duration": "13h 50m",
+        "departureTime": "18:15",
+        "arrivalTime": "08:05"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "18:15",
+    "arrivalTime": "08:05",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 60,
+    "confidenceScore": 90,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Easier Transfer",
+      "crowdLevel": 30,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 72,
+    "comfortScore": 70,
+    "seatLikelihood": 60,
+    "recommendationReasoning": [
+      "Easier Transfer"
+    ],
+    "waitlistCode": "RAC",
+    "confirmationLikelihood": "Likely",
+    "confirmationProbability": 65,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "RAIL-12305-NDLS-PNBE-14EB3E",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "12h 50m",
+    "estimatedPrice": "INR 5,341",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi",
+        "to": "Patna Junction",
+        "mode": "Train",
+        "duration": "12h 50m",
+        "departureTime": "10:55",
+        "arrivalTime": "23:45"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "10:55",
+    "arrivalTime": "23:45",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 78,
+    "confidenceScore": 80,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Easier Transfer",
+      "crowdLevel": 10,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 69,
+    "comfortScore": 92,
+    "seatLikelihood": 78,
+    "recommendationReasoning": [
+      "Easier Transfer"
+    ],
+    "waitlistCode": "AVL",
+    "confirmationLikelihood": "Highly Likely",
+    "confirmationProbability": 90,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "NX-75275445955718769958875095841795099882-F1",
     "routeCombination": "Delhi -> Patna",
     "duration": "3h 50m",
     "estimatedPrice": "INR 12,720",
@@ -113,28 +203,28 @@
         "arrivalTime": "14:50"
       }
     ],
-    "recommendationTag": "Easier Transfer",
+    "recommendationTag": "Express Comfort",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "11:30",
     "arrivalTime": "15:20",
     "layoverDuration": "0h 00m",
     "estimatedAvailability": 98,
-    "confidenceScore": 90,
+    "confidenceScore": 85,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 40,
+      "seasonalTip": "Express Comfort",
+      "crowdLevel": 45,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 72,
-    "comfortScore": 60,
+    "navixScore": 69,
+    "comfortScore": 55,
     "seatLikelihood": 98,
     "recommendationReasoning": [
-      "Easier Transfer"
+      "Express Comfort"
     ],
     "waitlistCode": null,
     "confirmationLikelihood": null,
@@ -142,7 +232,191 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-3504305020826593878864337055795312107-B1",
+    "id": "RAIL-12382-NDLS-PNBE-EA5859",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "11h 40m",
+    "estimatedPrice": "INR 1,838",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi",
+        "to": "Patna Junction",
+        "mode": "Train",
+        "duration": "11h 40m",
+        "departureTime": "17:55",
+        "arrivalTime": "05:35"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "17:55",
+    "arrivalTime": "05:35",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 48,
+    "confidenceScore": 90,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Easier Transfer",
+      "crowdLevel": 38,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 68,
+    "comfortScore": 62,
+    "seatLikelihood": 48,
+    "recommendationReasoning": [
+      "Easier Transfer"
+    ],
+    "waitlistCode": "WL/5",
+    "confirmationLikelihood": "Uncertain",
+    "confirmationProbability": 40,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "RAIL-12309-NDLS-PNBE-08AB90",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "14h 10m",
+    "estimatedPrice": "INR 1,204",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi",
+        "to": "Patna Junction",
+        "mode": "Train",
+        "duration": "14h 10m",
+        "departureTime": "22:25",
+        "arrivalTime": "12:35"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "22:25",
+    "arrivalTime": "12:35",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 48,
+    "confidenceScore": 80,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 38,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 67,
+    "comfortScore": 62,
+    "seatLikelihood": 48,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "WL/5",
+    "confirmationLikelihood": "Uncertain",
+    "confirmationProbability": 40,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "RAIL-12309-NDLS-RJPB-E57CE7",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "14h 35m",
+    "estimatedPrice": "INR 1,204",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi",
+        "to": "Rajendra Nagar",
+        "mode": "Train",
+        "duration": "14h 35m",
+        "departureTime": "22:25",
+        "arrivalTime": "13:00"
+      }
+    ],
+    "recommendationTag": "Best Value Comfort",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "22:25",
+    "arrivalTime": "13:00",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 48,
+    "confidenceScore": 85,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Best Value Comfort",
+      "crowdLevel": 38,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 67,
+    "comfortScore": 62,
+    "seatLikelihood": 48,
+    "recommendationReasoning": [
+      "Best Value Comfort"
+    ],
+    "waitlistCode": "WL/5",
+    "confirmationLikelihood": "Uncertain",
+    "confirmationProbability": 40,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "RAIL-12616-NDLS-PNBE-9458E7",
+    "routeCombination": "Delhi -> Patna",
+    "duration": "12h 50m",
+    "estimatedPrice": "INR 2,610",
+    "travelModes": [
+      "Train"
+    ],
+    "legs": [
+      {
+        "from": "New Delhi",
+        "to": "Patna Junction",
+        "mode": "Train",
+        "duration": "12h 50m",
+        "departureTime": "21:40",
+        "arrivalTime": "10:30"
+      }
+    ],
+    "recommendationTag": "Easier Transfer",
+    "tagTone": "cyan",
+    "isRecommended": false,
+    "departureTime": "21:40",
+    "arrivalTime": "10:30",
+    "layoverDuration": "0h 00m",
+    "estimatedAvailability": 48,
+    "confidenceScore": 90,
+    "difficulty": "Easy",
+    "travelInsights": {
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
+      "seasonalTip": "Easier Transfer",
+      "crowdLevel": 38,
+      "priceTrend": "Stable",
+      "trendDescription": "Fares are stable on this corridor."
+    },
+    "navixScore": 66,
+    "comfortScore": 62,
+    "seatLikelihood": 48,
+    "recommendationReasoning": [
+      "Easier Transfer"
+    ],
+    "waitlistCode": "WL/5",
+    "confirmationLikelihood": "Uncertain",
+    "confirmationProbability": 40,
+    "rescueRecommendation": null
+  },
+  {
+    "id": "NX-75275445955718769958875095841795099882-B1",
     "routeCombination": "Delhi -> Patna",
     "duration": "20h 39m",
     "estimatedPrice": "INR 4,038",
@@ -165,20 +439,20 @@
     "departureTime": "20:00",
     "arrivalTime": "16:39",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 11,
+    "estimatedAvailability": 16,
     "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "High",
       "bookingUrgency": "Book immediately",
       "seasonalTip": "Easier Transfer",
-      "crowdLevel": 62,
+      "crowdLevel": 67,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 26,
-    "comfortScore": 38,
-    "seatLikelihood": 11,
+    "navixScore": 47,
+    "comfortScore": 33,
+    "seatLikelihood": 16,
     "recommendationReasoning": [
       "Easier Transfer"
     ],

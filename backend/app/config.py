@@ -21,6 +21,8 @@ _DEFAULTS = {
     "WEIGHT_PRICE": 0.15,
     "WEIGHT_DURATION": 0.10,
     "WEIGHT_AVAILABILITY": 0.05,
+    "WEIGHT_RELIABILITY": 0.0,   # Reserved — Schedule Reliability component (Sprint 3 persona tuning)
+    "WEIGHT_INTEGRITY": 0.0,     # Reserved — Information Integrity component (Sprint 3 persona tuning)
     "COMFORT_THRESHOLD": 70.0,
     "RECOMMENDATION_THRESHOLD": 60.0,
     "IMPORT_LOCATION": "database_export",

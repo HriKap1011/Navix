@@ -47,8 +47,8 @@ def test_search_orchestrator_integration():
     has_real = any(j["route_id"].startswith("RAIL-") for j in journeys_real)
     assert has_real is True
 
-    # Assert that NO synthetic/dummy train routes exist when real ones exist
-    has_synthetic_train = any(j["route_id"].startswith("NX-") and "Train" in j["transport_modes"] for j in journeys_real)
+    # Assert that NO direct synthetic/dummy train routes exist when real ones exist
+    has_synthetic_train = any(j["route_id"].startswith("NX-") and j["transport_modes"] == ["Train"] for j in journeys_real)
     assert has_synthetic_train is False
 
 

@@ -125,7 +125,7 @@ export async function fetchRoutesFromApi(
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await fetch(backendUrl, {
       method: "POST",
@@ -191,7 +191,7 @@ export async function fetchCitiesFromApi(): Promise<FetchCitiesResult> {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch(backendUrl, {
       signal: controller.signal,
