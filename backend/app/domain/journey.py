@@ -1,8 +1,17 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
+
 from app.domain.leg import Leg, Duration
 from app.domain.pricing import Money
 from app.domain.availability import SeatAvailability
+
+if TYPE_CHECKING:
+    # Imported only for type annotations — avoids circular import at runtime
+    # (components.py already imports Journey via TYPE_CHECKING in the other direction).
+    from app.domain.components import RecommendationComponents
+
 
 @dataclass
 class Journey:
@@ -23,3 +32,6 @@ class Journey:
     availability: Optional[SeatAvailability] = None
     is_recommended: bool = False
     recommendation_reasoning: List[str] = field(default_factory=list)
+    # Populated by services.calculate_smart_scores() after component computation.
+    # Declared here (not as a dynamic attribute) to enable static analysis and IDE completion.
+    components: Optional[RecommendationComponents] = field(default=None)
