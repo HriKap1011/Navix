@@ -159,55 +159,69 @@ def calculate_smart_scores(journeys: List[Journey]) -> List[Journey]:
         min_friction=min_friction, max_friction=max_friction
     )
 
-    # Apply Weights and compute NX Scores
+    # -----------------------------------------------------------------------
+    # Phase 3 — Compute all 7 semantic components and assemble NX Score
+    # -----------------------------------------------------------------------
     scored_journeys = []
     for s in sanitized_data:
         j = s["journey"]
         
-        # Calculate all 7 components first
+        # Step A: Compute all 7 semantic components.
+        # ComponentCalculator is the single source of truth for component values.
         comp = ComponentCalculator.compute(j, s, ranges)
         j.components = comp
-        
-        # Re-derive raw normalized fields to preserve exact behavior/explainability
-        c_norm = normalize(s["comfort"], min_comfort, max_comfort, min_span=20.0, default_bounds=(0.0, 100.0))
-        f_norm = normalize(s["friction"], min_friction, max_friction, min_span=20.0, default_bounds=(0.0, 100.0))
-        bc_norm = normalize(s["seat"], min_seat, max_seat, min_span=20.0, default_bounds=(0.0, 100.0))
-        t_norm = normalize(s["transfers"], min_transfers, max_transfers, invert=True, min_span=2.0, default_bounds=(0.0, 3.0))
+
+        # Step B: Price/duration normalized scalars for reasoning label generation ONLY.
+        # These scalars do NOT feed into the NX Score — journey_value is the sole
+        # scoring vehicle for price and duration signals. See components.py mapping table.
         p_norm = normalize(s["price"], min_price, max_price, invert=True, min_span=200.0)
         d_norm = normalize(s["duration"], min_duration, max_duration, invert=True, min_span=60.0)
 
-        # Compute weighted components using semantic scores where applicable
-        w_comfort = comp.physical_comfort * WEIGHT_COMFORT
-        w_friction = comp.timing_convenience * WEIGHT_FRICTION
-        w_booking_confidence = comp.booking_confidence * (WEIGHT_SEAT + WEIGHT_AVAILABILITY)
-        w_transfers = comp.journey_simplicity * WEIGHT_TRANSFERS
-        w_price = p_norm * WEIGHT_PRICE
-        w_duration = d_norm * WEIGHT_DURATION
+        # Step C: Assemble NX Score exclusively from all 7 semantic components.
+        # Every raw metric reaches the score through a component — no direct norm bypass.
+        #
+        # Weight mapping (config weights → semantic components, total = 1.0):
+        #   journey_value        ← WEIGHT_PRICE + WEIGHT_DURATION  (0.25)
+        #   booking_confidence   ← WEIGHT_SEAT + WEIGHT_AVAILABILITY (0.20)
+        #   journey_simplicity   ← WEIGHT_TRANSFERS                 (0.15)
+        #   timing_convenience   ← WEIGHT_FRICTION                  (0.20)
+        #   physical_comfort     ← WEIGHT_COMFORT                   (0.20)
+        #   schedule_reliability ← WEIGHT_RELIABILITY               (0.0 — Sprint 3)
+        #   information_integrity← WEIGHT_INTEGRITY                 (0.0 — Sprint 3)
+        w_journey_value         = comp.journey_value         * (WEIGHT_PRICE + WEIGHT_DURATION)
+        w_booking_confidence    = comp.booking_confidence    * (WEIGHT_SEAT + WEIGHT_AVAILABILITY)
+        w_journey_simplicity    = comp.journey_simplicity    * WEIGHT_TRANSFERS
+        w_timing_convenience    = comp.timing_convenience    * WEIGHT_FRICTION
+        w_physical_comfort      = comp.physical_comfort      * WEIGHT_COMFORT
+        w_schedule_reliability  = comp.schedule_reliability  * WEIGHT_RELIABILITY  # 0.0 — reserved Sprint 3
+        w_information_integrity = comp.information_integrity * WEIGHT_INTEGRITY    # 0.0 — reserved Sprint 3
 
-        total_score_pct = (w_comfort + w_friction + w_booking_confidence + w_transfers + w_price + w_duration) * 100
+        total_score_pct = (
+            w_journey_value + w_booking_confidence + w_journey_simplicity
+            + w_timing_convenience + w_physical_comfort
+            + w_schedule_reliability + w_information_integrity
+        ) * 100
+
         total_score = max(0, min(100, int(round(total_score_pct)) - s["incomplete_penalty"]))
-        
         j.nx_score = total_score
-        j._friction_score = s["friction"]  # keep for legacy reasoning compatibility
-        
-        # Save raw normalized components for dynamic explainability comparison
-        j._c_norm = c_norm
-        j._f_norm = f_norm
-        j._bc_norm = bc_norm
-        j._t_norm = t_norm
+
+        # Step D: Persist weighted contributions and reasoning-only norms on the Journey
+        # object for use in the badge/reasoning pass (Phase 4). These are temporary
+        # dynamic attributes cleaned up at the end of Phase 4.
         j._p_norm = p_norm
         j._d_norm = d_norm
-        j._w_comfort = w_comfort
-        j._w_friction = w_friction
-        j._w_booking_confidence = w_booking_confidence
-        j._w_transfers = w_transfers
-        j._w_price = w_price
-        j._w_duration = w_duration
-        j._incomplete_penalty = s["incomplete_penalty"]
+        j._w_journey_value        = w_journey_value
+        j._w_booking_confidence   = w_booking_confidence
+        j._w_journey_simplicity   = w_journey_simplicity
+        j._w_timing_convenience   = w_timing_convenience
+        j._w_physical_comfort     = w_physical_comfort
+        j._incomplete_penalty     = s["incomplete_penalty"]
         
         scored_journeys.append(j)
 
-    # Determine badges and reasoning
+    # -----------------------------------------------------------------------
+    # Phase 4 — Badges, recommendation reasoning, and rescue hints
+    # -----------------------------------------------------------------------
     prices_list = [j.price.total_price.amount for j in scored_journeys if j.price and j.price.total_price]
     min_price_val = min(prices_list) if prices_list else 1000.0
     
@@ -231,50 +245,50 @@ def calculate_smart_scores(journeys: List[Journey]) -> List[Journey]:
         reasoning = []
 
         if is_best:
-            # 1. Strongest Positive Factors (components where raw score >= 0.85)
+            # 1. Strongest Positive Factors (components where score >= 0.85)
             positives = []
-            if getattr(j, "_c_norm", 0.0) >= 0.85:
+            if j.components.physical_comfort >= 0.85:
                 positives.append(f"Outstanding travel comfort (comfort level: {int(round(j.comfort_score))}/100)")
-            if getattr(j, "_p_norm", 0.0) >= 0.85:
+            if j._p_norm >= 0.85:
                 positives.append(f"Highly economical pricing (INR {int(round(j.price.total_price.amount))})")
-            if getattr(j, "_bc_norm", 0.0) >= 0.85:
+            if j.components.booking_confidence >= 0.85:
                 positives.append("Highly confident seat availability")
-            if getattr(j, "_t_norm", 0.0) >= 0.85 and len(j.legs) - 1 == 0:
+            if j.components.journey_simplicity >= 0.85 and len(j.legs) - 1 == 0:
                 positives.append("Direct connection with no transfer delays")
-            if getattr(j, "_f_norm", 0.0) >= 0.85:
+            if j.components.timing_convenience >= 0.85:
                 positives.append("Zero layout/timing schedule friction")
-            if getattr(j, "_d_norm", 0.0) >= 0.85:
+            if j._d_norm >= 0.85:
                 positives.append(f"Fast journey duration ({j.duration.formatted})")
                 
-            # If no component is >= 0.85, grab the top 2 highest normalized components
+            # If no component is >= 0.85, grab the top 2 highest scoring components
             if not positives:
-                components = [
-                    ("comfort", getattr(j, "_c_norm", 0.0), f"Good travel comfort ({int(round(j.comfort_score))}/100)"),
-                    ("price", getattr(j, "_p_norm", 0.0), f"Reasonable travel price (INR {int(round(j.price.total_price.amount))})"),
-                    ("booking", getattr(j, "_bc_norm", 0.0), "Confirmed ticket availability"),
-                    ("transfers", getattr(j, "_t_norm", 0.0), "Simple journey structure"),
-                    ("friction", getattr(j, "_f_norm", 0.0), "Convenient departure/arrival timings"),
-                    ("duration", getattr(j, "_d_norm", 0.0), f"Short transit time ({j.duration.formatted})")
+                component_signals = [
+                    ("comfort",   j.components.physical_comfort,  f"Good travel comfort ({int(round(j.comfort_score))}/100)"),
+                    ("price",     j._p_norm,                      f"Reasonable travel price (INR {int(round(j.price.total_price.amount))})"),
+                    ("booking",   j.components.booking_confidence, "Confirmed ticket availability"),
+                    ("transfers", j.components.journey_simplicity, "Simple journey structure"),
+                    ("friction",  j.components.timing_convenience, "Convenient departure/arrival timings"),
+                    ("duration",  j._d_norm,                       f"Short transit time ({j.duration.formatted})"),
                 ]
-                components.sort(key=lambda x: x[1], reverse=True)
-                positives.append(components[0][2])
-                positives.append(components[1][2])
+                component_signals.sort(key=lambda x: x[1], reverse=True)
+                positives.append(component_signals[0][2])
+                positives.append(component_signals[1][2])
 
-            reasoning.extend(positives[:2]) # Keep top 2 positive factors
+            reasoning.extend(positives[:2])  # Keep top 2 positive factors
 
-            # 2. Strongest Negative Factors (components where raw score <= 0.40)
+            # 2. Strongest Negative Factors (components where score <= 0.40)
             negatives = []
-            if getattr(j, "_p_norm", 1.0) <= 0.40:
+            if j._p_norm <= 0.40:
                 negatives.append("Premium ticket pricing")
-            if getattr(j, "_d_norm", 1.0) <= 0.40:
+            if j._d_norm <= 0.40:
                 negatives.append("Longer travel duration compared to flying")
-            if getattr(j, "_bc_norm", 1.0) <= 0.40:
+            if j.components.booking_confidence <= 0.40:
                 negatives.append("Risk of ticket waitlisting / low seat probability")
-            if getattr(j, "_t_norm", 1.0) <= 0.40:
+            if j.components.journey_simplicity <= 0.40:
                 negatives.append("Requires multiple route transfers")
-            if getattr(j, "_f_norm", 1.0) <= 0.40:
+            if j.components.timing_convenience <= 0.40:
                 negatives.append("Sub-optimal scheduling / inconvenient hours")
-            if getattr(j, "_incomplete_penalty", 0) > 0:
+            if j._incomplete_penalty > 0:
                 negatives.append("Incomplete record details penalized score confidence")
 
             if negatives:
@@ -283,16 +297,15 @@ def calculate_smart_scores(journeys: List[Journey]) -> List[Journey]:
             # 3. Decisive differentiator over next best alternative
             if second_best_j:
                 advantages = [
-                    ("comfort", (getattr(j, "_w_comfort", 0.0) - getattr(second_best_j, "_w_comfort", 0.0)) * 100, "superior travel comfort"),
-                    ("price", (getattr(j, "_w_price", 0.0) - getattr(second_best_j, "_w_price", 0.0)) * 100, "lower pricing"),
-                    ("booking", (getattr(j, "_w_booking_confidence", 0.0) - getattr(second_best_j, "_w_booking_confidence", 0.0)) * 100, "better seat certainty"),
-                    ("transfers", (getattr(j, "_w_transfers", 0.0) - getattr(second_best_j, "_w_transfers", 0.0)) * 100, "fewer transfers"),
-                    ("friction", (getattr(j, "_w_friction", 0.0) - getattr(second_best_j, "_w_friction", 0.0)) * 100, "lower timing and layover friction"),
-                    ("duration", (getattr(j, "_w_duration", 0.0) - getattr(second_best_j, "_w_duration", 0.0)) * 100, "faster travel time")
+                    ("journey_value",  (getattr(j, "_w_journey_value", 0.0)      - getattr(second_best_j, "_w_journey_value", 0.0))      * 100, "better overall journey value"),
+                    ("booking",        (getattr(j, "_w_booking_confidence", 0.0)  - getattr(second_best_j, "_w_booking_confidence", 0.0))  * 100, "better seat certainty"),
+                    ("simplicity",     (getattr(j, "_w_journey_simplicity", 0.0)  - getattr(second_best_j, "_w_journey_simplicity", 0.0))  * 100, "fewer transfers"),
+                    ("timing",         (getattr(j, "_w_timing_convenience", 0.0)  - getattr(second_best_j, "_w_timing_convenience", 0.0))  * 100, "lower timing and layover friction"),
+                    ("comfort",        (getattr(j, "_w_physical_comfort", 0.0)    - getattr(second_best_j, "_w_physical_comfort", 0.0))    * 100, "superior travel comfort"),
                 ]
                 advantages.sort(key=lambda x: x[1], reverse=True)
                 top_adv = advantages[0]
-                if top_adv[1] > 1.0: # Only mention if the advantage is positive and meaningful
+                if top_adv[1] > 1.0:  # Only mention if the advantage is positive and meaningful
                     reasoning.append(f"Ranked above other alternatives primarily due to {top_adv[2]}")
                 else:
                     reasoning.append("Offers the best balanced combination of cost, time, and comfort")
@@ -307,7 +320,7 @@ def calculate_smart_scores(journeys: List[Journey]) -> List[Journey]:
                     tag = "Most Comfortable"
                 elif j.seat_likelihood > 85:
                     tag = "Best Seat Confidence"
-                elif getattr(j, "_friction_score", 100) > 90:
+                elif j.components.timing_convenience > 0.90:
                     tag = "Zero Timing Friction"
                 else:
                     tag = "Smoothest Journey"
@@ -332,18 +345,19 @@ def calculate_smart_scores(journeys: List[Journey]) -> List[Journey]:
                 current_stations = {leg.from_city.upper() for leg in j.legs if leg.mode == "Train"}
                 valid_alts = [s for s in alt_stations if s.upper() not in current_stations]
                 if valid_alts:
-                    j.rescue_recommendation = f"Navix TKG Hint: Secure better seat availability by boarding at nearby station {valid_alts[0]} instead!"
+                    # TODO (Sprint 3): Surface TKG hint via journey.availability.rescue_recommendation
+                    # by rebuilding SeatAvailability with the hint string. Setting a bare
+                    # j.rescue_recommendation attribute is incorrect — it is never serialized
+                    # to the DTO (the mapper reads journey.availability.rescue_recommendation).
+                    pass
             except Exception:
                 pass
         
-        # Cleanup temporary friction attribute
-        if hasattr(j, "_friction_score"):
-            delattr(j, "_friction_score")
-        
-        # Cleanup custom normalization variables
-        for attr in ["_c_norm", "_f_norm", "_bc_norm", "_t_norm", "_p_norm", "_d_norm", 
-                     "_w_comfort", "_w_friction", "_w_booking_confidence", "_w_transfers", 
-                     "_w_price", "_w_duration", "_incomplete_penalty", "_missing_time"]:
+        # Cleanup Phase 4 temporary reasoning attributes from Journey objects
+        for attr in ["_p_norm", "_d_norm",
+                     "_w_journey_value", "_w_booking_confidence", "_w_journey_simplicity",
+                     "_w_timing_convenience", "_w_physical_comfort",
+                     "_incomplete_penalty", "_missing_time"]:
             if hasattr(j, attr):
                 delattr(j, attr)
 

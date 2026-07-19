@@ -1,46 +1,46 @@
 [
   {
-    "id": "RAIL-12022-NDLS-PNBE-77111D",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "8h 02m",
-    "estimatedPrice": "INR 5,510",
+    "id": "RAIL-12951-NDLS-BVI-1B153C",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "12h 53m",
+    "estimatedPrice": "INR 4,844",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
         "from": "New Delhi",
-        "to": "Patna Junction",
+        "to": "Borivali",
         "mode": "Train",
-        "duration": "8h 02m",
-        "departureTime": "14:50",
-        "arrivalTime": "22:52"
+        "duration": "12h 53m",
+        "departureTime": "17:55",
+        "arrivalTime": "06:48"
       }
     ],
-    "recommendationTag": "12022 Howrah Shatabdi Express (AC)",
+    "recommendationTag": "12951 Mumbai Rajdhani Express",
     "tagTone": "cyan",
     "isRecommended": true,
-    "departureTime": "14:50",
-    "arrivalTime": "22:52",
+    "departureTime": "17:55",
+    "arrivalTime": "06:48",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 82,
+    "estimatedAvailability": 78,
     "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "12022 Howrah Shatabdi Express (AC)",
-      "crowdLevel": 12,
+      "seasonalTip": "12951 Mumbai Rajdhani Express",
+      "crowdLevel": 10,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 83,
-    "comfortScore": 88,
-    "seatLikelihood": 82,
+    "navixScore": 78,
+    "comfortScore": 92,
+    "seatLikelihood": 78,
     "recommendationReasoning": [
-      "Outstanding travel comfort (comfort level: 88/100)",
+      "Outstanding travel comfort (comfort level: 92/100)",
       "Direct connection with no transfer delays",
-      "Ranked above other alternatives primarily due to better seat certainty"
+      "Offers the best balanced combination of cost, time, and comfort"
     ],
     "waitlistCode": "AVL",
     "confirmationLikelihood": "Highly Likely",
@@ -48,120 +48,120 @@
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12554-NDLS-PNBE-8F0C48",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "14h 10m",
-    "estimatedPrice": "INR 1,504",
+    "id": "RAIL-12951-NDLS-MMCT-2F8441",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "13h 45m",
+    "estimatedPrice": "INR 4,844",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
         "from": "New Delhi",
-        "to": "Patna Junction",
+        "to": "Mumbai Central",
         "mode": "Train",
-        "duration": "14h 10m",
-        "departureTime": "16:35",
-        "arrivalTime": "06:45"
+        "duration": "13h 45m",
+        "departureTime": "17:55",
+        "arrivalTime": "07:40"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "16:35",
-    "arrivalTime": "06:45",
+    "departureTime": "17:55",
+    "arrivalTime": "07:40",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 60,
+    "estimatedAvailability": 78,
     "confidenceScore": 85,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
       "seasonalTip": "Easier Transfer",
-      "crowdLevel": 30,
+      "crowdLevel": 10,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 72,
-    "comfortScore": 70,
-    "seatLikelihood": 60,
+    "navixScore": 78,
+    "comfortScore": 92,
+    "seatLikelihood": 78,
     "recommendationReasoning": [
       "Easier Transfer"
     ],
-    "waitlistCode": "RAC",
-    "confirmationLikelihood": "Likely",
-    "confirmationProbability": 65,
+    "waitlistCode": "AVL",
+    "confirmationLikelihood": "Highly Likely",
+    "confirmationProbability": 90,
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12582-NDLS-PNBE-E23F11",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "13h 50m",
-    "estimatedPrice": "INR 1,504",
+    "id": "RAIL-12953-NDLS-BVI-744E24",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "13h 40m",
+    "estimatedPrice": "INR 4,844",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
         "from": "New Delhi",
-        "to": "Patna Junction",
+        "to": "Borivali",
         "mode": "Train",
-        "duration": "13h 50m",
-        "departureTime": "18:15",
-        "arrivalTime": "08:05"
+        "duration": "13h 40m",
+        "departureTime": "17:25",
+        "arrivalTime": "07:05"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "18:15",
-    "arrivalTime": "08:05",
+    "departureTime": "17:25",
+    "arrivalTime": "07:05",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 60,
+    "estimatedAvailability": 78,
     "confidenceScore": 90,
     "difficulty": "Easy",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
       "seasonalTip": "Easier Transfer",
-      "crowdLevel": 30,
+      "crowdLevel": 10,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 72,
-    "comfortScore": 70,
-    "seatLikelihood": 60,
+    "navixScore": 78,
+    "comfortScore": 92,
+    "seatLikelihood": 78,
     "recommendationReasoning": [
       "Easier Transfer"
     ],
-    "waitlistCode": "RAC",
-    "confirmationLikelihood": "Likely",
-    "confirmationProbability": 65,
+    "waitlistCode": "AVL",
+    "confirmationLikelihood": "Highly Likely",
+    "confirmationProbability": 90,
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12305-NDLS-PNBE-14EB3E",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "12h 50m",
-    "estimatedPrice": "INR 5,341",
+    "id": "RAIL-12953-NDLS-MMCT-A112E8",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "14h 40m",
+    "estimatedPrice": "INR 4,844",
     "travelModes": [
       "Train"
     ],
     "legs": [
       {
         "from": "New Delhi",
-        "to": "Patna Junction",
+        "to": "Mumbai Central",
         "mode": "Train",
-        "duration": "12h 50m",
-        "departureTime": "10:55",
-        "arrivalTime": "23:45"
+        "duration": "14h 40m",
+        "departureTime": "17:25",
+        "arrivalTime": "08:05"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "10:55",
-    "arrivalTime": "23:45",
+    "departureTime": "17:25",
+    "arrivalTime": "08:05",
     "layoverDuration": "0h 00m",
     "estimatedAvailability": 78,
     "confidenceScore": 80,
@@ -174,7 +174,7 @@
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 69,
+    "navixScore": 78,
     "comfortScore": 92,
     "seatLikelihood": 78,
     "recommendationReasoning": [
@@ -186,28 +186,28 @@
     "rescueRecommendation": null
   },
   {
-    "id": "NX-75275445955718769958875095841795099882-F1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "3h 50m",
-    "estimatedPrice": "INR 12,720",
+    "id": "NX-280580467950907206479554387521713423592-F1",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "4h 16m",
+    "estimatedPrice": "INR 9,726",
     "travelModes": [
       "Flight"
     ],
     "legs": [
       {
         "from": "Delhi Airport (DEL)",
-        "to": "Patna Airport (PAT)",
+        "to": "Mumbai Airport (BOM)",
         "mode": "Flight - IndiGo",
-        "duration": "1h 20m",
+        "duration": "1h 46m",
         "departureTime": "13:30",
-        "arrivalTime": "14:50"
+        "arrivalTime": "15:16"
       }
     ],
     "recommendationTag": "Express Comfort",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "11:30",
-    "arrivalTime": "15:20",
+    "arrivalTime": "15:46",
     "layoverDuration": "0h 00m",
     "estimatedAvailability": 98,
     "confidenceScore": 85,
@@ -216,12 +216,12 @@
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
       "seasonalTip": "Express Comfort",
-      "crowdLevel": 45,
+      "crowdLevel": 15,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 69,
-    "comfortScore": 55,
+    "navixScore": 77,
+    "comfortScore": 85,
     "seatLikelihood": 98,
     "recommendationReasoning": [
       "Express Comfort"
@@ -232,227 +232,263 @@
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12382-NDLS-PNBE-EA5859",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "11h 40m",
-    "estimatedPrice": "INR 1,838",
+    "id": "NX-280580467950907206479554387521713423592-S1",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "23h 58m",
+    "estimatedPrice": "INR 2,213",
     "travelModes": [
+      "Bus",
       "Train"
     ],
     "legs": [
       {
-        "from": "New Delhi",
-        "to": "Patna Junction",
-        "mode": "Train",
-        "duration": "11h 40m",
-        "departureTime": "17:55",
-        "arrivalTime": "05:35"
+        "from": "Delhi",
+        "to": "Kota",
+        "mode": "Intercity Bus - IntrCity AC",
+        "duration": "8h 51m",
+        "departureTime": "06:00",
+        "arrivalTime": "14:51"
+      },
+      {
+        "from": "Kota Junction",
+        "to": "Mumbai CSMT (CSMT)",
+        "mode": "Train - SF Exp",
+        "duration": "13h 37m",
+        "departureTime": "16:21",
+        "arrivalTime": "05:58"
       }
     ],
-    "recommendationTag": "Easier Transfer",
+    "recommendationTag": "Lower crowding than main corridor",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "17:55",
-    "arrivalTime": "05:35",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 48,
+    "departureTime": "06:00",
+    "arrivalTime": "05:58",
+    "layoverDuration": "1h 30m",
+    "estimatedAvailability": 66,
     "confidenceScore": 90,
-    "difficulty": "Easy",
+    "difficulty": "Moderate",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 38,
+      "seasonalTip": "Lower crowding than main corridor",
+      "crowdLevel": 35,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 68,
-    "comfortScore": 62,
-    "seatLikelihood": 48,
+    "navixScore": 39,
+    "comfortScore": 65,
+    "seatLikelihood": 66,
     "recommendationReasoning": [
-      "Easier Transfer"
+      "Lower crowding than main corridor"
     ],
-    "waitlistCode": "WL/5",
-    "confirmationLikelihood": "Uncertain",
-    "confirmationProbability": 40,
+    "waitlistCode": null,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 66,
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12309-NDLS-PNBE-08AB90",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "14h 10m",
-    "estimatedPrice": "INR 1,204",
+    "id": "NX-280580467950907206479554387521713423592-S1",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "23h 25m",
+    "estimatedPrice": "INR 2,105",
     "travelModes": [
+      "Bus",
       "Train"
     ],
     "legs": [
       {
-        "from": "New Delhi",
-        "to": "Patna Junction",
-        "mode": "Train",
-        "duration": "14h 10m",
-        "departureTime": "22:25",
-        "arrivalTime": "12:35"
+        "from": "Delhi",
+        "to": "Jaipur",
+        "mode": "Intercity Bus - IntrCity AC",
+        "duration": "5h 10m",
+        "departureTime": "06:00",
+        "arrivalTime": "11:10"
+      },
+      {
+        "from": "JP Station",
+        "to": "Mumbai CSMT (CSMT)",
+        "mode": "Train - SF Exp",
+        "duration": "16h 45m",
+        "departureTime": "12:40",
+        "arrivalTime": "05:25"
       }
     ],
     "recommendationTag": "Best Value Comfort",
     "tagTone": "cyan",
     "isRecommended": false,
-    "departureTime": "22:25",
-    "arrivalTime": "12:35",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 48,
+    "departureTime": "06:00",
+    "arrivalTime": "05:25",
+    "layoverDuration": "1h 30m",
+    "estimatedAvailability": 66,
     "confidenceScore": 80,
-    "difficulty": "Easy",
+    "difficulty": "Moderate",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
       "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 38,
+      "crowdLevel": 35,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 67,
-    "comfortScore": 62,
-    "seatLikelihood": 48,
+    "navixScore": 39,
+    "comfortScore": 65,
+    "seatLikelihood": 66,
     "recommendationReasoning": [
       "Best Value Comfort"
     ],
-    "waitlistCode": "WL/5",
-    "confirmationLikelihood": "Uncertain",
-    "confirmationProbability": 40,
+    "waitlistCode": null,
+    "confirmationLikelihood": "Medium",
+    "confirmationProbability": 66,
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12309-NDLS-RJPB-E57CE7",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "14h 35m",
-    "estimatedPrice": "INR 1,204",
+    "id": "NX-280580467950907206479554387521713423592-H1",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "21h 37m",
+    "estimatedPrice": "INR 5,604",
     "travelModes": [
+      "Flight",
       "Train"
     ],
     "legs": [
       {
-        "from": "New Delhi",
-        "to": "Rajendra Nagar",
-        "mode": "Train",
-        "duration": "14h 35m",
-        "departureTime": "22:25",
-        "arrivalTime": "13:00"
+        "from": "Delhi Airport (DEL)",
+        "to": "Jaipur Airport (JAI)",
+        "mode": "Flight - IndiGo",
+        "duration": "0h 22m",
+        "departureTime": "11:00",
+        "arrivalTime": "11:22"
+      },
+      {
+        "from": "Jaipur Junction",
+        "to": "Mumbai CSMT (CSMT)",
+        "mode": "Train - SF Exp",
+        "duration": "16h 45m",
+        "departureTime": "13:52",
+        "arrivalTime": "06:37"
       }
     ],
-    "recommendationTag": "Best Value Comfort",
-    "tagTone": "cyan",
+    "recommendationTag": "Air hybrid saves hours vs direct rail",
+    "tagTone": "violet",
     "isRecommended": false,
-    "departureTime": "22:25",
-    "arrivalTime": "13:00",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 48,
+    "departureTime": "09:00",
+    "arrivalTime": "06:37",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 78,
     "confidenceScore": 85,
-    "difficulty": "Easy",
+    "difficulty": "Moderate",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Best Value Comfort",
-      "crowdLevel": 38,
+      "seasonalTip": "Air hybrid saves hours vs direct rail",
+      "crowdLevel": 20,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 67,
-    "comfortScore": 62,
-    "seatLikelihood": 48,
+    "navixScore": 37,
+    "comfortScore": 80,
+    "seatLikelihood": 78,
     "recommendationReasoning": [
-      "Best Value Comfort"
+      "Air hybrid saves hours vs direct rail"
     ],
-    "waitlistCode": "WL/5",
-    "confirmationLikelihood": "Uncertain",
-    "confirmationProbability": 40,
+    "waitlistCode": null,
+    "confirmationLikelihood": "High",
+    "confirmationProbability": 78,
     "rescueRecommendation": null
   },
   {
-    "id": "RAIL-12616-NDLS-PNBE-9458E7",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "12h 50m",
-    "estimatedPrice": "INR 2,610",
+    "id": "NX-280580467950907206479554387521713423592-H1",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "21h 37m",
+    "estimatedPrice": "INR 5,604",
     "travelModes": [
+      "Flight",
       "Train"
     ],
     "legs": [
       {
-        "from": "New Delhi",
-        "to": "Patna Junction",
-        "mode": "Train",
-        "duration": "12h 50m",
-        "departureTime": "21:40",
-        "arrivalTime": "10:30"
+        "from": "Delhi Airport (DEL)",
+        "to": "Jaipur Airport (JAI)",
+        "mode": "Flight - IndiGo",
+        "duration": "0h 22m",
+        "departureTime": "11:00",
+        "arrivalTime": "11:22"
+      },
+      {
+        "from": "JP Station",
+        "to": "Mumbai CSMT (CSMT)",
+        "mode": "Train - SF Exp",
+        "duration": "16h 45m",
+        "departureTime": "13:52",
+        "arrivalTime": "06:37"
       }
     ],
-    "recommendationTag": "Easier Transfer",
-    "tagTone": "cyan",
+    "recommendationTag": "Air hybrid saves hours vs direct rail",
+    "tagTone": "violet",
     "isRecommended": false,
-    "departureTime": "21:40",
-    "arrivalTime": "10:30",
-    "layoverDuration": "0h 00m",
-    "estimatedAvailability": 48,
+    "departureTime": "09:00",
+    "arrivalTime": "06:37",
+    "layoverDuration": "2h 00m",
+    "estimatedAvailability": 78,
     "confidenceScore": 90,
-    "difficulty": "Easy",
+    "difficulty": "Moderate",
     "travelInsights": {
       "demandLevel": "Moderate",
       "bookingUrgency": "Standard booking window",
-      "seasonalTip": "Easier Transfer",
-      "crowdLevel": 38,
+      "seasonalTip": "Air hybrid saves hours vs direct rail",
+      "crowdLevel": 20,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 66,
-    "comfortScore": 62,
-    "seatLikelihood": 48,
+    "navixScore": 37,
+    "comfortScore": 80,
+    "seatLikelihood": 78,
     "recommendationReasoning": [
-      "Easier Transfer"
+      "Air hybrid saves hours vs direct rail"
     ],
-    "waitlistCode": "WL/5",
-    "confirmationLikelihood": "Uncertain",
-    "confirmationProbability": 40,
+    "waitlistCode": null,
+    "confirmationLikelihood": "High",
+    "confirmationProbability": 78,
     "rescueRecommendation": null
   },
   {
-    "id": "NX-75275445955718769958875095841795099882-B1",
-    "routeCombination": "Delhi -> Patna",
-    "duration": "20h 39m",
-    "estimatedPrice": "INR 4,038",
+    "id": "NX-280580467950907206479554387521713423592-B1",
+    "routeCombination": "Delhi -> Mumbai",
+    "duration": "27h 27m",
+    "estimatedPrice": "INR 3,230",
     "travelModes": [
       "Sleeper Bus"
     ],
     "legs": [
       {
         "from": "Delhi",
-        "to": "Patna",
+        "to": "Mumbai",
         "mode": "Sleeper Bus - Zingbus Premium",
-        "duration": "20h 39m",
+        "duration": "27h 27m",
         "departureTime": "20:00",
-        "arrivalTime": "16:39"
+        "arrivalTime": "23:27"
       }
     ],
     "recommendationTag": "Easier Transfer",
     "tagTone": "cyan",
     "isRecommended": false,
     "departureTime": "20:00",
-    "arrivalTime": "16:39",
+    "arrivalTime": "23:27",
     "layoverDuration": "0h 00m",
-    "estimatedAvailability": 16,
+    "estimatedAvailability": 72,
     "confidenceScore": 80,
     "difficulty": "Easy",
     "travelInsights": {
-      "demandLevel": "High",
-      "bookingUrgency": "Book immediately",
+      "demandLevel": "Moderate",
+      "bookingUrgency": "Standard booking window",
       "seasonalTip": "Easier Transfer",
-      "crowdLevel": 67,
+      "crowdLevel": 37,
       "priceTrend": "Stable",
       "trendDescription": "Fares are stable on this corridor."
     },
-    "navixScore": 47,
-    "comfortScore": 33,
-    "seatLikelihood": 16,
+    "navixScore": 36,
+    "comfortScore": 63,
+    "seatLikelihood": 72,
     "recommendationReasoning": [
       "Easier Transfer"
     ],

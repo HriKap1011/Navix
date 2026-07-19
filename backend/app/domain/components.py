@@ -14,6 +14,37 @@ Each component is a normalized float in [0.0, 1.0]:
 
 Components are intentionally decoupled — each has a single responsibility
 and does NOT re-use or duplicate logic from another component.
+
+------------------------------------------------------------------------------
+Metric-to-Component Mapping  (Sprint 2 canonical reference)
+------------------------------------------------------------------------------
+The table below documents which raw metrics each semantic component absorbs,
+replacing the old pattern of feeding raw metrics directly into the NX Score.
+
+  Raw Metric                  Semantic Component       Role
+  ────────────────────────    ─────────────────────    ────────────────────────────
+  price (normalized)          journey_value            p_norm × 0.45
+  duration (normalized)       journey_value            d_norm × 0.35
+  comfort (softening term)    journey_value            c_norm × 0.20 comfort dividend
+  comfort (primary signal)    physical_comfort         c_norm × 0.75 + mode bonus × 0.25
+  seat_likelihood             booking_confidence       s_norm × base (0.60)
+  confirmation_probability    booking_confidence       avail bonus up to +0.20
+  waitlist_code               booking_confidence       WL/RAC penalty −0.15
+  transfers (leg count − 1)   journey_simplicity       t_norm (inverted, fewer = better)
+  friction_score (layovers,   timing_convenience       f_norm (high friction = low convenience)
+    overnight, early dep.)    
+  route_id prefix             schedule_reliability     RAIL- → 1.0  /  NX- → 0.55
+  transport_modes             schedule_reliability     harmonic mean punctuality × 0.40
+  transport_modes             physical_comfort         geometric mean mode bonus × 0.25
+  incomplete_penalty          information_integrity    linear map [0 → 1.0, 50 → 0.10]
+  ────────────────────────    ─────────────────────    ────────────────────────────
+
+IMPORTANT — internal normalization contract:
+  p_norm and d_norm are computed inside ComponentCalculator.compute() and
+  consumed exclusively by _journey_value(). They are NOT re-exported and must
+  NOT be re-derived elsewhere for scoring purposes. services.py computes its own
+  p_norm/d_norm copies solely for human-readable reasoning labels.
+------------------------------------------------------------------------------
 """
 
 from __future__ import annotations
@@ -175,6 +206,11 @@ class ComponentCalculator:
             sanitized:  Pre-sanitized metrics dict from services.py:
                         {price, duration, comfort, seat, friction, transfers, incomplete_penalty}
             ranges:     Population-level min/max normalization ranges.
+
+        Internal normalization contract:
+            p_norm and d_norm are local to this method and are passed into
+            _journey_value() only. They are intentionally NOT returned or
+            exposed — services.py must not use them for scoring.
         """
         # Pre-compute normalized scalars shared across multiple components
         p_norm = normalize(
