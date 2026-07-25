@@ -1488,3 +1488,335 @@ Top 5 trains recommended for schedule import to maximize coverage impact:
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ===========================================================================
+# Phase 5 — Recommendation Evaluation Lab (Internal Engineering Only)
+# ===========================================================================
+# These endpoints expose the internal evaluation framework for debugging,
+# calibrating, and inspecting recommendation quality.
+#
+# IMPORTANT: These endpoints are engineering-only. They do NOT modify any
+# production scoring logic, Journey objects, or public search API behavior.
+# Mount under /admin/eval-lab to keep them clearly separated from user APIs.
+# ===========================================================================
+
+from pydantic import BaseModel as _BaseModel
+from typing import Optional as _Optional, List as _List, Any as _Any, Dict as _Dict
+
+
+class EvalLabRequest(_BaseModel):
+    """Request body for /admin/eval-lab/evaluate and /admin/eval-lab/compare."""
+    source: str
+    destination: str
+    date: _Optional[str] = None
+    journey_objects: _Optional[_List[_Any]] = None
+
+
+def _scorecard_to_dict(sc) -> dict:
+    """Serialize a RecommendationScorecard to a JSON-safe dict."""
+    return {
+        "route_id":           sc.route_id,
+        "source":             sc.source,
+        "destination":        sc.destination,
+        "transport_modes":    sc.transport_modes,
+        "departure_time":     sc.departure_time,
+        "arrival_time":       sc.arrival_time,
+        "price_inr":          sc.price_inr,
+        "duration_min":       sc.duration_min,
+        "transfers":          sc.transfers,
+        "nx_score":           sc.nx_score,
+        "ranking_position":   sc.ranking_position,
+        "is_recommended":     sc.is_recommended,
+        "recommendation_tag": sc.recommendation_tag,
+        "recommendation_reasons": sc.recommendation_reasons,
+        "delta_vs_top":       sc.delta_vs_top,
+        "primary_decisive_factors": sc.primary_decisive_factors,
+        "total_incomplete_penalty": sc.total_incomplete_penalty,
+        "total_friction_penalty":   sc.total_friction_penalty,
+        "component_breakdown": [
+            {
+                "name":                    c.name,
+                "raw_value":               c.raw_value,
+                "raw_label":               c.raw_label,
+                "normalized_value":        c.normalized_value,
+                "component_weight":        c.component_weight,
+                "weighted_contribution":   c.weighted_contribution,
+                "weighted_contribution_pts": c.weighted_contribution_pts,
+                "status":                  c.status,
+            }
+            for c in sc.component_breakdown
+        ],
+        "penalties_applied": [
+            {
+                "name":        p.name,
+                "category":    p.category,
+                "value":       p.value,
+                "description": p.description,
+                "applied":     p.applied,
+            }
+            for p in sc.penalties_applied
+        ],
+        "bonuses_applied": [
+            {
+                "name":        b.name,
+                "category":    b.category,
+                "value":       b.value,
+                "description": b.description,
+                "applied":     b.applied,
+            }
+            for b in sc.bonuses_applied
+        ],
+        "normalization_details": {
+            "min_price":    sc.normalization_details.min_price,
+            "max_price":    sc.normalization_details.max_price,
+            "min_duration": sc.normalization_details.min_duration,
+            "max_duration": sc.normalization_details.max_duration,
+            "min_transfers":sc.normalization_details.min_transfers,
+            "max_transfers":sc.normalization_details.max_transfers,
+            "min_comfort":  sc.normalization_details.min_comfort,
+            "max_comfort":  sc.normalization_details.max_comfort,
+            "min_seat":     sc.normalization_details.min_seat,
+            "max_seat":     sc.normalization_details.max_seat,
+            "min_friction": sc.normalization_details.min_friction,
+            "max_friction": sc.normalization_details.max_friction,
+            "cohort_size":  sc.normalization_details.cohort_size,
+        },
+    }
+
+
+def _trace_step_to_dict(step) -> dict:
+    return {
+        "step_number": step.step_number,
+        "step_name":   step.step_name,
+        "description": step.description,
+        "inputs":      step.inputs,
+        "outputs":     step.outputs,
+        "notes":       step.notes,
+    }
+
+
+def _fetch_journeys_for_eval(source: str, destination: str, date: _Optional[str] = None) -> list:
+    """
+    Fetch journeys for evaluation using the active search provider.
+    Returns unscored Journey objects ready for EvaluationLab.evaluate().
+    """
+    try:
+        from app.providers.registry import get_active_provider
+        provider = get_active_provider()
+        search_date = date or "2026-08-01"
+        journeys = provider.search_routes(source=source, destination=destination, date=search_date)
+        return journeys if journeys else []
+    except Exception as exc:
+        logger.warning(f"eval-lab: provider fetch failed for {source}→{destination}: {exc}")
+        return []
+
+
+@router.post("/eval-lab/evaluate")
+def eval_lab_evaluate(payload: EvalLabRequest):
+    """
+    [INTERNAL ENGINEERING] Evaluate journeys and return full RecommendationScorecards.
+
+    Fetches journeys for the given source/destination corridor, runs them
+    through the production scoring engine, and returns a complete scorecard
+    for each journey including:
+      - All 7 component breakdowns with raw/normalized/weighted values
+      - Penalties and bonuses applied
+      - Normalization bounds (population-level min/max ranges)
+      - Ranking position and delta vs. top journey
+
+    This endpoint does NOT affect any production search results.
+    """
+    try:
+        from app.evaluation import EvaluationLab
+
+        journeys = _fetch_journeys_for_eval(payload.source, payload.destination, payload.date)
+        if not journeys:
+            return {
+                "success": True,
+                "message": f"No journeys found for {payload.source} → {payload.destination}",
+                "scorecards": [],
+                "cohort_size": 0,
+            }
+
+        lab = EvaluationLab()
+        scorecards = lab.evaluate(journeys)
+
+        return {
+            "success": True,
+            "source": payload.source,
+            "destination": payload.destination,
+            "cohort_size": len(scorecards),
+            "scorecards": [_scorecard_to_dict(sc) for sc in scorecards],
+        }
+    except Exception as e:
+        logger.error(f"eval-lab/evaluate error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Evaluation failed: {str(e)}")
+
+
+@router.post("/eval-lab/compare")
+def eval_lab_compare(payload: EvalLabRequest):
+    """
+    [INTERNAL ENGINEERING] Compare journeys and return a full comparison report.
+
+    Returns:
+      - Ranking table (all journeys ranked by NX Score)
+      - Score distribution (min, max, mean, median, std_dev)
+      - Strongest strengths per journey (component where it leads the cohort)
+      - Weakest components per journey (component where it lags the cohort)
+      - Pairwise analysis ("Why Journey A beat Journey B") for adjacent ranks
+
+    This endpoint does NOT affect any production search results.
+    """
+    try:
+        from app.evaluation import EvaluationLab, JourneyComparator
+
+        journeys = _fetch_journeys_for_eval(payload.source, payload.destination, payload.date)
+        if not journeys:
+            return {
+                "success": True,
+                "message": f"No journeys found for {payload.source} → {payload.destination}",
+                "comparison": None,
+            }
+
+        lab = EvaluationLab()
+        scorecards = lab.evaluate(journeys)
+
+        comparator = JourneyComparator()
+        result = comparator.compare(scorecards)
+
+        return {
+            "success": True,
+            "source": payload.source,
+            "destination": payload.destination,
+            "cohort_size": len(scorecards),
+            "comparison": {
+                "ranking_table": result.ranking_table,
+                "score_distribution": {
+                    "min_score":   result.score_distribution.min_score,
+                    "max_score":   result.score_distribution.max_score,
+                    "mean_score":  result.score_distribution.mean_score,
+                    "median_score":result.score_distribution.median_score,
+                    "std_dev":     result.score_distribution.std_dev,
+                    "cohort_size": result.score_distribution.cohort_size,
+                },
+                "strongest_strengths": result.strongest_strengths,
+                "weakest_components":  result.weakest_components,
+                "pairwise_analysis": [
+                    {
+                        "journey_a": pa.journey_a_route_id,
+                        "journey_b": pa.journey_b_route_id,
+                        "score_delta": pa.score_delta,
+                        "component_deltas": pa.component_deltas,
+                        "decisive_factors": pa.decisive_factors,
+                        "mitigating_factors": pa.mitigating_factors,
+                    }
+                    for pa in result.pairwise_analysis
+                ],
+            },
+        }
+    except Exception as e:
+        logger.error(f"eval-lab/compare error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Comparison failed: {str(e)}")
+
+
+@router.get("/eval-lab/trace/{route_id}")
+def eval_lab_trace(
+    route_id: str,
+    source: str = "",
+    destination: str = "",
+    date: _Optional[str] = None,
+):
+    """
+    [INTERNAL ENGINEERING] Generate a 5-step recommendation trace for one journey.
+
+    Fetches journeys for the source/destination corridor, finds the journey
+    matching route_id, and returns the full audit trace:
+
+      Step 1 → Raw Data Ingestion & Sanitization
+      Step 2 → Normalization & Component Calculations
+      Step 3 → Penalties & Bonuses
+      Step 4 → Weighted Contributions Assembly
+      Step 5 → Final NX Score Assembly
+
+    Query params:
+      source:      Source city name (required for journey lookup)
+      destination: Destination city name (required for journey lookup)
+    """
+    try:
+        from app.evaluation import EvaluationLab, TraceEngine
+        from app.evaluation.evaluator import EvaluationLab as _EvalLab
+
+        if not source or not destination:
+            raise HTTPException(
+                status_code=400,
+                detail="source and destination query parameters are required for journey lookup"
+            )
+
+        journeys = _fetch_journeys_for_eval(source, destination, date)
+        if not journeys:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No journeys found for {source} → {destination}"
+            )
+
+        # Score journeys via production engine and build scorecards
+        lab = _EvalLab()
+        scorecards = lab.evaluate(journeys)  # also scores journeys in place
+
+        # Find the journey matching route_id
+        target_journey = None
+        target_sanitized = None
+        target_ranges = None
+
+        # Re-derive sanitized data and ranges (needed for trace)
+        sanitized_data = lab._sanitize_all(journeys)
+
+        prices    = [s["price"] for s in sanitized_data]
+        durations = [s["duration"] for s in sanitized_data]
+        transfers = [s["transfers"] for s in sanitized_data]
+        comforts  = [s["comfort"] for s in sanitized_data]
+        seats     = [s["seat"] for s in sanitized_data]
+        frictions = [s["friction"] for s in sanitized_data]
+
+        from app.domain.components import NormalizationRanges
+        ranges = NormalizationRanges(
+            min_price=min(prices),       max_price=max(prices),
+            min_duration=min(durations), max_duration=max(durations),
+            min_transfers=min(transfers),max_transfers=max(transfers),
+            min_comfort=min(comforts),   max_comfort=max(comforts),
+            min_seat=min(seats),         max_seat=max(seats),
+            min_friction=min(frictions), max_friction=max(frictions),
+        )
+
+        for j, s in zip(journeys, sanitized_data):
+            if j.route_id == route_id:
+                target_journey = j
+                target_sanitized = s
+                break
+
+        if target_journey is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Journey '{route_id}' not found in results for {source} → {destination}"
+            )
+
+        engine = TraceEngine()
+        trace = engine.trace(target_journey, target_sanitized, ranges)
+
+        return {
+            "success": True,
+            "route_id": route_id,
+            "final_nx_score": trace.final_nx_score,
+            "summary": trace.summary,
+            "steps": [
+                _trace_step_to_dict(trace.step1_raw_data),
+                _trace_step_to_dict(trace.step2_normalization),
+                _trace_step_to_dict(trace.step3_penalties_bonuses),
+                _trace_step_to_dict(trace.step4_weighted_contributions),
+                _trace_step_to_dict(trace.step5_final_score),
+            ],
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"eval-lab/trace error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Trace generation failed: {str(e)}")
